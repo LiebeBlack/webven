@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Vacíos declarados del dataset
+    url: https://usuario.github.io/observatorio-deuda-soberana-ve/#fuentes
+    about: Antes de abrir un issue, revisa la agenda de vacíos: quizá la duda ya está declarada junto con la acción que la cerraría.
+  - name: Cómo funciona la auditoría
+    url: https://github.com/usuario/observatorio-deuda-soberana-ve/blob/main/docs/METODOLOGIA.md
+    about: Qué se recalcula, con qué fórmulas y con qué tolerancias.
+  - name: Dudas sobre la licencia
+    url: https://github.com/usuario/observatorio-deuda-soberana-ve/blob/main/data/LICENSE.md
+    about: Código bajo MIT, datos bajo CC BY 4.0, con la atribución sugerida.

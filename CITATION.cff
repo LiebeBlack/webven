@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: "Observatorio Arquitectónico de la Deuda Soberana de Venezuela"
+message: "Si usas estas cifras en un trabajo publicado, cita el dataset con la fecha de valuación. Cita el registro concreto que uses, no el agregado: atribuir un total sin sus insumos impide reproducirlo."
+type: dataset
+abstract: >-
+  Reconstrucción documentada de la deuda externa venezolana entre 1990 y 2026:
+  stock por acreedor e instrumento, laudos arbitrales del CIADI y de la CCI,
+  agenda de ejecución de sentencias, mecanismos de recuperación evaluados,
+  régimen de sanciones y escenarios de reestructuración. Cada registro declara
+  su capa de procedencia (oficial, reportado, precedente, calculado o
+  propuesta) y cada cifra derivada se recalcula en una auditoría automática.
+version: "2026.09"
+date-released: "2026-09-01"
+license: CC-BY-4.0
+license-url: "https://creativecommons.org/licenses/by/4.0/"
+repository-code: "https://github.com/usuario/observatorio-deuda-soberana-ve"
+url: "https://usuario.github.io/observatorio-deuda-soberana-ve/"
+keywords:
+  - deuda soberana
+  - Venezuela
+  - reestructuración de deuda
+  - arbitraje de inversiones
+  - CIADI
+  - cesación de pagos
+  - datos abiertos
+authors:
+  - name: "Información del Mercantil Venezolano"
+    city: Caracas
+    country: VE
+preferred-citation:
+  type: report
+  title: "Observatorio Arquitectónico de la Deuda Soberana de Venezuela: arquitectura de la acreencia, laudos arbitrales y mecanismos de recuperación"
+  year: 2026
+  institution:
+    name: "Información del Mercantil Venezolano"

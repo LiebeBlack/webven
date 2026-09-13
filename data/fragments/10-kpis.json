@@ -1,0 +1,554 @@
+{
+  "kpis": [
+    {
+      "id": "deuda-externa-total",
+      "group": "stock",
+      "label": "Deuda externa agregada",
+      "sublabel": "República, PDVSA, bilaterales, multilaterales y atrasos",
+      "value_mm": 170360,
+      "unit": "MM USD",
+      "tier": "reportado",
+      "as_of": "2026-03-20",
+      "source_ids": ["S27", "S01", "S02"],
+      "delta_yoy_pct": 3.5,
+      "trend": "up",
+      "sparkline": [110200, 118900, 126400, 133700, 140300, 145600, 150900, 156200, 159400, 161800, 163100, 164432, 170360],
+      "note": "Cifra del observatorio civil, no un estado financiero auditado. El mercado maneja un rango de 150.000 a 240.000 millones según se incluyan intereses, atrasos y laudos.",
+      "breakdown": [
+        { "label": "Bonos soberanos", "value_mm": 44000, "tier": "reportado" },
+        { "label": "Bonos PDVSA", "value_mm": 33000, "tier": "reportado" },
+        { "label": "Bilaterales (China, Rusia, otros)", "value_mm": 28000, "tier": "reportado" },
+        { "label": "Multilaterales y Club de París", "value_mm": 12500, "tier": "reportado" },
+        { "label": "Proveedores y atrasos comerciales", "value_mm": 35000, "tier": "reportado" },
+        { "label": "Otros reconocidos", "value_mm": 17860, "tier": "calculado" }
+      ]
+    },
+    {
+      "id": "exposicion-total-agregada",
+      "group": "stock",
+      "label": "Exposición total agregada",
+      "sublabel": "Deuda externa más acreencias arbitrales",
+      "value_mm": 187730,
+      "store_as": "value_mm",
+      "unit": "MM USD",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S27", "S05", "S06", "S08"],
+      "delta_yoy_pct": 4.1,
+      "trend": "up",
+      "sparkline": [136900, 145200, 154300, 163900, 173400, 187730],
+      "note": "La deuda externa por sí sola no refleja lo que un proceso de reestructuración tendría que absorber: los laudos arbitrales son acreencia adicional y contingente, y varios de ellos están en fase de ejecución sobre activos concretos.",
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "value_mm",
+        "formula": "Exposición = Σ importes de cada clase de acreedor",
+        "params": {
+          "items": [
+            { "label": "Bonos soberanos", "value_mm": 44000 },
+            { "label": "Bonos PDVSA garantizados", "value_mm": 3400 },
+            { "label": "Bonos PDVSA no garantizados", "value_mm": 29600 },
+            { "label": "Acreencias arbitrales", "value_mm": 17370 },
+            { "label": "China", "value_mm": 19000 },
+            { "label": "Rusia", "value_mm": 3000 },
+            { "label": "Otros bilaterales", "value_mm": 6000 },
+            { "label": "Multilaterales", "value_mm": 10000 },
+            { "label": "Club de París", "value_mm": 2500 },
+            { "label": "Proveedores y contratistas", "value_mm": 35000 },
+            { "label": "Otros reconocidos", "value_mm": 17860 }
+          ]
+        },
+        "assumptions": [
+          "Los laudos se incorporan a valor nominal de condena, sin capitalizar intereses.",
+          "No se incluyen daños reclamados y no reconocidos en laudos firmes."
+        ],
+        "sensitivity": [
+          { "label": "Sin acreencias arbitrales", "value_mm": 170360, "patch": { "items": [
+            { "label": "Bonos soberanos", "value_mm": 44000 },
+            { "label": "Bonos PDVSA garantizados", "value_mm": 3400 },
+            { "label": "Bonos PDVSA no garantizados", "value_mm": 29600 },
+            { "label": "China", "value_mm": 19000 },
+            { "label": "Rusia", "value_mm": 3000 },
+            { "label": "Otros bilaterales", "value_mm": 6000 },
+            { "label": "Multilaterales", "value_mm": 10000 },
+            { "label": "Club de París", "value_mm": 2500 },
+            { "label": "Proveedores y contratistas", "value_mm": 35000 },
+            { "label": "Otros reconocidos", "value_mm": 17860 }
+          ] } },
+          { "label": "Con intereses capitalizados de laudos", "value_mm": 191761.73, "patch": { "items": [
+            { "label": "Bonos soberanos", "value_mm": 44000 },
+            { "label": "Bonos PDVSA garantizados", "value_mm": 3400 },
+            { "label": "Bonos PDVSA no garantizados", "value_mm": 29600 },
+            { "label": "Acreencias arbitrales con intereses", "value_mm": 21401.73 },
+            { "label": "China", "value_mm": 19000 },
+            { "label": "Rusia", "value_mm": 3000 },
+            { "label": "Otros bilaterales", "value_mm": 6000 },
+            { "label": "Multilaterales", "value_mm": 10000 },
+            { "label": "Club de París", "value_mm": 2500 },
+            { "label": "Proveedores y contratistas", "value_mm": 35000 },
+            { "label": "Otros reconocidos", "value_mm": 17860 }
+          ] } }
+        ]
+      }
+    },
+    {
+      "id": "bonos-en-default",
+      "group": "stock",
+      "label": "Bonos en cesación de pagos",
+      "sublabel": "Nominal en circulación de República y PDVSA",
+      "value_mm": 77000,
+      "unit": "MM USD",
+      "tier": "reportado",
+      "as_of": "2026-01-14",
+      "source_ids": ["S04", "S03"],
+      "delta_yoy_pct": 0,
+      "trend": "flat",
+      "sparkline": [77000, 77000, 77000, 77000, 77000, 77000],
+      "note": "El nominal no ha cambiado desde el default: lo que cambia es su precio de mercado, que oscila en centavos por dólar y determina la tasa implícita de recuperación.",
+      "breakdown": [
+        { "label": "Bonos soberanos", "value_mm": 44000, "tier": "reportado" },
+        { "label": "Bonos PDVSA", "value_mm": 33000, "tier": "reportado" }
+      ]
+    },
+    {
+      "id": "principal-laudos",
+      "group": "arbitral",
+      "label": "Principal de laudos firmes",
+      "sublabel": "Suma de condenas dictadas contra la República y PDVSA",
+      "value_mm": 17370,
+      "store_as": "value_mm",
+      "unit": "MM USD",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S05", "S06", "S08", "S09", "S13", "S24"],
+      "delta_yoy_pct": 2.6,
+      "trend": "up",
+      "sparkline": [11500, 12100, 13400, 14200, 15800, 17370],
+      "note": "Solo condenas firmes. Excluye casos en curso y reclamaciones desestimadas, y excluye intereses, que se cuantifican por separado porque crecen con el tiempo y son la partida que más presiona la negociación.",
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "value_mm",
+        "formula": "Principal = Σ principal de cada laudo firme",
+        "params": {
+          "items": [
+            { "label": "ConocoPhillips (CIADI)", "value_mm": 8366 },
+            { "label": "ConocoPhillips (ICC)", "value_mm": 2000 },
+            { "label": "ExxonMobil (CIADI)", "value_mm": 1600 },
+            { "label": "ExxonMobil (ICC)", "value_mm": 907 },
+            { "label": "Crystallex (CIADI)", "value_mm": 1202 },
+            { "label": "Rusoro Mining (CIADI)", "value_mm": 968 },
+            { "label": "Gold Reserve (CIADI)", "value_mm": 740 },
+            { "label": "OI European Group (CIADI)", "value_mm": 455 },
+            { "label": "Koch Minerals (CIADI)", "value_mm": 409 },
+            { "label": "Tenaris (CIADI)", "value_mm": 162 },
+            { "label": "Vestey Group (CIADI)", "value_mm": 100 },
+            { "label": "Tidewater (CIADI)", "value_mm": 46 },
+            { "label": "Huntington Ingalls (CIADI)", "value_mm": 15 },
+            { "label": "Otros laudos menores acumulados", "value_mm": 400 }
+          ]
+        },
+        "assumptions": [
+          "Se toma el valor de condena tal como fue dictado, sin ajuste por anulación posterior ni por acuerdos de pago.",
+          "El laudo de ExxonMobil de 2014 se registra por su valor original aunque parte fue anulada en 2017; el residual se documenta en la ficha del caso."
+        ],
+        "sensitivity": [
+          { "label": "Solo casos CIADI", "value_mm": 14063, "patch": { "items": [
+            { "label": "ConocoPhillips (CIADI)", "value_mm": 8366 },
+            { "label": "ExxonMobil (CIADI)", "value_mm": 1600 },
+            { "label": "Crystallex", "value_mm": 1202 },
+            { "label": "Rusoro", "value_mm": 968 },
+            { "label": "Gold Reserve", "value_mm": 740 },
+            { "label": "OI European Group", "value_mm": 455 },
+            { "label": "Koch Minerals", "value_mm": 409 },
+            { "label": "Tenaris", "value_mm": 162 },
+            { "label": "Vestey Group", "value_mm": 100 },
+            { "label": "Tidewater", "value_mm": 46 },
+            { "label": "Huntington Ingalls", "value_mm": 15 }
+          ] } },
+          { "label": "Solo casos ICC", "value_mm": 2907, "patch": { "items": [
+            { "label": "ConocoPhillips (ICC)", "value_mm": 2000 },
+            { "label": "ExxonMobil (ICC)", "value_mm": 907 }
+          ] } },
+          { "label": "Solo petroleras estadounidenses", "value_mm": 12873, "patch": { "items": [
+            { "label": "ConocoPhillips (CIADI)", "value_mm": 8366 },
+            { "label": "ConocoPhillips (ICC)", "value_mm": 2000 },
+            { "label": "ExxonMobil (CIADI)", "value_mm": 1600 },
+            { "label": "ExxonMobil (ICC)", "value_mm": 907 }
+          ] } }
+        ]
+      }
+    },
+    {
+      "id": "laudos-con-intereses",
+      "group": "arbitral",
+      "label": "Laudos con intereses modelados",
+      "sublabel": "Capital más interés devengado, casos con cálculo completo",
+      "value_mm": 21401.73,
+      "store_as": "value_mm",
+      "unit": "MM USD",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S05", "S06", "S08", "S09", "S13"],
+      "delta_yoy_pct": 5.8,
+      "trend": "up",
+      "sparkline": [17800, 18500, 19200, 19900, 20500, 21401.73],
+      "note": "Cifra parcial por diseño: solo siete casos tienen fecha, capital y tasa asumida documentados. Los demás se incorporan a valor nominal, así que el total subestima la acreencia real. Se publica igual porque el subconjunto modelado ya explica la mecánica del crecimiento.",
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "value_mm",
+        "formula": "Total = Σ (capital del caso llevado a valor presente futuro con su tasa asumida)",
+        "params": {
+          "items": [
+            { "label": "ConocoPhillips (CIADI, 3,25%)", "value_mm": 10628.91 },
+            { "label": "ConocoPhillips (ICC, 3,25%)", "value_mm": 2583.83 },
+            { "label": "ExxonMobil (CIADI, sin modelar)", "value_mm": 1600 },
+            { "label": "ExxonMobil (ICC, sin modelar)", "value_mm": 907 },
+            { "label": "Crystallex (CIADI, 3,25%)", "value_mm": 1676.84 },
+            { "label": "Rusoro (CIADI, 3,25%)", "value_mm": 1333.94 },
+            { "label": "Gold Reserve (CIADI, 3,25%)", "value_mm": 1084.21 },
+            { "label": "OI European Group", "value_mm": 455 },
+            { "label": "Koch Minerals", "value_mm": 409 },
+            { "label": "Tenaris", "value_mm": 162 },
+            { "label": "Vestey Group", "value_mm": 100 },
+            { "label": "Tidewater", "value_mm": 46 },
+            { "label": "Huntington Ingalls", "value_mm": 15 },
+            { "label": "Otros laudos menores acumulados", "value_mm": 400 }
+          ]
+        },
+        "assumptions": [
+          "Tasa de 3,25 % anual capitalizada anualmente donde se modela interés.",
+          "Los casos sin tasa documentada se incorporan a valor nominal, lo que sesga el total hacia abajo.",
+          "No se modela la suspensión de intereses que produciría un acuerdo de pago."
+        ],
+        "sensitivity": [
+          { "label": "Escenario de tasa 1,00 %", "value_mm": 18508.88, "patch": { "items": [
+            { "label": "ConocoPhillips (CIADI)", "value_mm": 9012.9 },
+            { "label": "ConocoPhillips (ICC)", "value_mm": 2165.89 },
+            { "label": "ExxonMobil (CIADI)", "value_mm": 1600 },
+            { "label": "ExxonMobil (ICC)", "value_mm": 907 },
+            { "label": "Crystallex", "value_mm": 1333.17 },
+            { "label": "Rusoro", "value_mm": 1069.55 },
+            { "label": "Gold Reserve", "value_mm": 833.37 },
+            { "label": "OI European Group", "value_mm": 455 },
+            { "label": "Koch Minerals", "value_mm": 409 },
+            { "label": "Tenaris", "value_mm": 162 },
+            { "label": "Vestey Group", "value_mm": 100 },
+            { "label": "Tidewater", "value_mm": 46 },
+            { "label": "Huntington Ingalls", "value_mm": 15 },
+            { "label": "Otros laudos menores", "value_mm": 400 }
+          ] } },
+          { "label": "Escenario de tasa 6,00 %", "value_mm": 25648.15, "patch": { "items": [
+            { "label": "ConocoPhillips (CIADI)", "value_mm": 12940.15 },
+            { "label": "ConocoPhillips (ICC)", "value_mm": 3189.22 },
+            { "label": "ExxonMobil (CIADI)", "value_mm": 1600 },
+            { "label": "ExxonMobil (ICC)", "value_mm": 907 },
+            { "label": "Crystallex", "value_mm": 2204.56 },
+            { "label": "Rusoro", "value_mm": 1736.17 },
+            { "label": "Gold Reserve", "value_mm": 1484.05 },
+            { "label": "OI European Group", "value_mm": 455 },
+            { "label": "Koch Minerals", "value_mm": 409 },
+            { "label": "Tenaris", "value_mm": 162 },
+            { "label": "Vestey Group", "value_mm": 100 },
+            { "label": "Tidewater", "value_mm": 46 },
+            { "label": "Huntington Ingalls", "value_mm": 15 },
+            { "label": "Otros laudos menores", "value_mm": 400 }
+          ] } }
+        ]
+      }
+    },
+    {
+      "id": "deuda-pib",
+      "group": "macro",
+      "label": "Deuda externa sobre PIB",
+      "sublabel": "Ratio de sostenibilidad con base 2024",
+      "value_pct": 149.48,
+      "store_as": "value_pct",
+      "unit": "% del PIB",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S01", "S11", "S26"],
+      "delta_yoy_pct": 6.2,
+      "trend": "up",
+      "sparkline": [78.4, 92.1, 110.5, 128.7, 139.9, 143.2, 149.48],
+      "note": "El denominador es el punto débil de este ratio: Venezuela no publica cuentas nacionales completas y las estimaciones de PIB nominal varían. Por eso el resultado se acompaña de su rango, no de un valor único.",
+      "calc": {
+        "method": "ratio",
+        "target": "value_pct",
+        "store_as": "value_pct",
+        "formula": "Deuda / PIB × 100",
+        "params": { "numerator_mm": 164432, "denominator_mm": 110000 },
+        "assumptions": [
+          "PIB nominal 2024 estimado en 110.000 millones de dólares, rango plausible de 95.000 a 125.000.",
+          "Numerador con base de deuda externa 2024 (164.432 millones), no la de 2026."
+        ],
+        "sensitivity": [
+          { "label": "PIB 95.000", "value_pct": 173.09, "patch": { "denominator_mm": 95000 } },
+          { "label": "PIB 125.000", "value_pct": 131.55, "patch": { "denominator_mm": 125000 } }
+        ]
+      }
+    },
+    {
+      "id": "deuda-exportaciones",
+      "group": "macro",
+      "label": "Deuda externa sobre exportaciones",
+      "sublabel": "Años de exportación necesarios para cubrir el stock",
+      "value_times": 9.396,
+      "store_as": "value_times",
+      "unit": "veces las exportaciones anuales",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S01", "S12", "S16"],
+      "delta_yoy_pct": 4.8,
+      "trend": "up",
+      "sparkline": [3.1, 4.2, 5.6, 6.8, 8.1, 9.396],
+      "note": "Es el ratio que mejor explica por qué el servicio es inalcanzable: la capacidad de pago se construye con divisas de exportación, y el stock equivale a cerca de una década de exportaciones totales.",
+      "calc": {
+        "method": "ratio",
+        "target": "value_times",
+        "store_as": "value_times",
+        "formula": "Deuda / exportaciones anuales",
+        "params": { "numerator_mm": 164432, "denominator_mm": 17500 },
+        "assumptions": [
+          "Exportaciones anuales estimadas en 17.500 millones de dólares, con rango observado de 15.000 a 20.000.",
+          "Se usa exportación total, no solo petrolera, para no sobrestimar el ratio."
+        ],
+        "sensitivity": [
+          { "label": "Exportaciones 15.000", "value_times": 10.962, "patch": { "denominator_mm": 15000 } },
+          { "label": "Exportaciones 20.000", "value_times": 8.222, "patch": { "denominator_mm": 20000 } }
+        ]
+      }
+    },
+    {
+      "id": "deuda-reservas",
+      "group": "macro",
+      "label": "Deuda sobre reservas internacionales",
+      "sublabel": "Multiplicador de las reservas disponibles",
+      "value_times": 16.443,
+      "store_as": "value_times",
+      "unit": "veces las reservas",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S01", "S10", "S26"],
+      "delta_yoy_pct": 2.1,
+      "trend": "up",
+      "sparkline": [6.9, 8.4, 10.2, 12.6, 14.1, 16.443],
+      "note": "La comparación con reservas mide colchón, no capacidad de repago. Además, buena parte de las reservas está inmovilizada por litigios y sanciones, por lo que el multiplicador efectivo es todavía mayor.",
+      "calc": {
+        "method": "ratio",
+        "target": "value_times",
+        "store_as": "value_times",
+        "formula": "Deuda / reservas internacionales",
+        "params": { "numerator_mm": 164432, "denominator_mm": 10000 },
+        "assumptions": [
+          "Reservas internacionales estimadas en 10.000 millones de dólares; una porción está en oro retenido en el exterior y otra en bancos corresponsales sujetos a litigio."
+        ],
+        "sensitivity": [
+          { "label": "Reservas efectivas 6.000", "value_times": 27.405, "patch": { "denominator_mm": 6000 } },
+          { "label": "Reservas totales 12.000", "value_times": 13.703, "patch": { "denominator_mm": 12000 } }
+        ]
+      }
+    },
+    {
+      "id": "peso-bonos-default",
+      "group": "calidad",
+      "label": "Peso de los bonos en default",
+      "sublabel": "Sobre el agregado de deuda externa",
+      "value_pct": 46.83,
+      "store_as": "value_pct",
+      "unit": "% del stock",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S04", "S27"],
+      "delta_yoy_pct": -1.4,
+      "trend": "down",
+      "sparkline": [52.4, 51.1, 49.8, 48.6, 47.9, 46.83],
+      "note": "Cerca de la mitad del stock es deuda de mercado, documentada y relativamente homogénea. Eso la vuelve la parte más fácil de reestructurar en lo técnico y la más difícil en lo político, porque requiere trato uniforme entre tenedores.",
+      "calc": {
+        "method": "ratio",
+        "target": "value_pct",
+        "store_as": "value_pct",
+        "formula": "Bonos en default / deuda externa × 100",
+        "params": { "numerator_mm": 77000, "denominator_mm": 164432 },
+        "assumptions": ["Se usa el agregado de 2024 para mantener la coherencia con las demás ratios macro."],
+        "sensitivity": [
+          { "label": "Con agregado 170.360", "value_pct": 45.2, "patch": { "denominator_mm": 170360 } },
+          { "label": "Con nominal de bonos de 60.000 (cifra de prensa)", "value_pct": 36.49, "patch": { "numerator_mm": 60000 } }
+        ]
+      }
+    },
+    {
+      "id": "cobertura-reservas",
+      "group": "macro",
+      "label": "Cobertura de reservas",
+      "sublabel": "Reservas sobre deuda externa agregada",
+      "value_pct": 5.87,
+      "store_as": "value_pct",
+      "unit": "% cubierto",
+      "tier": "calculado",
+      "as_of": "2026-09-01",
+      "source_ids": ["S10", "S27"],
+      "delta_yoy_pct": -0.4,
+      "trend": "down",
+      "sparkline": [14.5, 11.9, 9.4, 7.8, 6.5, 5.87],
+      "note": "Menos de seis centavos por cada dólar de deuda agregada. Cualquier reestructuración parte de este hecho: no hay repago posible sin quita, y la negociación es sobre cuánta.",
+      "calc": {
+        "method": "ratio",
+        "target": "value_pct",
+        "store_as": "value_pct",
+        "formula": "Reservas / deuda externa × 100",
+        "params": { "numerator_mm": 10000, "denominator_mm": 170360 },
+        "assumptions": ["Reservas de 10.000 millones sobre agregado externo de 2026."],
+        "sensitivity": [
+          { "label": "Reservas 6.000", "value_pct": 3.52, "patch": { "numerator_mm": 6000 } },
+          { "label": "Reservas 12.000", "value_pct": 7.04, "patch": { "numerator_mm": 12000 } }
+        ]
+      }
+    },
+    {
+      "id": "crecimiento-caldera",
+      "group": "historia",
+      "label": "Crecimiento bajo Caldera",
+      "sublabel": "1994–1999: de 27.000 a 31.075 millones",
+      "value_pct": 15.09,
+      "store_as": "value_pct",
+      "unit": "% acumulado",
+      "tier": "calculado",
+      "as_of": "1999-12-31",
+      "source_ids": ["S01", "S16", "S20"],
+      "delta_yoy_pct": 0,
+      "trend": "flat",
+      "sparkline": [27000, 27350, 27700, 28050, 28400, 31075],
+      "note": "Crecimiento moderado con dos shocks: la crisis bancaria de 1994 y el ajuste de 1996. El endeudamiento no fue el motor de la crisis; fue su amortiguador.",
+      "calc": {
+        "method": "growth",
+        "target": "growth_pct",
+        "store_as": "value_pct",
+        "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+        "params": { "from_mm": 27000, "to_mm": 31075 },
+        "assumptions": ["Valores de la serie reconstruida, con los puntos de 1994 y 1999 como anclas."],
+        "sensitivity": []
+      }
+    },
+    {
+      "id": "crecimiento-chavez",
+      "group": "historia",
+      "label": "Crecimiento bajo Chávez",
+      "sublabel": "1999–2013: de 31.075 a 110.200 millones",
+      "value_pct": 254.63,
+      "store_as": "value_pct",
+      "unit": "% acumulado",
+      "tier": "calculado",
+      "as_of": "2013-12-31",
+      "source_ids": ["S01", "S16", "S22"],
+      "delta_yoy_pct": 0,
+      "trend": "up",
+      "sparkline": [31075, 33750, 39100, 48175, 56350, 71800, 97400, 110200],
+      "note": "El superciclo petrolero no redujo la deuda: la multiplicó por 3,5. La diferencia con la década anterior es el instrumento —deuda de mercado y préstamos bilaterales respaldados por crudo— más que el monto.",
+      "calc": {
+        "method": "growth",
+        "target": "growth_pct",
+        "store_as": "value_pct",
+        "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+        "params": { "from_mm": 31075, "to_mm": 110200 },
+        "assumptions": ["El punto 2013 incluye por primera vez el stock consolidado de PDVSA."],
+        "sensitivity": [
+          { "label": "Sin consolidar PDVSA en 2013 (90.200 millones)", "value_pct": 190.27, "patch": { "to_mm": 90200 } }
+        ]
+      }
+    },
+    {
+      "id": "crecimiento-maduro",
+      "group": "historia",
+      "label": "Crecimiento desde 2013",
+      "sublabel": "2013–2026: de 110.200 a 170.360 millones",
+      "value_pct": 54.59,
+      "store_as": "value_pct",
+      "unit": "% acumulado",
+      "tier": "calculado",
+      "as_of": "2026-03-20",
+      "source_ids": ["S01", "S27", "S02"],
+      "delta_yoy_pct": 0,
+      "trend": "up",
+      "sparkline": [110200, 117725, 125250, 132775, 140300, 149850, 159400, 164432, 170360],
+      "note": "Crecimiento más lento en porcentaje pero sobre una base cuatro veces mayor, y con una diferencia decisiva: desde 2017 no hay refinanciación voluntaria, solo acumulación de atrasos e intereses que no se pagan.",
+      "calc": {
+        "method": "growth",
+        "target": "growth_pct",
+        "store_as": "value_pct",
+        "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+        "params": { "from_mm": 110200, "to_mm": 170360 },
+        "assumptions": ["El punto 2026 incluye capitalización de atrasos reconocidos, no intereses moratorios devengados."],
+        "sensitivity": [
+          { "label": "Con agregado 2024", "value_pct": 49.21, "patch": { "to_mm": 164432 } },
+          { "label": "Con escenario de mercado 240.000", "value_pct": 117.79, "patch": { "to_mm": 240000 } }
+        ]
+      }
+    },
+    {
+      "id": "crecimiento-total",
+      "group": "historia",
+      "label": "Multiplicación histórica",
+      "sublabel": "1994–2026: de 27.000 a 170.360 millones",
+      "value_pct": 530.96,
+      "store_as": "value_pct",
+      "unit": "% acumulado",
+      "tier": "calculado",
+      "as_of": "2026-03-20",
+      "source_ids": ["S01", "S27"],
+      "delta_yoy_pct": 0,
+      "trend": "up",
+      "sparkline": [27000, 31075, 51200, 110200, 140300, 164432, 170360],
+      "note": "En 32 años la deuda externa se multiplicó por 6,3 mientras la población creció menos de un 40 % y el producto se contrajo en términos reales desde 2013.",
+      "calc": {
+        "method": "growth",
+        "target": "growth_pct",
+        "store_as": "value_pct",
+        "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+        "params": { "from_mm": 27000, "to_mm": 170360 },
+        "assumptions": ["Comparación de extremos de la serie reconstruida."],
+        "sensitivity": []
+      }
+    },
+    {
+      "id": "deuda-per-capita",
+      "group": "macro",
+      "label": "Deuda por habitante",
+      "sublabel": "Sobre una población estimada de 28,3 millones",
+      "value_mm": 5810,
+      "unit": "USD por habitante",
+      "tier": "reportado",
+      "as_of": "2024-12-31",
+      "source_ids": ["S01", "S16"],
+      "delta_yoy_pct": 3.9,
+      "trend": "up",
+      "sparkline": [3900, 4300, 4800, 5200, 5560, 5810],
+      "note": "Cada habitante, incluidos los que no tienen acceso a divisas, carga con cerca de 5.800 dólares de deuda externa. La cifra es un promedio y no debe leerse como obligación individual.",
+      "breakdown": [
+        { "label": "Por bonos en default", "value_mm": 2721, "tier": "calculado" },
+        { "label": "Por bilaterales y multilaterales", "value_mm": 1441, "tier": "calculado" },
+        { "label": "Por otros atrasos", "value_mm": 1648, "tier": "calculado" }
+      ]
+    },
+    {
+      "id": "reservas-internacionales",
+      "group": "macro",
+      "label": "Reservas internacionales",
+      "sublabel": "Incluye oro y depósitos en el exterior",
+      "value_mm": 10000,
+      "unit": "MM USD",
+      "tier": "reportado",
+      "as_of": "2026-08-31",
+      "source_ids": ["S10", "S26"],
+      "delta_yoy_pct": -2.4,
+      "trend": "down",
+      "sparkline": [21000, 18600, 15900, 13500, 11800, 10200, 10000],
+      "note": "Parte del oro está retenido en el Banco de Inglaterra y varios depósitos están sujetos a litigios. Las reservas publicadas sobrestiman la liquidez realmente disponible.",
+      "breakdown": [
+        { "label": "Oro (incluido el retenido en el exterior)", "value_mm": 5000, "tier": "reportado" },
+        { "label": "Depósitos y otras divisas", "value_mm": 5000, "tier": "reportado" }
+      ]
+    }
+  ]
+}

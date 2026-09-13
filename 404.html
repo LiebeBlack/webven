@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es-VE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>404 · Ruta no encontrada · Observatorio de Deuda Soberana VE</title>
+    <style>
+      /* Autocontenida a propósito: GitHub Pages sirve esta página para
+         cualquier ruta ausente, y desde una ruta profunda las hojas de estilo
+         relativas no resolverían. */
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        background: #000;
+        color: #ededed;
+        font-family: Inter, system-ui, sans-serif;
+        line-height: 1.6;
+      }
+      main { width: min(62ch, 100%); }
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #c8a24a;
+      }
+      h1 { font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 0.6rem 0 1rem; }
+      p { color: #a8adb6; margin: 0 0 1rem; }
+      hr { border: 0; border-top: 1px solid #16171a; margin: 1.75rem 0; }
+      ul { padding-left: 1.1rem; color: #a8adb6; }
+      a { color: #c8a24a; text-decoration: none; border-bottom: 1px solid rgba(200, 162, 74, 0.32); }
+      a:hover { border-bottom-color: #c8a24a; }
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.86em;
+        color: #ededed;
+        background: rgba(255, 255, 255, 0.045);
+        padding: 0.1rem 0.35rem;
+        border-radius: 4px;
+      }
+      .note { font-size: 0.85rem; color: #6e747e; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Error 404</p>
+      <h1>Esta ruta no existe en el observatorio</h1>
+      <p>
+        La dirección solicitada no corresponde a ningún documento del sitio. El observatorio es estático: no hay
+        redirecciones dinámicas, así que el enlace está mal escrito o el documento se movió.
+      </p>
+      <ul>
+        <li><a id="home" href="./">Portada del observatorio</a></li>
+        <li><a id="audit" href="./tests/validate.html">Auditoría del dataset</a></li>
+        <li><a id="repo" href="https://github.com/usuario/observatorio-deuda-soberana-ve">Código y datos en el repositorio</a></li>
+      </ul>
+      <hr />
+      <p class="note">
+        Si llegaste aquí desde un enlace del propio documento, es un error del sitio y conviene reportarlo: el repositorio
+        tiene una plantilla específica para corregir enlaces roto. Los artefactos de un solo archivo viven en
+        <code>dist/</code>.
+      </p>
+    </main>
+
+    <script>
+      /* La raíz del sitio se deduce, porque GitHub Pages sirve esta página en
+         cualquier profundidad: en un sitio de proyecto la raíz es /repositorio/,
+         y en un dominio propio es /. Se prueba de la más específica a la raíz. */
+      (function () {
+        var segments = window.location.pathname.split("/").filter(Boolean);
+        var candidates = [];
+        if (segments.length) candidates.push("/" + segments[0] + "/");
+        candidates.push("/");
+
+        function wire(base) {
+          ["home", "audit", "repo"].forEach(function (id) {
+            var node = document.getElementById(id);
+            if (!node) return;
+            if (id === "home") node.href = base;
+            if (id === "audit") node.href = base + "tests/validate.html";
+          });
+        }
+
+        var index = 0;
+        function probe() {
+          if (index >= candidates.length) return;
+          var base = candidates[index];
+          index += 1;
+          fetch(base + "index.html", { method: "HEAD", cache: "no-store" })
+            .then(function (response) {
+              if (response.ok) wire(base);
+              else probe();
+            })
+            .catch(probe);
+        }
+
+        wire(candidates[0]);
+        probe();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "observatorio-deuda-soberana-ve",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Observatorio arquitectónico de la deuda soberana de Venezuela: dataset forense con procedencia declarada por registro, recálculo reproducible de cada cifra derivada y sitio estático sin dependencias de ejecución.",
+  "keywords": [
+    "deuda-soberana",
+    "venezuela",
+    "reestructuracion-de-deuda",
+    "arbitraje-de-inversiones",
+    "datos-abiertos",
+    "visualizacion-de-datos"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/usuario/observatorio-deuda-soberana-ve",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "validate": "node tools/validate.mjs",
+    "test": "node tools/validate.mjs",
+    "build:data": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-database.ps1",
+    "build:data:check": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-database.ps1 -Check",
+    "build:bundle": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/bundle-standalone.ps1 -Set todos",
+    "build": "npm run build:data && npm run build:bundle",
+    "serve": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/serve.ps1 -Open"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

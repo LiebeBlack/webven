@@ -1,0 +1,392 @@
+{
+  "legal_instruments": [
+    {
+      "id": "cac",
+      "name": "Cláusulas de Acción Colectiva (CAC)",
+      "jurisdiction": "Nueva York e inglesa, según el tramo",
+      "family": "contractual",
+      "description": "Permiten que una mayoría calificada de tenedores de un tramo modifique términos financieros y obligue al resto de los tenedores de ese tramo.",
+      "relevance": "Es la herramienta central frente a los fondos de bloqueo. El stock venezolano es mayoritariamente anterior al estándar de ICMA de 2014, así que una parte importante de los tramos carece de CAC con umbrales útiles.",
+      "application": "Diseño de los umbrales de adhesión de un canje y viabilidad de imponerlo a minorías.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S19", "S25"]
+    },
+    {
+      "id": "cac-agregada",
+      "name": "Cláusula de acción colectiva agregada",
+      "jurisdiction": "Nueva York",
+      "family": "contractual",
+      "description": "Extiende el cálculo de mayorías al conjunto de los tramos, de modo que una minoría en un bono pequeño no pueda bloquear la operación completa.",
+      "relevance": "Elimina el arbitraje regulatorio entre tramos, que es la técnica preferida de los holdouts contemporáneos. Exige homogeneidad contractual entre los títulos que se agreguen.",
+      "application": "Cierre técnico de un canje único sobre la curva completa.",
+      "tier": "propuesta",
+      "source_ids": ["S17", "S04"]
+    },
+    {
+      "id": "clausula-peruana",
+      "name": "Cláusula peruana (trato más favorable)",
+      "jurisdiction": "Nueva York (tramos antiguos)",
+      "family": "contractual",
+      "description": "Garantiza al tenedor que si otro acreedor obtiene condiciones mejores en el futuro, esas condiciones se le extienden automáticamente.",
+      "relevance": "Impide recompras selectivas o acuerdos bilaterales con grupos reducidos, que son la vía más rápida y discreta de reducir pasivo.",
+      "application": "Diseño de acuerdos diferenciados por clase de acreedor.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S25"]
+    },
+    {
+      "id": "pari-passu",
+      "name": "Cláusula pari passu",
+      "jurisdiction": "Nueva York",
+      "family": "contractual",
+      "description": "Establece igualdad de rango entre acreedores. La jurisprudencia la ha interpretado de forma amplia, al punto de permitir bloquear pagos a tenedores que ya aceptaron una reestructuración.",
+      "relevance": "Es el principal riesgo jurídico que debe resolverse antes de ofrecer incentivos de adhesión diferenciados.",
+      "application": "Análisis de riesgo previo a definir trato desigual entre tenedores.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S24"]
+    },
+    {
+      "id": "negative-pledge",
+      "name": "Negative pledge (prohibición de garantías)",
+      "jurisdiction": "Nueva York e inglesa",
+      "family": "contractual",
+      "description": "Impide que el deudor otorgue garantías sobre activos a otros acreedores sin extenderlas de forma equivalente a los tenedores existentes.",
+      "relevance": "Explica por qué las estructuras de colateral con crudo y las garantías sobre acciones son jurídicamente sensibles: pueden activar reclamos de los tenedores sin garantía.",
+      "application": "Viabilidad de estructuras colateralizadas con producción petrolera.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S25"]
+    },
+    {
+      "id": "cross-default",
+      "name": "Cross-default (incumplimiento cruzado)",
+      "jurisdiction": "Nueva York e inglesa",
+      "family": "contractual",
+      "description": "El incumplimiento en un título se considera incumplimiento en todos los demás títulos vinculados por la cláusula.",
+      "relevance": "Es la razón por la cual el default venezolano fue simultáneo en casi todos los tramos y no escalonado. También significa que cualquier acuerdo parcial debe abarcar el conjunto vinculado.",
+      "application": "Alcance mínimo de un canje coherente.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S03"]
+    },
+    {
+      "id": "acceleration",
+      "name": "Cláusula de vencimiento anticipado (acceleration)",
+      "jurisdiction": "Nueva York e inglesa",
+      "family": "contractual",
+      "description": "Ante un incumplimiento, una mayoría de tenedores puede declarar exigible la totalidad del capital de un tramo.",
+      "relevance": "Convierte un atraso de cupón en una deuda completa exigible, lo que magnifica el monto judicializable y traslada la discusión a tribunales de ejecución.",
+      "application": "Evaluación del riesgo de que un tramo se transforme en sentencia ejecutable.",
+      "tier": "oficial",
+      "source_ids": ["S17", "S25"]
+    },
+    {
+      "id": "trust-indenture",
+      "name": "Fideicomiso de emisión (trust indenture)",
+      "jurisdiction": "Nueva York / Delaware",
+      "family": "contractual",
+      "description": "El fiduciario actúa en representación de todos los tenedores de un tramo, con poderes limitados y deberes fiduciarios definidos.",
+      "relevance": "Determina quién puede negociar por el tramo y quién puede litigar. Sin la cooperación del fiduciario, un acuerdo individual con tenedores no tiene efectos sobre el conjunto.",
+      "application": "Identificación de la contraparte legal real en cada tramo.",
+      "tier": "oficial",
+      "source_ids": ["S25", "S17"]
+    },
+    {
+      "id": "exit-consents",
+      "name": "Consentimientos de salida (exit consents)",
+      "jurisdiction": "Nueva York",
+      "family": "contractual",
+      "description": "Enmiendas aprobadas por mayoría que modifican cláusulas de un bono antes de canjearlo, eliminando herramientas de litigio futuro.",
+      "relevance": "Reduce la capacidad de bloqueo posterior, pero abre un frente de litigio sobre la validez de la enmienda misma.",
+      "application": "Neutralización de cláusulas de bloqueo antes del canje.",
+      "tier": "precedente",
+      "source_ids": ["S17", "S24"]
+    },
+    {
+      "id": "icsid-art54",
+      "name": "Artículo 54 del Convenio del CIADI",
+      "jurisdiction": "Multilateral (Convenio de Washington)",
+      "family": "tratado",
+      "description": "Obliga a los Estados contratantes a reconocer un laudo del CIADI como si fuera una sentencia firme de sus propios tribunales y a ejecutarlo.",
+      "relevance": "Es la razón por la cual los laudos venezolanos se persiguen en tribunales de terceros países con éxito, sin necesidad de revisar el fondo del caso.",
+      "application": "Ejecución internacional de laudos y diseño de defensas.",
+      "tier": "oficial",
+      "source_ids": ["S23", "S05"]
+    },
+    {
+      "id": "convencion-nueva-york",
+      "name": "Convención de Nueva York de 1958",
+      "jurisdiction": "Multilateral (más de 170 Estados)",
+      "family": "tratado",
+      "description": "Establece causales tasadas y limitadas para negar el reconocimiento de laudos arbitrales extranjeros, con lo que restringe la defensa del deudor.",
+      "relevance": "Aplica a los laudos del ICC y a los arbitrajes ad hoc. Sus causales de negativa son excepcionales, lo que deja al deudor con poco margen técnico.",
+      "application": "Cobertura de la ejecución de laudos no CIADI.",
+      "tier": "oficial",
+      "source_ids": ["S24", "S08"]
+    },
+    {
+      "id": "inmunidad-soberana",
+      "name": "Inmunidad soberana y sus excepciones (FSIA)",
+      "jurisdiction": "Estados Unidos",
+      "family": "estatutaria",
+      "description": "Reconoce inmunidad a los Estados extranjeros, con excepciones relevantes para actos comerciales y para renuncias contractuales expresas.",
+      "relevance": "Es la línea de defensa más fuerte del Estado y a la vez la más erosionada: cada bono incluye renuncias de inmunidad y PDVSA es una entidad comercial, lo que abre la vía de ejecución.",
+      "application": "Viabilidad de embargos sobre cuentas, acciones y activos en Estados Unidos.",
+      "tier": "oficial",
+      "source_ids": ["S24", "S23", "S13"]
+    },
+    {
+      "id": "act-of-state",
+      "name": "Doctrina del acto de Estado (act of state)",
+      "jurisdiction": "Estados Unidos",
+      "family": "jurisprudencial",
+      "description": "Impide que un tribunal estadounidense juzgue la validez de actos soberanos de otro Estado realizados en su propio territorio.",
+      "relevance": "Protege la expropiación misma de la revisión judicial interna, pero no protege la ejecución del laudo que se deriva de ella.",
+      "application": "Defensa frente a reclamos de validez de nacionalizaciones.",
+      "tier": "oficial",
+      "source_ids": ["S18", "S23"]
+    },
+    {
+      "id": "personalidad-separada",
+      "name": "Personalidad jurídica separada de PDVSA",
+      "jurisdiction": "Venezuela y país de ejecución",
+      "family": "estatutaria",
+      "description": "PDVSA y sus filiales son personas jurídicas distintas del Estado, con patrimonio y obligaciones propios.",
+      "relevance": "Es la puerta por la que los acreedores alcanzan activos sin vencer la inmunidad soberana. También obliga a decidir si la reestructuración se hace en uno o dos procesos.",
+      "application": "Delimitación del perímetro de la reestructuración y estrategia de ejecución.",
+      "tier": "oficial",
+      "source_ids": ["S04", "S13", "S23"]
+    },
+    {
+      "id": "ley-endeudamiento",
+      "name": "Ley de Endeudamiento y control legislativo",
+      "jurisdiction": "Venezuela",
+      "family": "doméstica",
+      "description": "Establece el marco interno de autorización del endeudamiento público y su techo anual.",
+      "relevance": "Cualquier acuerdo de reestructuración requiere autorización legislativa interna, además de la negociación externa. Es el filtro político que explica la lentitud del proceso.",
+      "application": "Análisis de viabilidad interna de un acuerdo.",
+      "tier": "reportado",
+      "source_ids": ["S22"]
+    },
+    {
+      "id": "consentimiento-tratado",
+      "name": "Consentimiento arbitral por tratado bilateral de inversión",
+      "jurisdiction": "Multilateral y bilateral",
+      "family": "tratado",
+      "description": "El Estado consiente anticipadamente el arbitraje internacional de disputas de inversión en los tratados que suscribe.",
+      "relevance": "Generó la mayoría de los laudos del portafolio venezolano. Su denuncia futura solo afecta a inversiones nuevas, no a las ya existentes.",
+      "application": "Análisis del universo de reclamaciones y de la exposición futura.",
+      "tier": "oficial",
+      "source_ids": ["S23", "S05"]
+    }
+  ],
+  "scenarios": {
+    "base_nominal_mm": 75000,
+    "valuation_date": "2026-09-01",
+    "unit": "MM USD",
+    "note": "Los escenarios son simulaciones reproducibles, no pronósticos. Cada uno declara quita, cupón, plazo, gracia y tasa de descuento, y el valor presente se recalcula en el validador con la misma fórmula que usa la interfaz. La tasa de descuento del 11 % al 13 % refleja el costo de oportunidad de un acreedor que cobra en un país sin acceso a mercados.",
+    "items": [
+      {
+        "id": "s1-brady-profundo",
+        "name": "Quita profunda tipo Brady",
+        "short": "Quita del 85 % y cupón bajo con garantía en el principal",
+        "probability_pct": 12,
+        "haircut_pct": 85,
+        "coupon_pct": 3,
+        "tenor_years": 30,
+        "grace_years": 5,
+        "discount_rate_pct": 12,
+        "recovery_npv_mm": 1755.69,
+        "store_as": "recovery_npv_mm",
+        "tier": "calculado",
+        "rationale": "Reproduce la lógica del Plan Brady: el acreedor acepta nominal muy reducido porque el principal queda colateralizado con un título sin riesgo de crédito. El alivio de caja es máximo y la recuperación efectiva mínima.",
+        "assumptions": [
+          "Tasa de descuento del 12 % anual.",
+          "Gracia de capital de 5 años y cupón del 3 % sobre el nominal ya reducido.",
+          "Se asume colateral del principal, condición del canje tipo Brady."
+        ],
+        "risks": ["Requiere recursos para adquirir el colateral", "Probabilidad baja sin acceso a financiamiento externo"],
+        "calc": {
+          "method": "recovery_npv",
+          "target": "npv_mm",
+          "store_as": "recovery_npv_mm",
+          "formula": "VPN = Σ C/(1+d)^i + R/(1+d)^(g+T), con R = N·(1−h)",
+          "params": { "nominal_mm": 75000, "haircut_pct": 85, "coupon_pct": 3, "tenor_years": 30, "grace_years": 5, "discount_rate_pct": 12 },
+          "extra_outputs": [
+            { "target": "recovery_pct_of_nominal", "store_as": "recovery_pct_of_nominal" },
+            { "target": "nominal_restructured_mm", "store_as": "nominal_restructured_mm" },
+            { "target": "coupon_mm_per_period", "store_as": "coupon_mm_per_period" },
+            { "target": "undiscounted_mm", "store_as": "undiscounted_mm" }
+          ],
+          "assumptions": ["Cupón anual, sin amortización intermedia.", "Tasa de descuento constante durante todo el plazo."],
+          "sensitivity": [
+            { "label": "Tasa de descuento 8 %", "value_mm": 3346.77, "patch": { "discount_rate_pct": 8 } },
+            { "label": "Tasa de descuento 16 %", "value_mm": 1054.99, "patch": { "discount_rate_pct": 16 } }
+          ]
+        },
+        "recovery_pct_of_nominal": 2.34,
+        "nominal_restructured_mm": 11250,
+        "coupon_mm_per_period": 337.5,
+        "undiscounted_mm": 21375,
+        "source_ids": ["S16", "S19"]
+      },
+      {
+        "id": "s2-reperfil-moderado",
+        "name": "Reperfil moderado",
+        "short": "Quita del 55 % con cupón medio y horizonte de 20 años",
+        "probability_pct": 22,
+        "haircut_pct": 55,
+        "coupon_pct": 6,
+        "tenor_years": 20,
+        "grace_years": 3,
+        "discount_rate_pct": 12,
+        "recovery_npv_mm": 13256.46,
+        "store_as": "recovery_npv_mm",
+        "tier": "calculado",
+        "rationale": "Es el escenario que suele mencionarse en mesas de negociación cuando hay voluntad mutua: una quita significativa pero no confiscatoria, con cupón que supera el rendimiento de un bono del Tesoro y plazo administrable.",
+        "assumptions": ["Tasa de descuento del 12 %.", "Cupón del 6 % sobre el nominal reducido.", "Gracia de 3 años."],
+        "risks": ["Requiere flujo de caja sostenido desde el cuarto año", "Sensible a una caída del precio del crudo"],
+        "calc": {
+          "method": "recovery_npv",
+          "target": "npv_mm",
+          "store_as": "recovery_npv_mm",
+          "formula": "VPN = Σ C/(1+d)^i + R/(1+d)^(g+T), con R = N·(1−h)",
+          "params": { "nominal_mm": 75000, "haircut_pct": 55, "coupon_pct": 6, "tenor_years": 20, "grace_years": 3, "discount_rate_pct": 12 },
+          "extra_outputs": [
+            { "target": "recovery_pct_of_nominal", "store_as": "recovery_pct_of_nominal" },
+            { "target": "nominal_restructured_mm", "store_as": "nominal_restructured_mm" },
+            { "target": "coupon_mm_per_period", "store_as": "coupon_mm_per_period" },
+            { "target": "undiscounted_mm", "store_as": "undiscounted_mm" }
+          ],
+          "assumptions": ["Cupón anual, sin amortización intermedia.", "Tasa de descuento constante."],
+          "sensitivity": [
+            { "label": "Tasa de descuento 8 %", "value_mm": 21530.91, "patch": { "discount_rate_pct": 8 } },
+            { "label": "Tasa de descuento 16 %", "value_mm": 8802.74, "patch": { "discount_rate_pct": 16 } }
+          ]
+        },
+        "recovery_pct_of_nominal": 17.68,
+        "nominal_restructured_mm": 33750,
+        "coupon_mm_per_period": 2025,
+        "undiscounted_mm": 74250,
+        "source_ids": ["S19", "S04"]
+      },
+      {
+        "id": "s3-con-colateral",
+        "name": "Reestructuración con colateral petrolero",
+        "short": "Quita del 40 % y cupón alto respaldado por entregas de crudo",
+        "probability_pct": 18,
+        "haircut_pct": 40,
+        "coupon_pct": 7,
+        "tenor_years": 25,
+        "grace_years": 4,
+        "discount_rate_pct": 11,
+        "recovery_npv_mm": 19657.1,
+        "store_as": "recovery_npv_mm",
+        "tier": "calculado",
+        "rationale": "El escenario de mejor recuperación para el acreedor: la quita se compensa con un cupón alto y con la percepción de que el flujo petrolero respalda el pago. Es el resultado que buscan los tenedores y también el que más hipoteca producción futura.",
+        "assumptions": ["Tasa de descuento del 11 % por menor riesgo percibido.", "Cupón del 7 % sobre el nominal reducido.", "Gracia de 4 años."],
+        "risks": ["Compromete volumen exportable por décadas", "Vulnerable a sanciones que afecten la comercialización", "Deja poco espacio para el gasto social"],
+        "calc": {
+          "method": "recovery_npv",
+          "target": "npv_mm",
+          "store_as": "recovery_npv_mm",
+          "formula": "VPN = Σ C/(1+d)^i + R/(1+d)^(g+T), con R = N·(1−h)",
+          "params": { "nominal_mm": 75000, "haircut_pct": 40, "coupon_pct": 7, "tenor_years": 25, "grace_years": 4, "discount_rate_pct": 11 },
+          "extra_outputs": [
+            { "target": "recovery_pct_of_nominal", "store_as": "recovery_pct_of_nominal" },
+            { "target": "nominal_restructured_mm", "store_as": "nominal_restructured_mm" },
+            { "target": "coupon_mm_per_period", "store_as": "coupon_mm_per_period" },
+            { "target": "undiscounted_mm", "store_as": "undiscounted_mm" }
+          ],
+          "assumptions": ["Cupón anual, sin amortización intermedia.", "Tasa de descuento constante."],
+          "sensitivity": [
+            { "label": "Tasa de descuento 8 %", "value_mm": 29545.52, "patch": { "discount_rate_pct": 8 } },
+            { "label": "Tasa de descuento 16 %", "value_mm": 11215.25, "patch": { "discount_rate_pct": 16 } }
+          ]
+        },
+        "recovery_pct_of_nominal": 26.21,
+        "nominal_restructured_mm": 45000,
+        "coupon_mm_per_period": 3150,
+        "undiscounted_mm": 123750,
+        "source_ids": ["S01", "S15", "S04"]
+      },
+      {
+        "id": "s4-cac-agregada",
+        "name": "Acuerdo integral con acción colectiva agregada",
+        "short": "Quita del 70 % con cupón del 5 % y cierre técnico por mayoría",
+        "probability_pct": 33,
+        "haircut_pct": 70,
+        "coupon_pct": 5,
+        "tenor_years": 25,
+        "grace_years": 4,
+        "discount_rate_pct": 12,
+        "recovery_npv_mm": 6448.64,
+        "store_as": "recovery_npv_mm",
+        "tier": "calculado",
+        "rationale": "Es el resultado más probable según este modelo: una quita alta negociada en un proceso ordenado, con mayoría agregada que impide el bloqueo. Maximiza la sostenibilidad y ofrece recuperación baja pero cierta.",
+        "assumptions": ["Tasa de descuento del 12 %.", "Cupón del 5 % sobre el nominal reducido.", "Gracia de 4 años."],
+        "risks": ["Requiere coordinación con acreedores arbitrales fuera del canje", "Depende de licencias de sanciones vigentes durante la ejecución"],
+        "calc": {
+          "method": "recovery_npv",
+          "target": "npv_mm",
+          "store_as": "recovery_npv_mm",
+          "formula": "VPN = Σ C/(1+d)^i + R/(1+d)^(g+T), con R = N·(1−h)",
+          "params": { "nominal_mm": 75000, "haircut_pct": 70, "coupon_pct": 5, "tenor_years": 25, "grace_years": 4, "discount_rate_pct": 12 },
+          "extra_outputs": [
+            { "target": "recovery_pct_of_nominal", "store_as": "recovery_pct_of_nominal" },
+            { "target": "nominal_restructured_mm", "store_as": "nominal_restructured_mm" },
+            { "target": "coupon_mm_per_period", "store_as": "coupon_mm_per_period" },
+            { "target": "undiscounted_mm", "store_as": "undiscounted_mm" }
+          ],
+          "assumptions": ["Cupón anual, sin amortización intermedia.", "Tasa de descuento constante."],
+          "sensitivity": [
+            { "label": "Tasa de descuento 8 %", "value_mm": 11241.93, "patch": { "discount_rate_pct": 8 } },
+            { "label": "Tasa de descuento 16 %", "value_mm": 4092.31, "patch": { "discount_rate_pct": 16 } }
+          ]
+        },
+        "recovery_pct_of_nominal": 8.6,
+        "nominal_restructured_mm": 22500,
+        "coupon_mm_per_period": 1125,
+        "undiscounted_mm": 50625,
+        "source_ids": ["S17", "S19", "S04"]
+      },
+      {
+        "id": "s5-impago-persistente",
+        "name": "Impago persistente sin acuerdo",
+        "short": "Quita del 95 % equivalente, sin flujo de pago por décadas",
+        "probability_pct": 15,
+        "haircut_pct": 95,
+        "coupon_pct": 2,
+        "tenor_years": 35,
+        "grace_years": 6,
+        "discount_rate_pct": 13,
+        "recovery_npv_mm": 298.25,
+        "store_as": "recovery_npv_mm",
+        "tier": "calculado",
+        "rationale": "El escenario de continuidad: sin negociación, el acreedor no cobra nada relevante y el deudor acumula condenas. No es un escenario de quita acordada sino su ausencia, expresada en los mismos términos para hacerla comparable.",
+        "assumptions": ["Tasa de descuento del 13 % por mayor incertidumbre.", "Cupón del 2 % y gracia de 6 años.", "Se asume que un acuerdo tardío replica las condiciones de un canje técnico mínimo."],
+        "risks": ["Escalamiento del litigio y pérdida de activos estratégicos", "Aislamiento financiero prolongado", "Deterioro del valor del activo que respalde un acuerdo futuro"],
+        "calc": {
+          "method": "recovery_npv",
+          "target": "npv_mm",
+          "store_as": "recovery_npv_mm",
+          "formula": "VPN = Σ C/(1+d)^i + R/(1+d)^(g+T), con R = N·(1−h)",
+          "params": { "nominal_mm": 75000, "haircut_pct": 95, "coupon_pct": 2, "tenor_years": 35, "grace_years": 6, "discount_rate_pct": 13 },
+          "extra_outputs": [
+            { "target": "recovery_pct_of_nominal", "store_as": "recovery_pct_of_nominal" },
+            { "target": "nominal_restructured_mm", "store_as": "nominal_restructured_mm" },
+            { "target": "coupon_mm_per_period", "store_as": "coupon_mm_per_period" },
+            { "target": "undiscounted_mm", "store_as": "undiscounted_mm" }
+          ],
+          "assumptions": ["Cupón anual, sin amortización intermedia.", "La probabilidad asignada es de ocurrencia del escenario, no de pago."],
+          "sensitivity": [
+            { "label": "Tasa de descuento 8 %", "value_mm": 710.66, "patch": { "discount_rate_pct": 8 } },
+            { "label": "Tasa de descuento 16 %", "value_mm": 199.86, "patch": { "discount_rate_pct": 16 } }
+          ]
+        },
+        "recovery_pct_of_nominal": 0.4,
+        "nominal_restructured_mm": 3750,
+        "coupon_mm_per_period": 75,
+        "undiscounted_mm": 6375,
+        "source_ids": ["S19", "S21"]
+      }
+    ]
+  }
+}

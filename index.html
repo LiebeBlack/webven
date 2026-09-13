@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es-VE" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Observatorio Arquitectónico de la Deuda Soberana de Venezuela · 1990–2026</title>
+    <meta
+      name="description"
+      content="Análisis forense de la deuda soberana de Venezuela: deuda externa, PDVSA, laudos CIADI e ICC, cláusulas de acción colectiva, cuentas escrow y escenarios de recuperación, con procedencia declarada en cada cifra."
+    />
+    <meta name="author" content="Observatorio Arquitectónico de la Deuda Soberana de Venezuela" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://usuario.github.io/observatorio-deuda-soberana-ve/" />
+
+    <!-- Open Graph y tarjeta social. Sustituye el dominio antes de publicar. -->
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="es_VE" />
+    <meta property="og:site_name" content="Observatorio de Deuda Soberana VE" />
+    <meta property="og:url" content="https://usuario.github.io/observatorio-deuda-soberana-ve/" />
+    <meta property="og:title" content="Observatorio Arquitectónico de la Deuda Soberana de Venezuela" />
+    <meta
+      property="og:description"
+      content="Arquitectura de la acreencia, ingeniería de recuperación y trazabilidad probatoria, 1990–2026. Cada cifra declara su procedencia y las derivadas se recalculan en una auditoría pública."
+    />
+    <meta property="og:image" content="assets/og-cover.svg" />
+    <meta property="og:image:alt" content="Marca del observatorio: curva de deuda creciente cortada por una línea de referencia" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Observatorio Arquitectónico de la Deuda Soberana de Venezuela" />
+    <meta
+      name="twitter:description"
+      content="Deuda externa, laudos arbitrales y mecanismos de recuperación de Venezuela, con procedencia declarada y cifras derivadas recalculables."
+    />
+    <meta name="twitter:image" content="assets/og-cover.svg" />
+
+    <!-- Favicon vectorial embebido: sin dependencia de archivo externo, y por
+         eso también funciona en la distribución de archivo único. -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000000'/%3E%3Crect x='4' y='4' width='24' height='24' fill='none' stroke='%23c8a24a' stroke-width='1'/%3E%3Cpath d='M9 22V10h3.2l3.4 6.2L19 10h3v12h-2.4v-7.6L16.4 20h-1.6l-3.2-5.6V22z' fill='%23c8a24a'/%3E%3C/svg%3E"
+    />
+
+    <!-- assets:inicio — el empaquetador retira este bloque del archivo único,
+         porque ahí no existen los archivos externos que referencia. -->
+    <link rel="icon" type="image/svg+xml" sizes="any" href="assets/favicon.svg" />
+    <link rel="apple-touch-icon" href="assets/favicon.svg" />
+    <link rel="manifest" href="site.webmanifest" />
+    <!-- assets:fin -->
+
+    <!-- Tipografías: Inter (texto), JetBrains Mono (cifras), Playfair Display (titulares) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Hoja de estilos propia: la identidad visual vive aquí, no en utilidades -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/print.css" media="print" />
+
+    <!-- Tailwind como capa de utilidades, fijado a una versión concreta -->
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      // Configuración mínima: solo se extienden los colores de marca y la
+      // tipografía. La estructura y las animaciones complejas están en css/styles.css.
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              ink: { DEFAULT: "#ededed", soft: "#a8adb6", dim: "#6e747e" },
+              pitch: { DEFAULT: "#000000", raise: "#050506", surface: "#08090a" },
+              brass: { DEFAULT: "#c8a24a", soft: "rgba(200,162,74,0.14)" },
+              documental: "#7fa6c8",
+              calculado: "#9c7fc8",
+              alerta: "#c4453f",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+              display: ["Playfair Display", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Biblioteca de gráficos: si no carga, cada visualización degrada a su tabla -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+      integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt"
+      crossorigin="anonymous"
+      onerror="window.__chartsFailed = true;"
+    ></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Observatorio Arquitectónico de la Deuda Soberana de Venezuela",
+        "description": "Dataset forense sobre deuda externa venezolana: stock por acreedor, laudos arbitrales, mecanismos de recuperación y escenarios, con procedencia declarada por registro.",
+        "inLanguage": "es-VE",
+        "temporalCoverage": "1990/2026",
+        "isAccessibleForFree": true,
+        "spatialCoverage": { "@type": "Place", "name": "Venezuela" },
+        "creator": {
+          "@type": "Organization",
+          "name": "Observatorio Arquitectónico de la Deuda Soberana de Venezuela"
+        },
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "variableMeasured": [
+          { "@type": "PropertyValue", "name": "Deuda externa agregada", "unitText": "MM USD" },
+          { "@type": "PropertyValue", "name": "Exposición agregada con acreencias arbitrales", "unitText": "MM USD" },
+          { "@type": "PropertyValue", "name": "Deuda sobre PIB", "unitText": "%" },
+          { "@type": "PropertyValue", "name": "Valor presente de recuperación por escenario", "unitText": "MM USD" }
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- Sin JavaScript, todo el detalle sigue visible: la clase .no-js lo garantiza -->
+    <noscript>
+      <div class="error-panel" style="margin: var(--sp-5) auto; max-width: 70ch">
+        <p class="error-panel__title">JavaScript desactivado</p>
+        <p>
+          Este documento necesita JavaScript para cargar el dataset y construir las secciones. Los textos de encuadre
+          siguen visibles, pero las cifras, tablas y visualizaciones no se montarán hasta que lo actives. El dataset
+          completo está disponible en <code>data/database.json</code> y es legible sin la interfaz.
+        </p>
+      </div>
+    </noscript>
+
+    <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+
+    <!-- Barra de progreso de lectura -->
+    <div class="progress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress__bar" id="progress-bar"></div>
+    </div>
+
+    <!-- Pantalla de arranque: registra la cadena de carga de datos -->
+    <div class="boot" id="boot-screen" role="status" aria-live="polite">
+      <div class="boot__box">
+        <div class="row" style="justify-content: space-between; margin-bottom: var(--sp-4)">
+          <span class="mono">Observatorio de Deuda Soberana VE</span>
+          <span class="mono ok">cargando…</span>
+        </div>
+        <div id="boot-log"></div>
+      </div>
+    </div>
+
+    <!-- Cabecera estilo terminal -->
+    <header class="masthead">
+      <div class="shell masthead__bar">
+        <div class="masthead__id">
+          <span class="masthead__mark" aria-hidden="true">VE</span>
+          <h1 class="masthead__title">
+            Información del Mercantil Venezolano
+            <span class="accent">/ deuda soberana</span>
+            <span class="cursor" aria-hidden="true"></span>
+          </h1>
+        </div>
+        <div class="masthead__status">
+          <span class="led led--ok">dataset en línea</span>
+          <span class="led led--alert">cesación de pagos desde 2017</span>
+          <button class="cite" type="button" data-open-palette aria-label="Abrir paleta de comandos">
+            comandos <span class="kbd">Ctrl K</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Cinta de hechos verificables -->
+    <div class="ticker" aria-label="Últimos hechos registrados">
+      <div class="ticker__track" id="ticker-track"></div>
+    </div>
+
+    <!-- Navegación anclada -->
+    <nav class="nav" aria-label="Secciones del observatorio">
+      <div class="shell">
+        <div class="nav__track">
+          <a class="nav__link" href="#resumen">Resumen</a>
+          <a class="nav__link" href="#trayectoria">Trayectoria</a>
+          <a class="nav__link" href="#acreedores">Acreedores</a>
+          <a class="nav__link" href="#arbitrajes">Arbitrajes</a>
+          <a class="nav__link" href="#ejecucion">Ejecución</a>
+          <a class="nav__link" href="#matriz-historica">Matriz histórica</a>
+          <a class="nav__link" href="#cronologia">Cronología</a>
+          <a class="nav__link" href="#mecanismos">Mecanismos</a>
+          <a class="nav__link" href="#escenarios">Escenarios</a>
+          <a class="nav__link" href="#vigilancia">Vigilancia</a>
+          <a class="nav__link" href="#fuentes">Fuentes</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="page" id="contenido">
+      <!-- ==================================================== RESUMEN === -->
+      <section class="section" id="resumen" aria-labelledby="resumen-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Observatorio · documento 01 · resumen ejecutivo</p>
+            <h2 class="section__title" id="resumen-title">
+              Una deuda sin acreedor único y sin mesa de negociación
+            </h2>
+            <p class="section__lede">
+              Venezuela acumula más de 170.000 millones de dólares de deuda externa reconocida y cerca de 17.370
+              millones en condenas arbitrales firmes. Lo que hace singular el caso no es el monto: es que las piezas
+              del proceso están repartidas entre tribunales extranjeros, comités de acreedores, bancos de política
+              estatales y un régimen de sanciones que decide qué pagos son legales. Este observatorio reconstruye esa
+              arquitectura, declara el origen de cada cifra y separa lo documentado de lo calculado y de lo propuesto.
+            </p>
+            <p class="section__meta">
+              Valuación<br />2026-09-01<br />Cifras en MM USD salvo indicación
+            </p>
+          </div>
+
+          <div id="source-notice"></div>
+
+          <div class="panel panel--static" style="margin-bottom: var(--sp-5)">
+            <div class="panel__pad">
+              <p class="expandable__section-title">Estado del dataset</p>
+              <div id="dataset-meta"></div>
+            </div>
+          </div>
+
+          <p class="expandable__section-title">Capas de procedencia</p>
+          <div class="tier-legend" id="tier-legend" style="margin-bottom: var(--sp-6)"></div>
+
+          <div class="grid grid--kpis" id="kpi-grid"></div>
+          <div id="kpi-note"></div>
+
+          <div class="grid grid--2" style="margin-top: var(--sp-7)">
+            <div class="panel panel--static">
+              <div class="panel__head">
+                <div>
+                  <span class="panel__eyebrow">Contexto inmediato</span>
+                  <h3 class="panel__title">Últimos hechos registrados</h3>
+                </div>
+              </div>
+              <div class="panel__pad" id="recent-events"></div>
+            </div>
+            <div class="panel panel--static">
+              <div class="panel__head">
+                <div>
+                  <span class="panel__eyebrow">Método</span>
+                  <h3 class="panel__title">Alcance, exclusiones y límites</h3>
+                </div>
+              </div>
+              <div class="panel__pad" id="scope-notes"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================ TRAYECTORIA === -->
+      <section class="section" id="trayectoria" aria-labelledby="trayectoria-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Visualizaciones · diecinueve vistas sobre el mismo dataset</p>
+            <h2 class="section__title" id="trayectoria-title">
+              La forma de la deuda: quién prestó, cuándo y con qué garantía
+            </h2>
+            <p class="section__lede">
+              Cada visualización tiene su versión tabular. Las diecinueve vistas se construyen con los mismos registros
+              que audita el validador del repositorio, de modo que un gráfico no puede mostrar algo que el dataset no
+              sostenga.
+            </p>
+            <p class="section__meta">Diecinueve visualizaciones<br />Escalas declaradas<br />Fuente por registro</p>
+          </div>
+          <div class="grid grid--charts" id="charts-container"></div>
+        </div>
+      </section>
+
+      <!-- ================================================== ACREEDORES === -->
+      <section class="section" id="acreedores" aria-labelledby="acreedores-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Mapa de acreedores · once clases con intereses distintos</p>
+            <h2 class="section__title" id="acreedores-title">Quién cobra, cuánto y con qué herramienta</h2>
+            <p class="section__lede">
+              Un tenedor de bonos, un banco de política chino y un fondo con un laudo firme no persiguen lo mismo ni
+              tienen la misma paciencia. Tratar la deuda como un bloque único es el error de lectura más costoso en
+              este caso.
+            </p>
+            <p class="section__meta">
+              <span data-creditors-count class="mono"></span>
+            </p>
+          </div>
+
+          <div class="toolbar filters" id="creditor-filters"></div>
+          <div id="creditors-summary" style="margin-bottom: var(--sp-5)"></div>
+          <div id="creditors-table"></div>
+          <p class="expandable__section-title" style="margin-top: var(--sp-6)">Notas de posición</p>
+          <div class="grid grid--2" id="creditor-notes"></div>
+          <p class="expandable__section-title" style="margin-top: var(--sp-7)">Grupos organizados</p>
+          <div class="grid grid--2" id="creditor-committees"></div>
+          <div id="ratings-history" style="margin-top: var(--sp-6)"></div>
+        </div>
+      </section>
+
+      <!-- ================================================== ARBITRAJES === -->
+      <section class="section" id="arbitrajes" aria-labelledby="arbitrajes-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Laudos y arbitrajes · CIADI, ICC y tribunales ad hoc</p>
+            <h2 class="section__title" id="arbitrajes-title">
+              El interés compuesto como reloj de la negociación
+            </h2>
+            <p class="section__lede">
+              Los laudos no esperan. Cada año sin acuerdo suma intereses sobre condenas que ya son ejecutables como
+              sentencia firme en más de 170 jurisdicciones. Esta sección muestra el capital de cada condena, su valor
+              acumulado calculado con el supuesto declarado y su conciliación contra las cifras publicadas.
+            </p>
+            <p class="section__meta">Capital y valor acumulado<br />Conciliación explícita<br />Tasa asumida declarada</p>
+          </div>
+
+          <div id="awards-summary"></div>
+          <div class="grid grid--2" style="margin-top: var(--sp-5)">
+            <div class="stack" id="awards-container" style="gap:var(--sp-3)"></div>
+            <div class="stack" id="awards-bars" style="gap:var(--sp-5)"></div>
+          </div>
+          <div id="awards-table" style="margin-top: var(--sp-6)"></div>
+        </div>
+      </section>
+
+      <!-- ==================================================== EJECUCIÓN === -->
+      <section class="section" id="ejecucion" aria-labelledby="ejecucion-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Ejecución, sanciones y actores</p>
+            <h2 class="section__title" id="ejecucion-title">
+              Donde la deuda deja de ser una cifra y pasa a ser un litigio
+            </h2>
+            <p class="section__lede">
+              El orden de pago de este caso no se está decidiendo en una mesa de negociación, sino en tribunales de
+              Delaware, en el Banco de Inglaterra y en la oficina de sanciones del Tesoro estadounidense. Documentar
+              esos frentes es documentar la deuda real.
+            </p>
+            <p class="section__meta">Activos perseguidos<br />Régimen de licencias<br />Influencia por actor</p>
+          </div>
+
+          <div id="enforcement-summary"></div>
+          <div id="enforcement-container" style="margin-top: var(--sp-5)"></div>
+          <div id="enforcement-note"></div>
+
+          <div class="grid grid--2" style="margin-top: var(--sp-7)">
+            <div>
+              <p class="expandable__section-title">Régimen de sanciones</p>
+              <div id="sanctions-container"></div>
+              <div id="sanctions-note"></div>
+            </div>
+            <div>
+              <p class="expandable__section-title">Capacidad de presión por nivel de influencia</p>
+              <div id="institutional-bars"></div>
+            </div>
+          </div>
+
+          <p class="expandable__section-title" style="margin-top: var(--sp-7)">Mapa institucional</p>
+          <div id="institutional-container"></div>
+        </div>
+      </section>
+
+      <!-- ============================================ MATRIZ HISTÓRICA === -->
+      <section class="section" id="matriz-historica" aria-labelledby="matriz-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Matriz histórica · 1994–2026</p>
+            <h2 class="section__title" id="matriz-title">
+              Tres gestiones, la misma vara: stock, acreedor, shock y transparencia
+            </h2>
+            <p class="section__lede">
+              El relato habitual atribuye el problema a un solo período. Los datos muestran algo distinto: la deuda
+              creció en los tres, con instrumentos y acreedores diferentes, y en los tres casos el aumento se explica
+              por una combinación de decisión propia y shock externo. Se evalúa cada gestión con las mismas
+              dimensiones para que la comparación sea posible.
+            </p>
+            <p class="section__meta">Puntos de partida y llegada verificados<br />Hitos fechados<br />Lectura por dimensión</p>
+          </div>
+
+          <div id="administration-table" style="margin-bottom: var(--sp-6)"></div>
+          <div class="stack" id="administration-matrix" style="gap:var(--sp-4)"></div>
+        </div>
+      </section>
+
+      <!-- ================================================= CRONOLOGÍA === -->
+      <section class="section" id="cronologia" aria-labelledby="cronologia-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Cronología global · 1990–2026</p>
+            <h2 class="section__title" id="cronologia-title">
+              Cuarenta hechos que explican la deuda mejor que un cuadro de saldos
+            </h2>
+            <p class="section__lede">
+              Cada hito está fechado, clasificado por severidad y ligado a su fuente. La cronología permite ver lo que
+              ningún agregado muestra: que el default no fue un accidente puntual sino la convergencia de sanciones,
+              caída de ingresos, judicialización y ausencia de estadísticas confiables.
+            </p>
+            <p class="section__meta">
+              <span data-timeline-count class="mono"></span>
+            </p>
+          </div>
+          <div id="timeline-summary" style="margin-bottom: var(--sp-5)"></div>
+          <div class="grid grid--2">
+            <div id="timeline-container"></div>
+            <div class="panel panel--static" style="align-self:start">
+              <div class="panel__head">
+                <div>
+                  <span class="panel__eyebrow">Cómo usar la cronología</span>
+                  <h3 class="panel__title">Filtrar por categoría y severidad</h3>
+                </div>
+              </div>
+              <div class="panel__pad">
+                <div class="toolbar filters">
+                  <div class="filters__group">
+                    <span class="filters__label">Categoría</span>
+                    <button class="chip is-active" type="button" data-filter-timeline-category="all" aria-pressed="true">Todas</button>
+                    <button class="chip" type="button" data-filter-timeline-category="crisis" aria-pressed="false">Crisis</button>
+                    <button class="chip" type="button" data-filter-timeline-category="default" aria-pressed="false">Cesación de pagos</button>
+                    <button class="chip" type="button" data-filter-timeline-category="sanciones" aria-pressed="false">Sanciones</button>
+                    <button class="chip" type="button" data-filter-timeline-category="legal" aria-pressed="false">Jurídico</button>
+                    <button class="chip" type="button" data-filter-timeline-category="reestructuracion" aria-pressed="false">Reestructuración</button>
+                    <button class="chip" type="button" data-filter-timeline-category="macroeconomia" aria-pressed="false">Macroeconomía</button>
+                    <button class="chip" type="button" data-filter-timeline-category="dato" aria-pressed="false">Dato</button>
+                  </div>
+                </div>
+                <div class="toolbar filters">
+                  <div class="filters__group">
+                    <span class="filters__label">Severidad</span>
+                    <button class="chip is-active" type="button" data-filter-timeline-severity="all" aria-pressed="true">Cualquiera</button>
+                    <button class="chip" type="button" data-filter-timeline-severity="3" aria-pressed="false">3 · máxima</button>
+                    <button class="chip" type="button" data-filter-timeline-severity="2" aria-pressed="false">2 · alta</button>
+                    <button class="chip" type="button" data-filter-timeline-severity="1" aria-pressed="false">1 · informativa</button>
+                  </div>
+                </div>
+                <p class="chart-note">
+                  Los filtros no alteran el dataset: solo ocultan registros en pantalla y el contador declara cuántos
+                  quedan visibles sobre el total.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================= MECANISMOS === -->
+      <section class="section" id="mecanismos" aria-labelledby="mecanismos-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Ingeniería de recuperación · 27 mecanismos evaluados</p>
+            <h2 class="section__title" id="mecanismos-title">
+              Qué instrumentos existen, cuáles solo se proponen y qué exige cada uno
+            </h2>
+            <p class="section__lede">
+              Fideicomisos, cuentas escrow, cláusulas de acción colectiva y agregada, cláusula peruana, colateral
+              petrolero, canje tipo Brady, bonos ligados al producto y canjes por naturaleza. Cada mecanismo aparece
+              con su base jurídica, sus prerrequisitos, sus riesgos y un puntaje de encaje que este observatorio
+              declara como propio. Lo que no existe se rotula como propuesta, sin excepción.
+            </p>
+            <p class="section__meta">
+              <span data-mechanisms-count class="mono"></span>
+            </p>
+          </div>
+
+          <div class="toolbar filters" id="mechanism-filters"></div>
+          <div id="mechanism-summary" style="margin-bottom: var(--sp-5)"></div>
+          <div class="grid grid--2" id="mechanisms-grid"></div>
+          <div id="mechanisms-table" style="margin-top: var(--sp-6)"></div>
+          <p class="expandable__section-title" style="margin-top: var(--sp-7)">Instrumentos jurídicos aplicables</p>
+          <div id="legal-instruments"></div>
+        </div>
+      </section>
+
+      <!-- ================================================== ESCENARIOS === -->
+      <section class="section" id="escenarios" aria-labelledby="escenarios-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Escenarios y simulador · cinco estructuras posibles</p>
+            <h2 class="section__title" id="escenarios-title">
+              Cuánto se recupera no depende de la quita, sino del valor presente
+            </h2>
+            <p class="section__lede">
+              Una quita del 70 % con cupón bajo y treinta años de plazo deja al acreedor menos que una quita del 55 %
+              con amortización corta. Este apartado compara cinco estructuras con la misma fórmula, y permite mover los
+              supuestos en vivo para ver cómo cambia el resultado.
+            </p>
+            <p class="section__meta">Probabilidades suman 100 %<br />Misma fórmula que la validación<br />Simulación declarada</p>
+          </div>
+
+          <div id="scenarios-table"></div>
+          <div class="grid grid--2" style="margin-top: var(--sp-5)" id="scenarios-container"></div>
+          <div id="scenario-simulator" style="margin-top: var(--sp-7)"></div>
+        </div>
+      </section>
+
+      <!-- ================================================== VIGILANCIA === -->
+      <section class="section" id="vigilancia" aria-labelledby="vigilancia-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Vigilancia y vacíos de información</p>
+            <h2 class="section__title" id="vigilancia-title">
+              Lo que este observatorio no sabe todavía, y qué haría falta para saberlo
+            </h2>
+            <p class="section__lede">
+              La deuda venezolana es un objeto parcialmente invisible: el deudor no publica estados financieros desde
+              2016, la tenencia efectiva de los bonos no se divulga y varios saldos bilaterales se amortizan en
+              especie sin registro público. En lugar de estimar en silencio, se enumeran las preguntas abiertas con la
+              acción concreta que permitiría cerrarlas.
+            </p>
+            <p class="section__meta">Diez preguntas abiertas<br />Umbrales declarados<br />Ninguna estimación silenciosa</p>
+          </div>
+          <div id="gaps-intro"></div>
+          <div class="stack" id="data-gaps" style="gap:var(--sp-3); margin-top: var(--sp-5)"></div>
+          <p class="expandable__section-title" style="margin-top: var(--sp-7)">Lista de vigilancia</p>
+          <div id="watchlist"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================== FUENTES === -->
+      <section class="section" id="fuentes" aria-labelledby="fuentes-title">
+        <div class="shell">
+          <div class="section__head">
+            <p class="section__kicker">Aparato probatorio</p>
+            <h2 class="section__title" id="fuentes-title">Fuentes, glosario y trazabilidad</h2>
+            <p class="section__lede">
+              Toda cifra de este documento remite a un registro del ledger. Donde existe un documento con URL estable,
+              el enlace se publica; donde no existe, se declara. El glosario define los términos que el debate público
+              usa de forma imprecisa, empezando por la diferencia entre quita nominal y recuperación efectiva.
+            </p>
+            <p class="section__meta">
+              <button class="cite" type="button" data-cite="Observatorio Arquitectónico de la Deuda Soberana de Venezuela. Dataset 2026.09. Cifras con procedencia declarada. Código MIT, datos CC BY 4.0.">
+                citar el documento completo
+              </button>
+            </p>
+          </div>
+
+          <div id="sources-summary" style="margin-bottom: var(--sp-5)"></div>
+          <div id="audit-report" style="margin-bottom: var(--sp-5)"></div>
+          <div id="sources-ledger"></div>
+          <p class="expandable__section-title" style="margin-top: var(--sp-7)">Glosario operativo</p>
+          <div class="glossary" id="glossary"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell">
+        <div id="footer-meta"></div>
+      </div>
+    </footer>
+
+    <!-- Paleta de comandos -->
+    <div class="palette" id="command-palette" hidden role="dialog" aria-modal="true" aria-label="Paleta de comandos">
+      <div class="palette__box">
+        <input
+          class="palette__input"
+          id="palette-input"
+          type="text"
+          placeholder="Buscar sección, laudo, mecanismo o indicador…"
+          aria-label="Buscar comando"
+          autocomplete="off"
+        />
+        <ul class="palette__list" id="palette-list" role="listbox" aria-label="Resultados"></ul>
+      </div>
+    </div>
+
+    <div class="toast-wrap" id="toast-wrap" aria-live="polite" aria-relevant="additions"></div>
+    <div class="sr-only" id="live-region" role="status" aria-live="polite"></div>
+
+    <!-- Aviso para quien abre el archivo haciendo doble clic. La comprobación se
+         hace en el evento, no solo por el protocolo: la distribución de archivo
+         único también vive bajo file:// y ahí sí funciona, porque lleva el
+         dataset y los módulos dentro. Solo se avisa cuando de verdad falta la
+         fuente de datos que el navegador no puede leer del disco. -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (window.location.protocol !== "file:") return;
+
+        function explain(title, body) {
+          var box = document.createElement("div");
+          box.className = "error-panel";
+          box.setAttribute("style", "margin:var(--sp-6) auto;max-width:76ch");
+          box.innerHTML = '<p class="error-panel__title">' + title + "</p><p>" + body + "</p>";
+          var main = document.querySelector("main");
+          if (main) main.insertBefore(box, main.firstChild);
+        }
+
+        if (!window.__OBS_DATABASE__) {
+          explain(
+            "Este documento necesita servirse por HTTP",
+            "Los módulos ES y la lectura del dataset están bloqueados por el navegador cuando la página se abre " +
+              "directamente desde el disco (protocolo file://). Sirve el proyecto con cualquier servidor estático " +
+              "(GitHub Pages, o <code>powershell -File tools/serve.ps1</code> en Windows). La versión empaquetada de " +
+              "<code>dist/</code> sí funciona sin servidor."
+          );
+          return;
+        }
+
+        // Distribución de archivo único: el dataset está dentro, pero algunos
+        // navegadores siguen bloqueando los módulos ES bajo file://. Si tras
+        // unos segundos el arranque no terminó, se explica en lugar de dejar
+        // una pantalla de carga eterna.
+        window.setTimeout(function () {
+          var boot = document.getElementById("boot-screen");
+          if (!boot || boot.classList.contains("is-done")) return;
+          explain(
+            "El navegador bloqueó los módulos de esta página",
+            "El dataset sí viaja dentro del archivo, pero este navegador no permite ejecutar módulos ES desde " +
+              "<code>file://</code>. Abre el archivo con un navegador basado en Chromium (Chrome, Edge, Brave) o " +
+              "sírvelo con un servidor estático: <code>powershell -File tools/serve.ps1</code>."
+          );
+        }, 4000);
+      });
+    </script>
+
+    <!-- Motor de la aplicación -->
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

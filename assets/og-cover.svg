@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630"
+     role="img" aria-label="Observatorio Arquitectónico de la Deuda Soberana de Venezuela">
+  <title>Observatorio Arquitectónico de la Deuda Soberana de Venezuela</title>
+
+  <defs>
+    <linearGradient id="brass" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#8a6a2c" />
+      <stop offset="0.55" stop-color="#c8a24a" />
+      <stop offset="1" stop-color="#e3c273" />
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8a24a" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#c8a24a" stop-opacity="0" />
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#111214" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <!-- Fondo premium pitch black con retícula institucional muy tenue -->
+  <rect width="1200" height="630" fill="#000000" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="#1c1d21" stroke-width="2" />
+
+  <!-- Área: trayectoria de la deuda, con relleno degradado -->
+  <path d="M80 470 C 250 468, 330 440, 430 372 S 640 250, 760 206 S 1020 140, 1120 118"
+        fill="none" stroke="url(#brass)" stroke-width="6" stroke-linecap="round" />
+  <path d="M80 470 C 250 468, 330 440, 430 372 S 640 250, 760 206 S 1020 140, 1120 118 L 1120 520 L 80 520 Z"
+        fill="url(#fade)" stroke="none" />
+
+  <!-- Línea de base y marca del default -->
+  <line x1="80" y1="520" x2="1120" y2="520" stroke="#23252a" stroke-width="2" />
+  <line x1="430" y1="130" x2="430" y2="520" stroke="#c4453f" stroke-width="2" stroke-dasharray="6 8" />
+  <circle cx="430" cy="372" r="9" fill="#c4453f" />
+  <text x="446" y="152" font-family="'JetBrains Mono', monospace" font-size="20" fill="#c4453f">cesación de pagos selectiva</text>
+
+  <!-- Masthead -->
+  <g font-family="'JetBrains Mono', monospace" font-size="21" letter-spacing="3.4" fill="#c8a24a">
+    <text x="80" y="86">INFORMACIÓN DEL MERCANTIL VENEZOLANO</text>
+  </g>
+  <line x1="80" y1="106" x2="1120" y2="106" stroke="#23252a" stroke-width="1" />
+
+  <!-- Titular -->
+  <text x="80" y="220" font-family="'Playfair Display', Georgia, serif" font-size="68" fill="#ededed">
+    Deuda soberana de Venezuela
+  </text>
+  <text x="80" y="298" font-family="'Playfair Display', Georgia, serif" font-size="68" fill="#ededed">
+    <tspan fill="#c8a24a">observada</tspan> cifra por cifra
+  </text>
+
+  <!-- Subtítulo -->
+  <text x="80" y="576" font-family="'Inter', system-ui, sans-serif" font-size="25" fill="#a8adb6">
+    Arquitectura de la acreencia, laudos arbitrales y mecanismos de recuperación · 1990–2026
+  </text>
+
+  <!-- Datos duros, alineados a la derecha -->
+  <g font-family="'JetBrains Mono', monospace" text-anchor="end" fill="#6e747e">
+    <text x="1120" y="222" font-size="20" letter-spacing="2">27 FUENTES · 14 LAUDOS</text>
+    <text x="1120" y="252" font-size="20" letter-spacing="2">5 CAPAS DE PROCEDENCIA</text>
+    <text x="1120" y="282" font-size="20" letter-spacing="2">AUDITORÍA REPRODUCIBLE</text>
+  </g>
+</svg>

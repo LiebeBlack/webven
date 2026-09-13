@@ -1,0 +1,583 @@
+{
+  "arbitration_cases": [
+    {
+      "id": "cp-ciadi",
+      "claimant": "ConocoPhillips (Petrozuata, Hamaca y Gulf of Paria)",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/07/30",
+      "sector": "Petróleo y gas — expropiación de proyectos de crudo extrapesado",
+      "award_mm": 8366,
+      "award_date": "2019-03-08",
+      "interest_rate_assumed_pct": 3.25,
+      "award_total_mm": 10628.91,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "laudo firme en ejecución",
+      "source_ids": ["S05", "S06", "S07", "S08"],
+      "annulment": {
+        "requested": true,
+        "decision_date": "2025-01-22",
+        "outcome": "rechazada",
+        "note": "El comité ad hoc desestimó la solicitud de anulación presentada por Venezuela. El laudo queda firme y ejecutable."
+      },
+      "calc": {
+        "method": "compound_accrual",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "A = P · (1 + r/n)^(n·t)",
+        "params": { "principal_mm": 8366, "rate_pct": 3.25, "from": "2019-03-08", "to": "2026-09-01", "compounds_per_year": 1 },
+        "assumptions": [
+          "Capitalización anual sobre el valor de condena, sin pagos intermedios.",
+          "La tasa de 3,25 % es un supuesto de trabajo (promedio compuesto de referencia del período), no la tasa que fije el tribunal en cada decisión de intereses."
+        ],
+        "sensitivity": [
+          { "label": "Tasa 1,00 %", "value_mm": 9012.9, "patch": { "rate_pct": 1.0 } },
+          { "label": "Tasa 6,00 %", "value_mm": 12940.15, "patch": { "rate_pct": 6.0 } },
+          { "label": "Tasa implícita que reproduce la cifra de prensa (0,52 %)", "value_mm": 8697.18, "patch": { "rate_pct": 0.52 } }
+        ]
+      },
+      "reconciliation": {
+        "reported_mm": 8700,
+        "reported_date": "2026-06-01",
+        "reported_source_ids": ["S08"],
+        "delta_pct": 22.17,
+        "note": "La cifra de prensa está 22 % por debajo de nuestro cálculo base y coincide, en cambio, con una tasa implícita de 0,52 % anual. La explicación más probable es que el valor divulgado no capitalice todo el período o use una tasa inferior a la de referencia. Se publican ambos y se deja el rango abierto en lugar de fijar un único número."
+      }
+    },
+    {
+      "id": "cp-icc",
+      "claimant": "ConocoPhillips (reclamaciones contractuales)",
+      "respondent": "PDVSA y filiales",
+      "forum": "ICC",
+      "case_number": "ICC 20594/GR",
+      "sector": "Petróleo y gas — incumplimiento de contratos de suministro y asociación",
+      "award_mm": 2000,
+      "award_date": "2018-08-29",
+      "interest_rate_assumed_pct": 3.25,
+      "award_total_mm": 2583.83,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "laudo en ejecución sobre activos de PDVSA",
+      "source_ids": ["S08", "S13", "S24"],
+      "annulment": {
+        "requested": false,
+        "decision_date": null,
+        "outcome": "no aplica",
+        "note": "Los laudos del ICC no se anulan ante el CIADI; su control se hace en la sede del arbitraje y su ejecución depende de la Convención de Nueva York."
+      },
+      "calc": {
+        "method": "compound_accrual",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "A = P · (1 + r/n)^(n·t)",
+        "params": { "principal_mm": 2000, "rate_pct": 3.25, "from": "2018-08-29", "to": "2026-09-01", "compounds_per_year": 1 },
+        "assumptions": ["Mismo supuesto de tasa que en el caso CIADI, para mantener comparabilidad entre foros."],
+        "sensitivity": [
+          { "label": "Tasa 1,00 %", "value_mm": 2165.89, "patch": { "rate_pct": 1.0 } },
+          { "label": "Tasa 6,00 %", "value_mm": 3189.22, "patch": { "rate_pct": 6.0 } }
+        ]
+      },
+      "reconciliation": { "reported_mm": null, "note": "Sin cifra reportada verificable en el período cubierto por este dataset." }
+    },
+    {
+      "id": "exxon-ciadi",
+      "claimant": "ExxonMobil (Cerro Negro y La Ceiba)",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/07/25",
+      "sector": "Petróleo y gas — expropiación de proyectos de la faja del Orinoco",
+      "award_mm": 1600,
+      "award_date": "2014-10-09",
+      "award_total_mm": 1600,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "anulado en parte; monto residual en disputa",
+      "source_ids": ["S05", "S09", "S18"],
+      "annulment": {
+        "requested": true,
+        "decision_date": "2017-03-09",
+        "outcome": "anulación parcial",
+        "note": "El comité anuló la indemnización por falta de jurisdicción sobre parte de las reclamaciones y dejó subsistente un monto muy inferior, en torno a 188 millones de dólares."
+      },
+      "residual_mm": 188,
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = monto original sin capitalizar intereses, dado que el laudo fue anulado en parte",
+        "params": { "items": [{ "label": "Monto original de condena", "value_mm": 1600 }] },
+        "assumptions": ["No se capitalizan intereses sobre un laudo parcialmente anulado: hacerlo inflaría una acreencia que perdió firmeza."],
+        "sensitivity": [
+          { "label": "Monto residual tras la anulación parcial", "value_mm": 188, "patch": { "items": [{ "label": "Residual", "value_mm": 188 }] } },
+          { "label": "Con intereses capitalizados al 3,25 % anual", "value_mm": 2340.75, "method": "compound_accrual", "patch": { "principal_mm": 1600, "rate_pct": 3.25, "from": "2014-10-09", "to": "2026-09-01", "compounds_per_year": 1 } }
+        ]
+      },
+      "reconciliation": {
+        "reported_mm": 188,
+        "reported_date": "2017-03-09",
+        "reported_source_ids": ["S09"],
+        "delta_pct": -88.25,
+        "note": "La divergencia respecto al valor original de condena es el resultado de la anulación parcial. Se conserva el monto original porque documenta el punto de partida de la negociación y el residual porque documenta su valor jurídico actual."
+      }
+    },
+    {
+      "id": "exxon-icc",
+      "claimant": "ExxonMobil (La Ceiba)",
+      "respondent": "PDVSA y filiales",
+      "forum": "ICC",
+      "case_number": "ICC 20594/GR (referencia agregada)",
+      "sector": "Petróleo y gas — incumplimiento contractual",
+      "award_mm": 907,
+      "award_date": "2014-12-18",
+      "award_total_mm": 907,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "en ejecución",
+      "source_ids": ["S08", "S18", "S24"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena ICC", "value_mm": 907 }] },
+        "assumptions": ["Sin modelar intereses por falta de fecha y tasa documentadas."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Referencia agregada por analistas; el desglose por caso requiere cotejo documental." }
+    },
+    {
+      "id": "crystallex",
+      "claimant": "Crystallex International Corporation",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB(AF)/11/2",
+      "sector": "Minería — revocatoria de la concesión de Las Cristinas",
+      "award_mm": 1202,
+      "award_date": "2016-04-04",
+      "interest_rate_assumed_pct": 3.25,
+      "award_total_mm": 1676.84,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "laudo reconocido; ejecución sobre acciones de PDV Holding",
+      "source_ids": ["S05", "S13", "S23", "S24"],
+      "annulment": { "requested": true, "decision_date": null, "outcome": "sin decisión publicada", "note": "No se registra decisión de anulación que altere el monto de condena en las fuentes consultadas." },
+      "calc": {
+        "method": "compound_accrual",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "A = P · (1 + r/n)^(n·t)",
+        "params": { "principal_mm": 1202, "rate_pct": 3.25, "from": "2016-04-04", "to": "2026-09-01", "compounds_per_year": 1 },
+        "assumptions": ["Tasa de referencia asumida al 3,25 %, idéntica a la del resto del portafolio modelado."],
+        "sensitivity": [
+          { "label": "Tasa 1,00 %", "value_mm": 1333.17, "patch": { "rate_pct": 1.0 } },
+          { "label": "Tasa 6,00 %", "value_mm": 2204.56, "patch": { "rate_pct": 6.0 } }
+        ]
+      },
+      "reconciliation": { "reported_mm": null, "note": "El valor exigible ha sido materia de disputa judicial: el caso es el que abrió la vía de ejecución sobre la matriz de Citgo." }
+    },
+    {
+      "id": "rusoro",
+      "claimant": "Rusoro Mining Ltd.",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB(AF)/12/5",
+      "sector": "Minería — medidas contra concesiones auríferas",
+      "award_mm": 968,
+      "award_date": "2016-08-22",
+      "interest_rate_assumed_pct": 3.25,
+      "award_total_mm": 1333.94,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "laudo firme en ejecución",
+      "source_ids": ["S05", "S13", "S24"],
+      "calc": {
+        "method": "compound_accrual",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "A = P · (1 + r/n)^(n·t)",
+        "params": { "principal_mm": 968, "rate_pct": 3.25, "from": "2016-08-22", "to": "2026-09-01", "compounds_per_year": 1 },
+        "assumptions": ["Tasa de referencia asumida al 3,25 %."],
+        "sensitivity": [
+          { "label": "Tasa 1,00 %", "value_mm": 1069.55, "patch": { "rate_pct": 1.0 } },
+          { "label": "Tasa 6,00 %", "value_mm": 1736.17, "patch": { "rate_pct": 6.0 } }
+        ]
+      },
+      "reconciliation": { "reported_mm": null, "note": "Sin cifra reportada verificable en el período cubierto." }
+    },
+    {
+      "id": "gold-reserve",
+      "claimant": "Gold Reserve Inc.",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB(AF)/09/1",
+      "sector": "Minería — concesión Brisas",
+      "award_mm": 740,
+      "award_date": "2014-09-22",
+      "interest_rate_assumed_pct": 3.25,
+      "award_total_mm": 1084.21,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "acuerdo de pago incumplido; ejecución reactivada",
+      "source_ids": ["S05", "S13"],
+      "calc": {
+        "method": "compound_accrual",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "A = P · (1 + r/n)^(n·t)",
+        "params": { "principal_mm": 740, "rate_pct": 3.25, "from": "2014-09-22", "to": "2026-09-01", "compounds_per_year": 1 },
+        "assumptions": ["Tasa de referencia asumida al 3,25 %. No se descuentan los pagos parciales reportados en el marco del acuerdo de 2016."],
+        "sensitivity": [
+          { "label": "Tasa 1,00 %", "value_mm": 833.37, "patch": { "rate_pct": 1.0 } },
+          { "label": "Tasa 6,00 %", "value_mm": 1484.05, "patch": { "rate_pct": 6.0 } }
+        ]
+      },
+      "reconciliation": { "reported_mm": null, "note": "Es uno de los pocos casos con acuerdo de pago conocido; el saldo exigible depende de lo efectivamente pagado, dato no público." }
+    },
+    {
+      "id": "oieg",
+      "claimant": "OI European Group B.V. (Owens-Illinois)",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/11/25",
+      "sector": "Manufactura — expropiación de plantas de vidrio",
+      "award_mm": 455,
+      "award_date": "2015-03-10",
+      "award_total_mm": 455,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "en ejecución",
+      "source_ids": ["S05", "S24"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 455 }] },
+        "assumptions": ["Sin modelar intereses por ausencia de tasa documentada."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Monto redondeado a partir de reportes de laudo." }
+    },
+    {
+      "id": "koch",
+      "claimant": "Koch Minerals S.à r.l. y Koch Nitrogen International",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/11/19",
+      "sector": "Química y fertilizantes",
+      "award_mm": 409,
+      "award_date": "2017-10-30",
+      "award_total_mm": 409,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "en ejecución",
+      "source_ids": ["S05", "S24"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 409 }] },
+        "assumptions": ["Sin modelar intereses."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Monto redondeado a partir de reportes de laudo." }
+    },
+    {
+      "id": "tenaris",
+      "claimant": "Tenaris S.A. y Talta Trading (Siderúrgica del Turbio)",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/11/26",
+      "sector": "Siderurgia",
+      "award_mm": 162,
+      "award_date": "2016-05-25",
+      "award_total_mm": 162,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "acuerdo de pago reportado",
+      "source_ids": ["S05"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 162 }] },
+        "assumptions": ["Sin modelar intereses."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Monto aproximado; existe reporte de acuerdo de pago, sin detalle público del monto." }
+    },
+    {
+      "id": "vestey",
+      "claimant": "Vestey Group Ltd.",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/06/4",
+      "sector": "Agroalimentario — expropiación de tierras y plantas",
+      "award_mm": 100,
+      "award_date": "2016-04-15",
+      "award_total_mm": 100,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "en ejecución",
+      "source_ids": ["S05"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 100 }] },
+        "assumptions": ["Sin modelar intereses."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Monto aproximado a partir de reportes de laudo." }
+    },
+    {
+      "id": "tidewater",
+      "claimant": "Tidewater Inc. y filiales",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/10/5",
+      "sector": "Servicios marítimos petroleros",
+      "award_mm": 46,
+      "award_date": "2015-03-13",
+      "award_total_mm": 46,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "en ejecución",
+      "source_ids": ["S05"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 46 }] },
+        "assumptions": ["Sin modelar intereses."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Monto aproximado; incluye limitación de la condena por conducta del inversor." }
+    },
+    {
+      "id": "huntington",
+      "claimant": "Huntington Ingalls Industries",
+      "respondent": "República Bolivariana de Venezuela",
+      "forum": "CIADI",
+      "case_number": "ARB/11/4",
+      "sector": "Construcción naval y servicios industriales",
+      "award_mm": 15,
+      "award_date": "2015-03-09",
+      "award_total_mm": 15,
+      "store_as": "award_total_mm",
+      "tier": "reportado",
+      "status": "laudo firme",
+      "source_ids": ["S05"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = valor de condena declarado",
+        "params": { "items": [{ "label": "Condena CIADI", "value_mm": 15 }] },
+        "assumptions": ["Sin modelar intereses."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Caso de monto reducido; se incluye para completar el universo de laudos firmes." }
+    },
+    {
+      "id": "otros-laudos",
+      "claimant": "Otros laudos menores y agregados",
+      "respondent": "República y PDVSA",
+      "forum": "CIADI / ICC / ad hoc",
+      "case_number": "Varios",
+      "sector": "Múltiple",
+      "award_mm": 400,
+      "award_date": null,
+      "award_total_mm": 400,
+      "store_as": "award_total_mm",
+      "tier": "calculado",
+      "status": "mixto",
+      "source_ids": ["S05", "S08"],
+      "calc": {
+        "method": "sum",
+        "target": "total_mm",
+        "store_as": "award_total_mm",
+        "formula": "Total = agregado residual de casos menores con condena firme",
+        "params": { "items": [{ "label": "Agregado residual", "value_mm": 400 }] },
+        "assumptions": ["Es una partida de cierre: si se documentan casos individuales, debe reducirse en la misma proporción."],
+        "sensitivity": []
+      },
+      "reconciliation": { "reported_mm": null, "note": "Partida de cierre declarada como tal, no una medición." }
+    }
+  ],
+  "enforcement_map": [
+    {
+      "id": "citgo-acciones",
+      "target": "Acciones de PDV Holding (matriz de Citgo, Delaware)",
+      "claimant": "Crystallex, ConocoPhillips y otros acreedores con laudo",
+      "type": "acciones",
+      "jurisdiction": "Estados Unidos (Delaware)",
+      "value_mm": 1200,
+      "status": "litigio avanzado con orden de venta en disputa",
+      "tier": "oficial",
+      "source_ids": ["S13", "S23", "S24"],
+      "note": "Es el activo más codiciado y a la vez el más disputado: sobre las mismas acciones concurren un acreedor garantizado y varios laudos ejecutables, y el orden de prelación lo decide un tribunal estadounidense, no el deudor."
+    },
+    {
+      "id": "citgo-colateral",
+      "target": "Participación del 50,1 % de PDV Holding pignorada como garantía",
+      "claimant": "Tenedores del bono PDVSA 2020",
+      "type": "colateral",
+      "jurisdiction": "Estados Unidos (Delaware / Nueva York)",
+      "value_mm": 3400,
+      "status": "garantía ejecutable en disputa",
+      "tier": "oficial",
+      "source_ids": ["S04", "S25"],
+      "note": "Su posición es la mejor del universo: no necesita vencer inmunidad soberana porque el activo es de una empresa y está pignorado."
+    },
+    {
+      "id": "oro-banco-inglaterra",
+      "target": "Oro venezolano depositado en el Banco de Inglaterra",
+      "claimant": "Litigio entre el BCV y contrapartes reconocidas por el Reino Unido",
+      "type": "cuenta",
+      "jurisdiction": "Reino Unido",
+      "value_mm": 1900,
+      "status": "retenido por decisión judicial",
+      "tier": "reportado",
+      "source_ids": ["S10", "S21"],
+      "note": "No es una ejecución de acreedores sino un conflicto de representación del deudor. Aun así, inmoviliza activo líquido que en teoría serviría al servicio de la deuda."
+    },
+    {
+      "id": "cuentas-corresponsales",
+      "target": "Cuentas del BCV y de PDVSA en bancos corresponsales extranjeros",
+      "claimant": "Sanciones de la OFAC y órdenes judiciales",
+      "type": "cuenta",
+      "jurisdiction": "Estados Unidos y varias plazas europeas",
+      "value_mm": 2500,
+      "status": "bloqueadas",
+      "tier": "oficial",
+      "source_ids": ["S14"],
+      "note": "El bloqueo de sanciones y la ejecución judicial producen el mismo efecto práctico: el dinero no está disponible, aunque la causa jurídica sea distinta."
+    },
+    {
+      "id": "monomeros",
+      "target": "Monómeros Colombo Venezolanos",
+      "claimant": "Disputa de control entre el Estado y la junta reconocida",
+      "type": "accion",
+      "jurisdiction": "Colombia",
+      "value_mm": 300,
+      "status": "control disputado",
+      "tier": "reportado",
+      "source_ids": ["S21", "S13"],
+      "note": "Activo de fertilizantes con litigio de control. Ilustra cómo las disputas de representación abren frentes de ejecución que no dependen de laudos."
+    },
+    {
+      "id": "refineria-curazao",
+      "target": "Refinería de Curazao (Isla) y activos asociados",
+      "claimant": "ConocoPhillips y acreedores de servicios",
+      "type": "refineria",
+      "jurisdiction": "Curazao",
+      "value_mm": 700,
+      "status": "contrato terminado y activos en disputa",
+      "tier": "reportado",
+      "source_ids": ["S13", "S08"],
+      "note": "La refinación y el almacenamiento en el Caribe son vulnerables porque son activos fijos, identificables y en jurisdicciones con tribunales receptivos."
+    },
+    {
+      "id": "buques-carga",
+      "target": "Buques y cargamentos de crudo en tránsito",
+      "claimant": "Acreedores con laudo y tenedores de garantías marítimas",
+      "type": "maritimo",
+      "jurisdiction": "Múltiple, según bandera y puerto de destino",
+      "value_mm": 400,
+      "status": "embargos puntuales",
+      "tier": "reportado",
+      "source_ids": ["S13", "S21"],
+      "note": "La ejecución marítima es rápida pero fragmentaria: se apropia de un cargamento, no de la capacidad de exportar."
+    },
+    {
+      "id": "pequiven-acciones",
+      "target": "Acciones y participaciones de filiales en el exterior",
+      "claimant": "Acreedores con sentencias de reconocimiento",
+      "type": "acciones",
+      "jurisdiction": "Varias",
+      "value_mm": 600,
+      "status": "en identificación y litigio",
+      "tier": "reportado",
+      "source_ids": ["S13", "S22"],
+      "note": "Mapa incompleto por diseño: la identificación de filiales opacas es la tarea forense más costosa y la que más afecta la negociación."
+    },
+    {
+      "id": "cuentas-sancionadas",
+      "target": "Programa de sanciones: entidades y personas señaladas",
+      "claimant": "OFAC",
+      "type": "sancion",
+      "jurisdiction": "Estados Unidos",
+      "value_mm": 0,
+      "status": "vigente con licencias específicas",
+      "tier": "oficial",
+      "source_ids": ["S14"],
+      "note": "Una sanción no genera deuda pero define qué pagos pueden hacerse legalmente. Sin su levantamiento o licencia, ninguna estructura de reestructuración con tenedores estadounidenses puede ejecutarse."
+    },
+    {
+      "id": "sentencias-laborales",
+      "target": "Sentencias laborales y comerciales locales contra entes públicos",
+      "claimant": "Trabajadores y proveedores",
+      "type": "sentencia",
+      "jurisdiction": "Venezuela",
+      "value_mm": 4000,
+      "status": "acumulación sin ejecución",
+      "tier": "reportado",
+      "source_ids": ["S01", "S22"],
+      "note": "La ejecución local contra el propio Estado es prácticamente nula, lo que convierte esta acreencia en un pasivo sin vía de cobro interna."
+    },
+    {
+      "id": "exxon-ejecucion",
+      "target": "Ejecución de laudos de ExxonMobil sobre activos de PDVSA",
+      "claimant": "ExxonMobil",
+      "type": "accion",
+      "jurisdiction": "Estados Unidos y Países Bajos",
+      "value_mm": 907,
+      "status": "en curso",
+      "tier": "reportado",
+      "source_ids": ["S08", "S18"],
+      "note": "ExxonMobil combina litigio de reconocimiento con medidas cautelares, lo que reduce el margen de maniobra del deudor sobre activos concretos."
+    },
+    {
+      "id": "conocophillips-caribe",
+      "target": "Activos de refinación y almacenamiento en el Caribe",
+      "claimant": "ConocoPhillips",
+      "type": "refineria",
+      "jurisdiction": "Curazao, Bonaire y San Eustaquio",
+      "value_mm": 850,
+      "status": "ejecución activa",
+      "tier": "reportado",
+      "source_ids": ["S13", "S08"],
+      "note": "La elección de jurisdicciones pequeñas con dependencia de la inversión extranjera ha sido estratégica: los tribunales conceden medidas con menos fricción política."
+    },
+    {
+      "id": "inmuebles-diplomaticos",
+      "target": "Bienes inmuebles y cuentas de representaciones en el exterior",
+      "claimant": "Acreedores con sentencias",
+      "type": "embargo",
+      "jurisdiction": "Múltiple",
+      "value_mm": 150,
+      "status": "embargos puntuales",
+      "tier": "reportado",
+      "source_ids": ["S21"],
+      "note": "Montos marginales y defensa de inmunidad parcial. Se documentan por su valor simbólico y por el desgaste institucional que generan."
+    },
+    {
+      "id": "reservas-ejecutables",
+      "target": "Reservas internacionales susceptibles de ejecución",
+      "claimant": "Acreedores con laudos y sentencias",
+      "type": "reserva",
+      "jurisdiction": "Según plaza de depósito",
+      "value_mm": 3000,
+      "status": "identificación parcial",
+      "tier": "calculado",
+      "source_ids": ["S10", "S21"],
+      "note": "No todo activo externo es embargable, pero el deudor no siempre puede saber cuál lo es. Esa incertidumbre encarece cualquier operación financiera internacional."
+    }
+  ]
+}

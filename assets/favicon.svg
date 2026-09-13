@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Observatorio de Deuda Soberana VE">
+  <defs>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0bd63" />
+      <stop offset="1" stop-color="#a9813a" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo: negro casi puro, el mismo del sistema visual del sitio -->
+  <rect width="64" height="64" rx="12" fill="#050506" />
+  <rect x="0.5" y="0.5" width="63" height="63" rx="11.5" fill="none" stroke="#23252a" />
+
+  <!-- La marca: curva de deuda que sube y una línea de referencia que la corta
+       (el momento del default). Trazo grueso para que se lea a 16 px. -->
+  <path d="M12 46 C 22 45, 26 41, 32 33 S 44 20, 52 17" fill="none" stroke="url(#brass)"
+        stroke-width="4.5" stroke-linecap="round" />
+  <path d="M12 52 L 52 52" fill="none" stroke="#23252a" stroke-width="3" stroke-linecap="round" />
+  <circle cx="32" cy="33" r="3.5" fill="#c4453f" />
+
+  <!-- Monograma discreto en la esquina inferior derecha -->
+  <text x="52" y="60" font-family="'JetBrains Mono', monospace" font-size="11" fill="#6e747e"
+        text-anchor="end">VE</text>
+</svg>

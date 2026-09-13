@@ -1,0 +1,233 @@
+{
+  "historical_matrix": {
+    "unit": "MM USD",
+    "note": "Cada administración se evalúa con la misma vara: punto de partida, punto de llegada, instrumentos usados, shocks exógenos y qué parte del aumento es atribuible a decisión propia o a contexto. La comparación no busca asignar culpa, sino identificar qué palancas se usaron y cuáles quedaron intactas.",
+    "dimensions": [
+      { "id": "stock", "label": "Formación de stock", "description": "Qué instrumento y qué velocidad de endeudamiento se eligió" },
+      { "id": "composicion", "label": "Composición del acreedor", "description": "Mercado, Estado o multilateral como acreedor dominante" },
+      { "id": "transparencia", "label": "Divulgación", "description": "Publicación de series, estados financieros y calendario de pagos" },
+      { "id": "shock", "label": "Shock absorbido", "description": "Qué choque externo golpeó la capacidad de pago durante el período" },
+      { "id": "reestructuracion", "label": "Reestructuración", "description": "Capacidad de renegociar sin caer en default desordenado" }
+    ],
+    "administrations": [
+      {
+        "id": "caldera",
+        "name": "Rafael Caldera",
+        "period": "1994–1999",
+        "from": "1994-02-02",
+        "to": "1999-02-02",
+        "label": "Crisis bancaria y apertura",
+        "thesis": "El endeudamiento no causó la crisis de 1994: la crisis de 1994 forzó el endeudamiento. La intervención bancaria y el rescate fueron financiados con deuda externa nueva, y una parte del aumento del stock es el costo de evitar un colapso mayor.",
+        "context": "Crisis bancaria tras el colapso de Banco Latino, inflación elevada, control de precios del decenio anterior desmontado y apertura petrolera como promesa de captar capital extranjero sin endeudarse.",
+        "debt_start_mm": 27000,
+        "debt_end_mm": 31075,
+        "growth_pct": 15.09,
+        "store_as": "growth_pct",
+        "tier": "calculado",
+        "calc": {
+          "method": "growth",
+          "target": "growth_pct",
+          "store_as": "growth_pct",
+          "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+          "params": { "from_mm": 27000, "to_mm": 31075 },
+          "assumptions": ["Puntos de 1994 y 1999 tomados como anclas de la serie reconstruida."],
+          "sensitivity": []
+        },
+        "indicators": [
+          { "label": "Crecimiento del stock", "value_mm": 4075, "unit": "MM USD", "tier": "calculado", "source_ids": ["S01", "S16"] },
+          { "label": "Peso de la deuda con el exterior más multilateral", "value_pct": 45.7, "unit": "% del total", "tier": "calculado", "source_ids": ["S16"] },
+          { "label": "Reestructuración Brady heredada en ejecución", "value_pct": 0, "unit": "sin nuevas rondas", "tier": "reportado", "source_ids": ["S16"] },
+          { "label": "Divulgación de series", "value_pct": 60, "unit": "% del calendario publicado", "tier": "reportado", "source_ids": ["S20"] }
+        ],
+        "milestones": [
+          { "date": "1994-02-02", "title": "Asume un gobierno de unidad con crisis bancaria en curso", "detail": "El mismo mes se desata el pánico tras la intervención de Banco Latino.", "debt_mm": 27000, "tier": "reportado", "source_ids": ["S20"] },
+          { "date": "1994-06-01", "title": "Intervención y rescate de la banca", "detail": "El rescate del sistema financiero se financia con deuda pública, sin aumentar tributación de forma compensatoria.", "debt_mm": 27200, "tier": "reportado", "source_ids": ["S20", "S16"] },
+          { "date": "1994-07-01", "title": "Suspensión temporal de garantías cambiarias", "detail": "El desmontaje del esquema de control de cambios deja al descubierto pasivos en divisas de la banca.", "debt_mm": 27300, "tier": "reportado", "source_ids": ["S20"] },
+          { "date": "1995-01-01", "title": "Reapertura petrolera", "detail": "La estrategia de captar capital privado busca financiar la expansión petrolera sin nueva deuda soberana.", "debt_mm": 27350, "tier": "reportado", "source_ids": ["S12", "S20"] },
+          { "date": "1996-04-15", "title": "Agenda Venezuela", "detail": "Ajuste con liberación cambiaria, aumento de precios internos y búsqueda de financiamiento multilateral.", "debt_mm": 27600, "tier": "reportado", "source_ids": ["S20", "S16"] },
+          { "date": "1997-01-01", "title": "Recuperación parcial y regreso al mercado", "detail": "El país vuelve a emitir en los mercados internacionales, reactivando la dependencia del acreedor privado.", "debt_mm": 28050, "tier": "reportado", "source_ids": ["S21"] },
+          { "date": "1998-12-06", "title": "Elección presidencial y giro de modelo", "detail": "La deuda se transfiere al siguiente gobierno prácticamente sin reestructurar y con calendario de pagos intacto.", "debt_mm": 28400, "tier": "reportado", "source_ids": ["S20"] },
+          { "date": "1999-02-02", "title": "Transición ordenada", "detail": "Entrega del stock en torno a 31.000 millones, un 15 % por encima de 1994 y con acreedores multilaterales recuperados.", "debt_mm": 31075, "tier": "reportado", "source_ids": ["S01", "S16"] }
+        ],
+        "legacy": "Reconstruyó la credibilidad externa con multilaterales y dejó una curva de bonos viva y bien documentada, pero también dejó instalada la idea de que todo shock interno se financia con deuda.",
+        "assessment": "Período con el menor crecimiento relativo del stock y el mayor peso de acreedores institucionales. Su aporte analítico es demostrar que la deuda puede ser consecuencia de un rescate y no causa del desequilibrio.",
+        "tier": "reportado",
+        "source_ids": ["S01", "S16", "S20", "S21"]
+      },
+      {
+        "id": "chavez",
+        "name": "Hugo Chávez",
+        "period": "1999–2013",
+        "from": "1999-02-02",
+        "to": "2013-03-05",
+        "label": "Superciclo y endeudamiento",
+        "thesis": "El superciclo petrolero más favorable en cuarenta años no redujo la deuda: la multiplicó por 3,5. La innovación del período no fue el monto sino el instrumento: deuda de mercado colocada sin transparencia y préstamos bilaterales respaldados por crudo futuro, que hipotecaron producción en lugar de pedir reformas.",
+        "context": "Precio del crudo multiplicado por varios múltiplos, nacionalizaciones de empresas estratégicas, controles de cambio y de precios, estatización del flujo de divisas y exclusión del país de los mercados de crédito multilateral tradicional.",
+        "debt_start_mm": 31075,
+        "debt_end_mm": 110200,
+        "growth_pct": 254.63,
+        "store_as": "growth_pct",
+        "tier": "calculado",
+        "calc": {
+          "method": "growth",
+          "target": "growth_pct",
+          "store_as": "growth_pct",
+          "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+          "params": { "from_mm": 31075, "to_mm": 110200 },
+          "assumptions": ["El punto de 2013 consolida por primera vez el stock de PDVSA con el de la República."],
+          "sensitivity": [
+            { "label": "Sin consolidar el stock de PDVSA (90.200 millones)", "value_pct": 190.27, "patch": { "to_mm": 90200 } }
+          ]
+        },
+        "indicators": [
+          { "label": "Crecimiento del stock", "value_mm": 79125, "unit": "MM USD", "tier": "calculado", "source_ids": ["S01", "S16"] },
+          { "label": "Peso del acreedor bilateral", "value_pct": 27.2, "unit": "% del total", "tier": "calculado", "source_ids": ["S01"] },
+          { "label": "Emisiones de mercado documentadas", "value_mm": 68000, "unit": "MM USD nominal emitido", "tier": "reportado", "source_ids": ["S22", "S25"] },
+          { "label": "Certidumbre de pago al final del período", "value_pct": 55, "unit": "% del servicio cubierto con flujo disponible", "tier": "reportado", "source_ids": ["S21", "S26"] }
+        ],
+        "milestones": [
+          { "date": "1999-02-02", "title": "Nuevo gobierno con mandato de refundación", "detail": "Sin reestructurar la deuda heredada; el primer ajuste relevante es la subida del precio del crudo, no fiscal.", "debt_mm": 31075, "tier": "reportado", "source_ids": ["S20"] },
+          { "date": "2001-11-01", "title": "Ley de Tierras y de Hidrocarburos", "detail": "El aumento de la participación estatal en el crudo se financia con deuda y con flujo corriente, no con capital externo.", "debt_mm": 36425, "tier": "reportado", "source_ids": ["S20"] },
+          { "date": "2002-04-01", "title": "Paro petrolero y colapso de producción", "detail": "El paro destruye capacidad operativa; la recuperación posterior exige inversión que se cubre con préstamos bilaterales nuevos.", "debt_mm": 39100, "tier": "reportado", "source_ids": ["S12", "S20"] },
+          { "date": "2003-02-01", "title": "Control de cambios", "detail": "El esquema de administración de divisas concentra el flujo en el Ejecutivo y crea un mecanismo paralelo de asignación de renta.", "debt_mm": 42125, "tier": "reportado", "source_ids": ["S10", "S20"] },
+          { "date": "2005-01-01", "title": "Bonos de la República colocados con tenedores locales", "detail": "Parte del endeudamiento se coloca internamente, lo que convierte la deuda externa en un asunto con dimensión doméstica.", "debt_mm": 48175, "tier": "reportado", "source_ids": ["S22", "S25"] },
+          { "date": "2007-01-10", "title": "Nacionalizaciones de telecomunicaciones, energía y cemento", "detail": "Las indemnizaciones y las tomas de control generan la mayoría de las reclamaciones arbitrales que se resolverían años después.", "debt_mm": 56350, "tier": "reportado", "source_ids": ["S05", "S18"] },
+          { "date": "2007-01-01", "title": "Primer tramo del Fondo Conjunto Chino-Venezolano", "detail": "Los préstamos bilaterales respaldados por entregas de crudo empiezan a desplazar al mercado como fuente principal.", "debt_mm": 56350, "tier": "reportado", "source_ids": ["S01", "S15"] },
+          { "date": "2009-01-01", "title": "Colocaciones masivas durante el ciclo de crudo alto", "detail": "Se emite deuda mientras el precio del crudo está en máximos históricos, lo que reduce el margen de maniobra cuando el ciclo se invierte.", "debt_mm": 66650, "tier": "reportado", "source_ids": ["S25", "S22"] },
+          { "date": "2011-01-01", "title": "Ley de endeudamiento con techo anual", "detail": "El control legislativo del endeudamiento se vuelve formal pero pierde capacidad de fiscalización efectiva.", "debt_mm": 84600, "tier": "reportado", "source_ids": ["S22"] },
+          { "date": "2012-01-01", "title": "Nuevas emisiones y bonos a tenedores locales", "detail": "La deuda se expande por encima de 100.000 millones con un calendario de pagos que concentra vencimientos en la década siguiente.", "debt_mm": 97400, "tier": "reportado", "source_ids": ["S22", "S25"] },
+          { "date": "2013-03-05", "title": "Transición y balance del período", "detail": "El stock se entrega multiplicado por 3,5, con vencimientos concentrados y con la mitad del bloque en manos de tenedores privados.", "debt_mm": 110200, "tier": "reportado", "source_ids": ["S01", "S22"] }
+        ],
+        "legacy": "Dejó el mayor salto de stock de la historia moderna del país y una arquitectura de acreedores diversificada pero opaca, con préstamos respaldados por crudo y una curva de bonos sin divulgación de estados financieros.",
+        "assessment": "El período con la contradicción más fuerte: ingresos récord y deuda multiplicada por 3,5. Su huella analítica es que muestra cómo un ciclo de precios altos, sin transparencia, produce el mismo resultado que un ciclo de precios bajos.",
+        "tier": "reportado",
+        "source_ids": ["S01", "S05", "S16", "S22", "S25"]
+      },
+      {
+        "id": "maduro",
+        "name": "Nicolás Maduro",
+        "period": "2013–presente",
+        "from": "2013-04-19",
+        "to": "2026-09-01",
+        "label": "Colapso, sanciones y default",
+        "thesis": "El crecimiento del stock se desaceleró en porcentaje pero sobre una base cuatro veces mayor, y con una diferencia decisiva: desde noviembre de 2017 no existe refinanciación voluntaria. La deuda nueva ya no se contrata, se acumula: atrasos, intereses impagos y sentencias arbitrales.",
+        "context": "Caída del precio del crudo, colapso de la producción, hiperinflación, sanciones financieras y petroleras, default selectivo, litigios internacionales, pérdida de acceso a los mercados y ausencia de publicación de datos fiscales.",
+        "debt_start_mm": 110200,
+        "debt_end_mm": 170360,
+        "growth_pct": 54.59,
+        "store_as": "growth_pct",
+        "tier": "calculado",
+        "calc": {
+          "method": "growth",
+          "target": "growth_pct",
+          "store_as": "growth_pct",
+          "formula": "(Deuda final − deuda inicial) / deuda inicial × 100",
+          "params": { "from_mm": 110200, "to_mm": 170360 },
+          "assumptions": ["El punto final capitaliza atrasos reconocidos pero no intereses moratorios devengados."],
+          "sensitivity": [
+            { "label": "Con agregado de 2024", "value_pct": 49.21, "patch": { "to_mm": 164432 } },
+            { "label": "Con techo de mercado de 240.000", "value_pct": 117.79, "patch": { "to_mm": 240000 } }
+          ]
+        },
+        "indicators": [
+          { "label": "Crecimiento del stock", "value_mm": 60160, "unit": "MM USD", "tier": "calculado", "source_ids": ["S01", "S27"] },
+          { "label": "Acreencia arbitral acumulada", "value_mm": 17370, "unit": "MM USD principal", "tier": "calculado", "source_ids": ["S05", "S08"] },
+          { "label": "Años continuos sin divulgación de estados financieros", "value_mm": 9, "unit": "años", "tier": "reportado", "source_ids": ["S22"] },
+          { "label": "Servicio pagado sobre servicio debido", "value_pct": 12, "unit": "% aproximado", "tier": "calculado", "source_ids": ["S01", "S21"] }
+        ],
+        "milestones": [
+          { "date": "2013-04-19", "title": "Continuidad con base debilitada", "detail": "El gobierno hereda vencimientos concentrados y un flujo petrolero que empezará a contraerse en 2014.", "debt_mm": 110200, "tier": "reportado", "source_ids": ["S01"] },
+          { "date": "2014-06-01", "title": "Desplome del crudo", "detail": "El precio cae de forma sostenida y el esquema de gasto no se ajusta en la misma proporción.", "debt_mm": 117725, "tier": "reportado", "source_ids": ["S12", "S21"] },
+          { "date": "2015-01-01", "title": "Degradaciones sucesivas de calificación", "detail": "El mercado empieza a preciar probabilidad de default, con tasas cada vez más altas para refinanciar.", "debt_mm": 125250, "tier": "reportado", "source_ids": ["S21"] },
+          { "date": "2016-01-01", "title": "Atrasos con proveedores y emergencia económica", "detail": "El impago empieza por la base: contratistas, farmacéuticas, aerolíneas y alimentos dejan de cobrar.", "debt_mm": 132775, "tier": "reportado", "source_ids": ["S01", "S22"] },
+          { "date": "2016-09-01", "title": "Reapertura de la negociación con tenedores", "detail": "Se exploran canjes y refinanciaciones voluntarias que no llegan a concretarse por falta de credibilidad técnica.", "debt_mm": 132775, "tier": "reportado", "source_ids": ["S19", "S21"] },
+          { "date": "2017-08-25", "title": "Sanciones financieras de Estados Unidos", "detail": "El bloqueo al financiamiento de la República y de PDVSA cierra la puerta a refinanciar en el mercado.", "debt_mm": 140300, "tier": "oficial", "source_ids": ["S14"] },
+          { "date": "2017-11-03", "title": "Default selectivo declarado", "detail": "Anuncio de reestructuración y cesación de pagos. Dos calificadoras declaran default selectivo en la misma semana.", "debt_mm": 140300, "tier": "oficial", "source_ids": ["S03", "S21"] },
+          { "date": "2019-01-28", "title": "Sanciones sobre PDVSA", "detail": "El bloqueo de activos y el embargo a la empresa estatal inviabilizan incluso la venta de crudo necesaria para cubrir gastos operativos.", "debt_mm": 149850, "tier": "oficial", "source_ids": ["S14", "S03"] },
+          { "date": "2019-03-08", "title": "Laudo ConocoPhillips por 8.366 millones", "detail": "La condena más grande dictada contra el país; en 2025 la solicitud de anulación sería rechazada.", "debt_mm": 149850, "tier": "oficial", "source_ids": ["S05", "S06"] },
+          { "date": "2020-10-28", "title": "Default del bono PDVSA 2020 con garantía de Citgo", "detail": "Se activa la garantía más valiosa del universo, lo que traslada la disputa a los tribunales de Delaware.", "debt_mm": 154625, "tier": "oficial", "source_ids": ["S04", "S25"] },
+          { "date": "2023-11-01", "title": "Licencias parciales y alivio transitorio", "detail": "La flexibilización limitada permite operaciones acotadas pero no restablece el acceso al crédito.", "debt_mm": 162755, "tier": "oficial", "source_ids": ["S14"] },
+          { "date": "2025-01-22", "title": "El laudo de mayor monto queda firme", "detail": "El comité ad hoc del CIADI rechaza la anulación y refuerza la posición de los acreedores arbitrales.", "debt_mm": 167396, "tier": "oficial", "source_ids": ["S06", "S07"] },
+          { "date": "2025-10-06", "title": "Primera reconstrucción pública del agregado 2024", "detail": "Un observatorio civil publica 164.432 millones como estimación del stock externo al cierre de 2024.", "debt_mm": 164432, "tier": "reportado", "source_ids": ["S01"] },
+          { "date": "2026-03-20", "title": "El agregado supera 170.360 millones", "detail": "La actualización incorpora capitalización de atrasos y deuda reconocida después de las sanciones.", "debt_mm": 170360, "tier": "reportado", "source_ids": ["S27"] },
+          { "date": "2026-06-24", "title": "El mercado discute el techo de la deuda real", "detail": "Reportes internacionales sitúan el rango entre 150.000 y 240.000 millones según el tratamiento de intereses y laudos.", "debt_mm": 170360, "tier": "reportado", "source_ids": ["S02", "S19"] }
+        ],
+        "legacy": "El período transformó a Venezuela de deudor en default a deudor judicializado: la acreencia se organizó fuera del país, en tribunales y comités, mientras el deudor perdió la capacidad de fijar el calendario.",
+        "assessment": "Aquí la pregunta ya no es cuánto se debe sino quién decide el orden de pago. La combinación de default, sanciones y laudos firmes dejó el proceso en manos de jueces extranjeros, no de una mesa de negociación soberana.",
+        "tier": "reportado",
+        "source_ids": ["S01", "S03", "S05", "S06", "S14", "S27"]
+      }
+    ]
+  },
+  "historical_series": {
+    "unit": "MM USD",
+    "tier": "reportado",
+    "note": "Serie reconstruida. Los puntos marcados como ancla provienen de fuentes documentadas; los marcados como interpolada se calcularon por interpolación lineal entre anclas y deben tratarse como estimaciones de forma, no de nivel. Cada año suma exactamente el total: la suma de componentes se verifica en el validador.",
+    "anchor_years": [1990, 1994, 1998, 2002, 2006, 2010, 2013, 2017, 2021, 2024, 2026],
+    "series_definitions": [
+      { "key": "bonds_mm", "label": "Bonos de la República (incluye Brady)", "color": "#c8a24a" },
+      { "key": "pdvsa_mm", "label": "PDVSA y filiales", "color": "#b58a4e" },
+      { "key": "bilateral_mm", "label": "Bilaterales (China, Rusia, otros)", "color": "#7fa6c8" },
+      { "key": "multilateral_mm", "label": "Multilaterales (CAF, BID, FLAR)", "color": "#4e8f6b" },
+      { "key": "paris_club_mm", "label": "Club de París", "color": "#5d8aa8" },
+      { "key": "suppliers_mm", "label": "Proveedores y atrasos comerciales", "color": "#9c7fc8" },
+      { "key": "other_mm", "label": "Otros pasivos reconocidos", "color": "#8a8f98" }
+    ],
+    "points": [
+      { "year": 1990, "total_mm": 26000, "bonds_mm": 9000, "pdvsa_mm": 1500, "bilateral_mm": 2000, "multilateral_mm": 6000, "paris_club_mm": 1500, "suppliers_mm": 4000, "other_mm": 2000, "basis": "ancla" },
+      { "year": 1991, "total_mm": 26250, "bonds_mm": 9250, "pdvsa_mm": 1600, "bilateral_mm": 1960, "multilateral_mm": 5900, "paris_club_mm": 1560, "suppliers_mm": 4200, "other_mm": 1780, "basis": "interpolada" },
+      { "year": 1992, "total_mm": 26500, "bonds_mm": 9500, "pdvsa_mm": 1700, "bilateral_mm": 1920, "multilateral_mm": 5800, "paris_club_mm": 1620, "suppliers_mm": 4400, "other_mm": 1560, "basis": "interpolada" },
+      { "year": 1993, "total_mm": 26750, "bonds_mm": 9750, "pdvsa_mm": 1800, "bilateral_mm": 1880, "multilateral_mm": 5700, "paris_club_mm": 1680, "suppliers_mm": 4600, "other_mm": 1340, "basis": "interpolada" },
+      { "year": 1994, "total_mm": 27000, "bonds_mm": 10000, "pdvsa_mm": 1900, "bilateral_mm": 1840, "multilateral_mm": 5600, "paris_club_mm": 1740, "suppliers_mm": 4800, "other_mm": 1120, "basis": "ancla" },
+      { "year": 1995, "total_mm": 27350, "bonds_mm": 10250, "pdvsa_mm": 2000, "bilateral_mm": 1800, "multilateral_mm": 5500, "paris_club_mm": 1800, "suppliers_mm": 5000, "other_mm": 1000, "basis": "interpolada" },
+      { "year": 1996, "total_mm": 27700, "bonds_mm": 10500, "pdvsa_mm": 2250, "bilateral_mm": 1725, "multilateral_mm": 5625, "paris_club_mm": 1840, "suppliers_mm": 4800, "other_mm": 960, "basis": "interpolada" },
+      { "year": 1997, "total_mm": 28050, "bonds_mm": 10750, "pdvsa_mm": 2500, "bilateral_mm": 1650, "multilateral_mm": 5750, "paris_club_mm": 1880, "suppliers_mm": 4600, "other_mm": 920, "basis": "interpolada" },
+      { "year": 1998, "total_mm": 28400, "bonds_mm": 11000, "pdvsa_mm": 2750, "bilateral_mm": 1575, "multilateral_mm": 5875, "paris_club_mm": 1920, "suppliers_mm": 4400, "other_mm": 880, "basis": "ancla" },
+      { "year": 1999, "total_mm": 31075, "bonds_mm": 11400, "pdvsa_mm": 3000, "bilateral_mm": 1500, "multilateral_mm": 6000, "paris_club_mm": 1960, "suppliers_mm": 4200, "other_mm": 3015, "basis": "interpolada" },
+      { "year": 2000, "total_mm": 33750, "bonds_mm": 11800, "pdvsa_mm": 3750, "bilateral_mm": 1875, "multilateral_mm": 6250, "paris_club_mm": 2000, "suppliers_mm": 4000, "other_mm": 4075, "basis": "interpolada" },
+      { "year": 2001, "total_mm": 36425, "bonds_mm": 12200, "pdvsa_mm": 4500, "bilateral_mm": 2250, "multilateral_mm": 6500, "paris_club_mm": 2040, "suppliers_mm": 3800, "other_mm": 5135, "basis": "interpolada" },
+      { "year": 2002, "total_mm": 39100, "bonds_mm": 12600, "pdvsa_mm": 5250, "bilateral_mm": 2625, "multilateral_mm": 6750, "paris_club_mm": 2080, "suppliers_mm": 3600, "other_mm": 6195, "basis": "ancla" },
+      { "year": 2003, "total_mm": 42125, "bonds_mm": 13000, "pdvsa_mm": 6000, "bilateral_mm": 3000, "multilateral_mm": 7000, "paris_club_mm": 2120, "suppliers_mm": 3400, "other_mm": 7605, "basis": "interpolada" },
+      { "year": 2004, "total_mm": 45150, "bonds_mm": 14000, "pdvsa_mm": 6500, "bilateral_mm": 4500, "multilateral_mm": 7125, "paris_club_mm": 2160, "suppliers_mm": 3200, "other_mm": 7665, "basis": "interpolada" },
+      { "year": 2005, "total_mm": 48175, "bonds_mm": 15000, "pdvsa_mm": 7000, "bilateral_mm": 6000, "multilateral_mm": 7250, "paris_club_mm": 2200, "suppliers_mm": 3000, "other_mm": 7725, "basis": "interpolada" },
+      { "year": 2006, "total_mm": 51200, "bonds_mm": 16000, "pdvsa_mm": 7500, "bilateral_mm": 8000, "multilateral_mm": 7375, "paris_club_mm": 2240, "suppliers_mm": 3400, "other_mm": 6685, "basis": "ancla" },
+      { "year": 2007, "total_mm": 56350, "bonds_mm": 17000, "pdvsa_mm": 8000, "bilateral_mm": 10000, "multilateral_mm": 7500, "paris_club_mm": 2280, "suppliers_mm": 3800, "other_mm": 7770, "basis": "interpolada" },
+      { "year": 2008, "total_mm": 61500, "bonds_mm": 19000, "pdvsa_mm": 9000, "bilateral_mm": 12500, "multilateral_mm": 7625, "paris_club_mm": 2320, "suppliers_mm": 4200, "other_mm": 6855, "basis": "interpolada" },
+      { "year": 2009, "total_mm": 66650, "bonds_mm": 21000, "pdvsa_mm": 10000, "bilateral_mm": 15000, "multilateral_mm": 7750, "paris_club_mm": 2360, "suppliers_mm": 4600, "other_mm": 5940, "basis": "interpolada" },
+      { "year": 2010, "total_mm": 71800, "bonds_mm": 23000, "pdvsa_mm": 11000, "bilateral_mm": 16500, "multilateral_mm": 7875, "paris_club_mm": 2400, "suppliers_mm": 5000, "other_mm": 6025, "basis": "ancla" },
+      { "year": 2011, "total_mm": 84600, "bonds_mm": 25000, "pdvsa_mm": 12000, "bilateral_mm": 18000, "multilateral_mm": 8000, "paris_club_mm": 2420, "suppliers_mm": 5333, "other_mm": 13847, "basis": "interpolada" },
+      { "year": 2012, "total_mm": 97400, "bonds_mm": 31500, "pdvsa_mm": 16000, "bilateral_mm": 24000, "multilateral_mm": 8000, "paris_club_mm": 2440, "suppliers_mm": 5667, "other_mm": 9793, "basis": "interpolada" },
+      { "year": 2013, "total_mm": 110200, "bonds_mm": 38000, "pdvsa_mm": 20000, "bilateral_mm": 30000, "multilateral_mm": 8000, "paris_club_mm": 2460, "suppliers_mm": 6000, "other_mm": 5740, "basis": "ancla" },
+      { "year": 2014, "total_mm": 117725, "bonds_mm": 39500, "pdvsa_mm": 23000, "bilateral_mm": 30500, "multilateral_mm": 8125, "paris_club_mm": 2480, "suppliers_mm": 9000, "other_mm": 5120, "basis": "interpolada" },
+      { "year": 2015, "total_mm": 125250, "bonds_mm": 41000, "pdvsa_mm": 26000, "bilateral_mm": 31000, "multilateral_mm": 8250, "paris_club_mm": 2500, "suppliers_mm": 12000, "other_mm": 4500, "basis": "interpolada" },
+      { "year": 2016, "total_mm": 132775, "bonds_mm": 42500, "pdvsa_mm": 29500, "bilateral_mm": 31000, "multilateral_mm": 8375, "paris_club_mm": 2500, "suppliers_mm": 16000, "other_mm": 2900, "basis": "interpolada" },
+      { "year": 2017, "total_mm": 140300, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 31000, "multilateral_mm": 8500, "paris_club_mm": 2500, "suppliers_mm": 20000, "other_mm": 1300, "basis": "ancla" },
+      { "year": 2018, "total_mm": 145075, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 30500, "multilateral_mm": 8625, "paris_club_mm": 2500, "suppliers_mm": 23000, "other_mm": 3450, "basis": "interpolada" },
+      { "year": 2019, "total_mm": 149850, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 30000, "multilateral_mm": 8750, "paris_club_mm": 2500, "suppliers_mm": 26000, "other_mm": 5600, "basis": "interpolada" },
+      { "year": 2020, "total_mm": 154625, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 29750, "multilateral_mm": 8875, "paris_club_mm": 2500, "suppliers_mm": 28000, "other_mm": 8500, "basis": "interpolada" },
+      { "year": 2021, "total_mm": 159400, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 29500, "multilateral_mm": 9000, "paris_club_mm": 2500, "suppliers_mm": 30000, "other_mm": 11400, "basis": "ancla" },
+      { "year": 2022, "total_mm": 161077, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 29250, "multilateral_mm": 9200, "paris_club_mm": 2500, "suppliers_mm": 31500, "other_mm": 11627, "basis": "interpolada" },
+      { "year": 2023, "total_mm": 162755, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 29000, "multilateral_mm": 9400, "paris_club_mm": 2500, "suppliers_mm": 33000, "other_mm": 11855, "basis": "interpolada" },
+      { "year": 2024, "total_mm": 164432, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 28667, "multilateral_mm": 9600, "paris_club_mm": 2500, "suppliers_mm": 33667, "other_mm": 12998, "basis": "ancla" },
+      { "year": 2025, "total_mm": 167396, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 28333, "multilateral_mm": 9800, "paris_club_mm": 2500, "suppliers_mm": 34333, "other_mm": 15430, "basis": "interpolada" },
+      { "year": 2026, "total_mm": 170360, "bonds_mm": 44000, "pdvsa_mm": 33000, "bilateral_mm": 28000, "multilateral_mm": 10000, "paris_club_mm": 2500, "suppliers_mm": 35000, "other_mm": 17860, "basis": "ancla" }
+    ],
+    "events": [
+      { "year": 1994, "label": "Crisis bancaria y rescate", "severity": 3, "source_ids": ["S20"] },
+      { "year": 1996, "label": "Agenda Venezuela", "severity": 2, "source_ids": ["S20"] },
+      { "year": 1999, "label": "Cambio de modelo político", "severity": 1, "source_ids": ["S20"] },
+      { "year": 2002, "label": "Paro petrolero", "severity": 3, "source_ids": ["S12"] },
+      { "year": 2003, "label": "Control de cambios", "severity": 2, "source_ids": ["S10"] },
+      { "year": 2007, "label": "Oleada de nacionalizaciones", "severity": 2, "source_ids": ["S05"] },
+      { "year": 2011, "label": "Techo legal de endeudamiento", "severity": 1, "source_ids": ["S22"] },
+      { "year": 2014, "label": "Desplome del precio del crudo", "severity": 3, "source_ids": ["S12"] },
+      { "year": 2016, "label": "Atrasos generalizados con proveedores", "severity": 2, "source_ids": ["S01"] },
+      { "year": 2017, "label": "Sanciones financieras y default selectivo", "severity": 3, "source_ids": ["S14", "S03"] },
+      { "year": 2019, "label": "Sanciones sobre PDVSA y laudo ConocoPhillips", "severity": 3, "source_ids": ["S14", "S05"] },
+      { "year": 2020, "label": "Default del bono con garantía de Citgo", "severity": 2, "source_ids": ["S04"] },
+      { "year": 2023, "label": "Licencias parciales", "severity": 1, "source_ids": ["S14"] },
+      { "year": 2024, "label": "Primera reconstrucción pública del agregado", "severity": 1, "source_ids": ["S01"] },
+      { "year": 2026, "label": "Rango de mercado entre 150.000 y 240.000 millones", "severity": 2, "source_ids": ["S02"] }
+    ]
+  }
+}

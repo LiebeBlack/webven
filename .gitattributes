@@ -1,2 +1,21 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Los artefactos del repo se regeneran byte a byte y se comparan en CI (y con
+# `build-database.ps1 -Check` en local). Un final de línea distinto según el
+# sistema haría que esa comparación fallara sin que nada haya cambiado: por eso
+# todo archivo de texto se guarda y se extrae con LF, en cualquier plataforma.
+* text=auto eol=lf
+
+# Binarios: nunca normalizar.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Archivos generados que se publican tal cual: marcarlos como generados evita
+# que GitHub los cuente como código en las estadísticas del repositorio.
+dist/*.html linguist-generated=true
+data/database.json linguist-generated=true
+data/database.embedded.js linguist-generated=true

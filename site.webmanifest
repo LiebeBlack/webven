@@ -1,0 +1,36 @@
+{
+  "name": "Observatorio Arquitectónico de la Deuda Soberana de Venezuela",
+  "short_name": "Deuda Soberana VE",
+  "description": "Arquitectura de la acreencia, laudos arbitrales y mecanismos de recuperación de la deuda externa venezolana, con procedencia declarada en cada cifra y auditoría reproducible.",
+  "lang": "es-VE",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#050506",
+  "categories": ["finance", "education", "government"],
+  "icons": [
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Auditoría del dataset",
+      "short_name": "Auditoría",
+      "description": "Informe de la auditoría automática: cifras derivadas recalculadas y fuentes resueltas.",
+      "url": "./tests/validate.html"
+    }
+  ]
+}

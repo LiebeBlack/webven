@@ -1,0 +1,79 @@
+name: Publicar observatorio en GitHub Pages
+
+# El despliegue es la última consecuencia de la validación, no un paso paralelo:
+# si el dataset no cuadra, el sitio anterior sigue publicado y se ve el informe
+# del validador en el registro de la ejecución.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  validar:
+    name: Validar dataset y artefactos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # 1. Contrato de datos: estructura, capas de procedencia, referencias a
+      #    fuentes, porcentajes que deben sumar 100 y recálculo de toda cifra
+      #    derivada y de sus sensibilidades declaradas.
+      - name: Auditar data/database.json
+        run: node tools/validate.mjs
+
+      # 2. Los artefactos del repositorio deben poder regenerarse byte a byte:
+      #    si un fragmento cambió y el JSON publicado no, esto lo detecta.
+      - name: Regenerar dataset y bundles
+        shell: pwsh
+        run: |
+          tools/build-database.ps1 -Check
+          tools/bundle-standalone.ps1 -Set todos -Quiet
+
+      - name: Verificar que los artefactos versionados estén al día
+        run: |
+          if [ -n "$(git status --porcelain data dist)" ]; then
+            echo "::error::Los artefactos generados no coinciden con el repositorio. Ejecuta 'npm run build' y confirma los archivos."
+            git status --porcelain data dist
+            git diff --stat data dist
+            exit 1
+          fi
+          echo "Artefactos al día: data/database.json, data/database.embedded.js y dist/."
+
+  desplegar:
+    name: Desplegar en Pages
+    needs: validar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      # El sitio es estático y no necesita compilación: se publica la raíz del
+      # repositorio tal cual, con rutas relativas que funcionan igual en un
+      # dominio propio que en usuario.github.io/repositorio/.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

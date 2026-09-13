@@ -1,0 +1,219 @@
+/* ============================================================================
+   OBSERVATORIO ARQUITECTÓNICO DE LA DEUDA SOBERANA DE VENEZUELA
+   css/tokens.css — Sistema de diseño: variables, escalas y primitivas de tema
+   ---------------------------------------------------------------------------
+   Una sola fuente de verdad para color, tipografía, espacio, radios, sombras y
+   movimiento. Ningún valor "mágico" fuera de este archivo.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---------------------------------------------------------------- Color --- */
+  /* Superficies: "Premium Pitch Black". Negros casi puros, sin lavado azulado. */
+  --bg: #000000;
+  --bg-raise: #050506;
+  --surface-solid: #08090a;
+  --surface-1: rgba(255, 255, 255, 0.022);
+  --surface-2: rgba(255, 255, 255, 0.042);
+  --surface-3: rgba(255, 255, 255, 0.068);
+  --surface-sunken: rgba(0, 0, 0, 0.42);
+
+  /* Hairlines: el andamiaje institucional. Estructura por línea, no por sombra. */
+  --hairline: #16171a;
+  --hairline-soft: #101114;
+  --hairline-strong: #23252a;
+  --hairline-accent: rgba(200, 162, 74, 0.26);
+  --hairline-focus: rgba(127, 166, 200, 0.55);
+
+  /* Tinta */
+  --ink: #ededed;
+  --ink-2: #a8adb6;
+  --ink-3: #6e747e;
+  --ink-4: #4a4f57;
+  --ink-invert: #08090a;
+
+  /* Acento institucional: latón (documentos, cifras reportadas) */
+  --accent: #c8a24a;
+  --accent-soft: rgba(200, 162, 74, 0.14);
+  --accent-line: rgba(200, 162, 74, 0.32);
+
+  /* Acento frío: azul documental */
+  --accent-cool: #7fa6c8;
+  --accent-cool-soft: rgba(127, 166, 200, 0.14);
+
+  /* Semánticos */
+  --alert: #c4453f;
+  --alert-soft: rgba(196, 69, 63, 0.14);
+  --warn: #c08a3e;
+  --warn-soft: rgba(192, 138, 62, 0.14);
+  --ok: #4e8f6b;
+  --ok-soft: rgba(78, 143, 107, 0.14);
+
+  /* Capas de procedencia (nunca se comunican solo por color: siempre con etiqueta) */
+  --tier-oficial: #7fa6c8;
+  --tier-oficial-soft: rgba(127, 166, 200, 0.13);
+  --tier-reportado: #c8a24a;
+  --tier-reportado-soft: rgba(200, 162, 74, 0.13);
+  --tier-precedente: #6ea89a;
+  --tier-precedente-soft: rgba(110, 168, 154, 0.13);
+  --tier-calculado: #9c7fc8;
+  --tier-calculado-soft: rgba(156, 127, 200, 0.13);
+  --tier-propuesta: #6e747e;
+  --tier-propuesta-soft: rgba(110, 116, 126, 0.13);
+
+  /* ----------------------------------------------------------------- Voz --- */
+  --font-sans: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --font-display: "Playfair Display", "Times New Roman", Georgia, serif;
+
+  /* Escala tipográfica fluida */
+  --fs-3xs: 0.625rem;
+  --fs-2xs: 0.6875rem;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.8125rem;
+  --fs-base: 0.9375rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: clamp(1.125rem, 0.9rem + 0.6vw, 1.375rem);
+  --fs-xl: clamp(1.375rem, 1rem + 1.2vw, 1.875rem);
+  --fs-2xl: clamp(1.75rem, 1.1rem + 2.2vw, 2.75rem);
+  --fs-3xl: clamp(2.25rem, 1.2rem + 3.4vw, 3.75rem);
+
+  --lh-tight: 1.14;
+  --lh-snug: 1.32;
+  --lh-normal: 1.58;
+
+  --ls-tight: -0.02em;
+  --ls-wide: 0.06em;
+  --ls-wider: 0.14em;
+
+  /* ------------------------------------------------------------ Espacio --- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  --gutter: clamp(1rem, 3.2vw, 2.5rem);
+  --shell-max: 1560px;
+  --measure: 68ch;
+
+  /* Radios: casi rectos. La rectitud es el lenguaje institucional. */
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 6px;
+  --r-4: 10px;
+  --r-pill: 999px;
+
+  /* --------------------------------------------------------------- Sombra --- */
+  --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  --shadow-2: 0 18px 48px -28px rgba(0, 0, 0, 0.9);
+  --shadow-3: 0 40px 120px -60px rgba(0, 0, 0, 1);
+  --ring: 0 0 0 1px var(--hairline-strong);
+  --ring-focus: 0 0 0 1px var(--bg), 0 0 0 3px var(--hairline-focus);
+
+  /* ------------------------------------------------------------ Movimiento --- */
+  --dur-1: 140ms;
+  --dur-2: 260ms;
+  --dur-3: 460ms;
+  --dur-4: 720ms;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ------------------------------------------------------------ Capas z --- */
+  --z-base: 1;
+  --z-sticky: 50;
+  --z-nav: 60;
+  --z-overlay: 80;
+  --z-toast: 90;
+
+  /* -------------------------------------------------- Tokens de gráficos --- */
+  --chart-ink: #a8adb6;
+  --chart-grid: #16171a;
+  --chart-grid-strong: #23252a;
+  --chart-tooltip-bg: rgba(5, 5, 6, 0.96);
+  --chart-h: clamp(260px, 34vh, 380px);
+  --chart-h-tall: clamp(340px, 46vh, 520px);
+  --panel-blur: 14px;
+}
+
+/* ---------------------------------------------------------------------------
+   Tema claro: solo para impresión y para usuarios que lo piden explícitamente.
+   El producto es oscuro por diseño; esto es una concesión funcional.
+   ------------------------------------------------------------------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fbfbfa;
+  --bg-raise: #ffffff;
+  --surface-solid: #ffffff;
+  --surface-1: rgba(8, 9, 10, 0.018);
+  --surface-2: rgba(8, 9, 10, 0.04);
+  --surface-3: rgba(8, 9, 10, 0.07);
+  --surface-sunken: rgba(8, 9, 10, 0.04);
+  --hairline: #e4e4e1;
+  --hairline-soft: #efefec;
+  --hairline-strong: #cfcfcb;
+  --ink: #0d0e10;
+  --ink-2: #4c5158;
+  --ink-3: #767c85;
+  --ink-4: #9aa0a8;
+}
+
+/* ---------------------------------------------------------------------------
+   Primitivas reutilizables
+   ------------------------------------------------------------------------- */
+
+/* Vidrio ultra sutil: se apoya en el degradado + blur, no en el brillo. */
+.glass {
+  background-color: var(--surface-solid);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.006) 38%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border: 1px solid var(--hairline);
+  -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(1.08);
+  backdrop-filter: blur(var(--panel-blur)) saturate(1.08);
+}
+
+/* Fallback sólido cuando backdrop-filter no existe o está desactivado. */
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+  .glass {
+    background-color: #0b0c0e;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: -0.01em;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden,
+[hidden] {
+  display: none !important;
+}

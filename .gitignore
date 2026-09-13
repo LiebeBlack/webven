@@ -1,0 +1,22 @@
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+
+# Dependencias (el proyecto no tiene, pero por si se añaden herramientas)
+node_modules/
+.pnpm-store/
+
+# Registros y temporales locales
+*.log
+tmp/
+.freebuff/
+
+# Archivos de trabajo que no forman parte de la entrega: los borradores del
+# dataset se versionan en data/fragments/, no aquí.
+*.local.json
+*~local.html

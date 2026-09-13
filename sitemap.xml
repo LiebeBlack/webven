@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sustituye https://usuario.github.io/observatorio-deuda-soberana-ve/ por la
+  dirección real antes de publicar (aparece también en index.html, robots.txt,
+  package.json y CITATION.cff: es el único dato que hay que personalizar).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://usuario.github.io/observatorio-deuda-soberana-ve/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://usuario.github.io/observatorio-deuda-soberana-ve/tests/validate.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

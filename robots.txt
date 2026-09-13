@@ -1,0 +1,11 @@
+# El observatorio es un documento público: se permite el rastreo completo.
+# Lo único que no interesa indexar son los artefactos generados de dist/, que
+# duplican el mismo contenido que las páginas fuente.
+
+User-agent: *
+Allow: /
+Disallow: /dist/
+
+# Sitemap: sustituye usuario.github.io/observatorio-deuda-soberana-ve por tu
+# dominio o la ruta real del repositorio antes de publicar.
+Sitemap: https://usuario.github.io/observatorio-deuda-soberana-ve/sitemap.xml

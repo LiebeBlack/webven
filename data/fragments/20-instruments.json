@@ -1,0 +1,114 @@
+{
+  "debt_instruments": {
+    "basis_note": "Los importes por tramo son estimaciones de nominal pendiente elaboradas a partir de reportes públicos, no saldos certificados contra escrituras de emisión. Se omite el ISIN deliberadamente: publicar un identificador no verificado en un documento de investigación sería peor que declarar el vacío. El nominal exacto por tramo está registrado como tarea pendiente en los vacíos de información.",
+    "as_of": "2026-09-01",
+    "tier": "reportado",
+    "source_ids": ["S01", "S03", "S04", "S22", "S25", "S27"],
+    "blocks": [
+      {
+        "id": "bonos-soberanos",
+        "label": "Bonos soberanos de la República",
+        "issuer": "República Bolivariana de Venezuela",
+        "tier": "reportado",
+        "total_mm": 44000,
+        "jurisdiction": "Nueva York (mayoría), con tramos bajo ley inglesa",
+        "status": "default",
+        "default_since": "2017-11",
+        "source_ids": ["S03", "S04", "S22", "S25"],
+        "note": "Cesación de pagos declarada en noviembre de 2017 tras el anuncio de reestructuración y el bloqueo de la OFAC. Los pagos depositados en fiduciarios quedaron sin acreditarse a los tenedores.",
+        "items": [
+          { "id": "venz-2019", "name": "Bono Global 2019", "ticker": "VENZ 7.750 2019", "coupon_pct": 7.75, "maturity": "2019-10-13", "amount_outstanding_mm": 1600, "tier": "reportado" },
+          { "id": "venz-2020", "name": "Bono Global 2020", "ticker": "VENZ 8.250 2020", "coupon_pct": 8.25, "maturity": "2020-04-15", "amount_outstanding_mm": 1200, "tier": "reportado" },
+          { "id": "venz-2021", "name": "Bono Global 2021", "ticker": "VENZ 9.000 2021", "coupon_pct": 9.0, "maturity": "2021-05-07", "amount_outstanding_mm": 1500, "tier": "reportado" },
+          { "id": "venz-2022", "name": "Bono Global 2022", "ticker": "VENZ 12.750 2022", "coupon_pct": 12.75, "maturity": "2022-08-23", "amount_outstanding_mm": 3000, "tier": "reportado" },
+          { "id": "venz-2023", "name": "Bono Global 2023", "ticker": "VENZ 7.750 2023", "coupon_pct": 7.75, "maturity": "2023-10-13", "amount_outstanding_mm": 1600, "tier": "reportado" },
+          { "id": "venz-2024", "name": "Bono Global 2024", "ticker": "VENZ 6.000 2024", "coupon_pct": 6.0, "maturity": "2024-04-15", "amount_outstanding_mm": 1500, "tier": "reportado" },
+          { "id": "venz-2025", "name": "Bono Global 2025", "ticker": "VENZ 7.000 2025", "coupon_pct": 7.0, "maturity": "2025-03-31", "amount_outstanding_mm": 1800, "tier": "reportado" },
+          { "id": "venz-2026", "name": "Bono Global 2026", "ticker": "VENZ 11.750 2026", "coupon_pct": 11.75, "maturity": "2026-08-21", "amount_outstanding_mm": 2800, "tier": "reportado" },
+          { "id": "venz-2027", "name": "Bono Global 2027", "ticker": "VENZ 9.250 2027", "coupon_pct": 9.25, "maturity": "2027-09-15", "amount_outstanding_mm": 4500, "tier": "reportado" },
+          { "id": "venz-2028", "name": "Bono Global 2028", "ticker": "VENZ 9.250 2028", "coupon_pct": 9.25, "maturity": "2028-05-07", "amount_outstanding_mm": 3000, "tier": "reportado" },
+          { "id": "venz-2031", "name": "Bono Global 2031", "ticker": "VENZ 11.950 2031", "coupon_pct": 11.95, "maturity": "2031-08-05", "amount_outstanding_mm": 4000, "tier": "reportado" },
+          { "id": "venz-2034", "name": "Bono Global 2034", "ticker": "VENZ 9.375 2034", "coupon_pct": 9.375, "maturity": "2034-01-13", "amount_outstanding_mm": 5000, "tier": "reportado" },
+          { "id": "venz-2038", "name": "Bono Global 2038", "ticker": "VENZ 7.000 2038", "coupon_pct": 7.0, "maturity": "2038-03-31", "amount_outstanding_mm": 2500, "tier": "reportado" },
+          { "id": "venz-otros", "name": "Otras emisiones de la República y colocaciones privadas", "ticker": "Varios", "coupon_pct": null, "maturity": null, "amount_outstanding_mm": 10000, "tier": "reportado", "note": "Incluye tramos menores colocados con tenedores locales e institucionales, cuyo registro individual no es público." }
+        ]
+      },
+      {
+        "id": "bonos-pdvsa",
+        "label": "Bonos y pagarés de PDVSA",
+        "issuer": "Petróleos de Venezuela, S.A.",
+        "tier": "reportado",
+        "total_mm": 33000,
+        "jurisdiction": "Nueva York (mayoría)",
+        "status": "default",
+        "default_since": "2017-11",
+        "source_ids": ["S03", "S04", "S13", "S22"],
+        "note": "PDVSA es una sociedad distinta de la República. Esa separación jurídica es lo que permite a los acreedores arbitrales y a los tenedores perseguir activos propios de la empresa, como la participación en Citgo, sin necesidad de vencer la inmunidad soberana del Estado.",
+        "items": [
+          { "id": "pdvsa-2020", "name": "Bono PDVSA 2020 con garantía de Citgo", "ticker": "PDVSA 8.500 2020", "coupon_pct": 8.5, "maturity": "2020-05-10", "amount_outstanding_mm": 3400, "collateral": "50,1 % de las acciones de PDV Holding (matriz de Citgo) en garantía", "tier": "oficial", "note": "Garantía pignorada y litigada. Es la acreencia con mejor posición jurídica relativa del universo PDVSA." },
+          { "id": "pdvsa-2021", "name": "Bono PDVSA 2021", "ticker": "PDVSA 9.000 2021", "coupon_pct": 9.0, "maturity": "2021-11-17", "amount_outstanding_mm": 2100, "tier": "reportado" },
+          { "id": "pdvsa-2022", "name": "Bono PDVSA 2022", "ticker": "PDVSA 12.750 2022", "coupon_pct": 12.75, "maturity": "2022-02-17", "amount_outstanding_mm": 2800, "tier": "reportado" },
+          { "id": "pdvsa-2023", "name": "Bono PDVSA 2023", "ticker": "PDVSA 6.000 2023", "coupon_pct": 6.0, "maturity": "2023-11-16", "amount_outstanding_mm": 1500, "tier": "reportado" },
+          { "id": "pdvsa-2024", "name": "Bono PDVSA 2024", "ticker": "PDVSA 6.000 2024", "coupon_pct": 6.0, "maturity": "2024-05-16", "amount_outstanding_mm": 3000, "tier": "reportado" },
+          { "id": "pdvsa-2026", "name": "Bono PDVSA 2026", "ticker": "PDVSA 6.000 2026", "coupon_pct": 6.0, "maturity": "2026-11-15", "amount_outstanding_mm": 3200, "tier": "reportado" },
+          { "id": "pdvsa-2027", "name": "Bono PDVSA 2027", "ticker": "PDVSA 5.375 2027", "coupon_pct": 5.375, "maturity": "2027-04-12", "amount_outstanding_mm": 3000, "tier": "reportado" },
+          { "id": "pdvsa-2035", "name": "Bono PDVSA 2035", "ticker": "PDVSA 9.750 2035", "coupon_pct": 9.75, "maturity": "2035-10-17", "amount_outstanding_mm": 3500, "tier": "reportado" },
+          { "id": "pdvsa-2037", "name": "Bono PDVSA 2037", "ticker": "PDVSA 5.375 2037", "coupon_pct": 5.375, "maturity": "2037-04-12", "amount_outstanding_mm": 5000, "tier": "reportado" },
+          { "id": "pdvsa-proveedores", "name": "Pagarés y créditos de proveedores de PDVSA", "ticker": "Varios", "coupon_pct": null, "maturity": null, "amount_outstanding_mm": 5500, "tier": "reportado", "note": "Convertidos en deuda reconocida tras los incumplimientos de 2016 y 2017." }
+        ]
+      },
+      {
+        "id": "credito-oficial",
+        "label": "Crédito oficial bilateral y multilateral",
+        "issuer": "República y entes públicos",
+        "tier": "reportado",
+        "total_mm": 40500,
+        "status": "moratoria_parcial",
+        "source_ids": ["S01", "S15", "S16", "S27"],
+        "note": "Aquí no hay default declarado en los mismos términos que en los bonos: hay refinanciaciones sucesivas, prepagos en crudo y renegociaciones bilaterales. Es el bloque donde un acuerdo político puede avanzar más rápido que en el mercado.",
+        "items": [
+          { "id": "china-fondo", "name": "China: Fondo Conjunto Chino-Venezolano (prestamista: CDB)", "type": "bilateral", "creditor": "China", "amount_outstanding_mm": 19000, "rate_note": "Préstamos respaldados por entregas de crudo, con tasas estimadas entre 2 % y 6 % y plazos largos.", "tier": "reportado", "note": "Estimación de saldo vivo con rango amplio (19.000 a 28.000 millones) según se neten o no entregas ya facturadas." },
+          { "id": "rusia-rosneft", "name": "Rusia: prepagos de crudo y créditos de Rosneft", "type": "bilateral", "creditor": "Rusia", "amount_outstanding_mm": 3000, "rate_note": "Estructura de prepago con descuento sobre el barril.", "tier": "reportado" },
+          { "id": "otros-bilaterales", "name": "Otros bilaterales (Bielorrusia, Turquía, Irán, Cuba, Portugal, España)", "type": "bilateral", "creditor": "Varios Estados", "amount_outstanding_mm": 6000, "rate_note": "Composición heterogénea con acuerdos de pago en especie y compensación comercial.", "tier": "reportado" },
+          { "id": "caf", "name": "Corporación Andina de Fomento (CAF)", "type": "multilateral", "creditor": "CAF", "amount_outstanding_mm": 6500, "rate_note": "Principal acreedor multilateral con exposición viva e intereses corrientes.", "tier": "reportado" },
+          { "id": "bid", "name": "Banco Interamericano de Desarrollo (BID)", "type": "multilateral", "creditor": "BID", "amount_outstanding_mm": 2500, "rate_note": "La cartera nueva está suspendida; el saldo corresponde a préstamos previos.", "tier": "reportado" },
+          { "id": "flar", "name": "Fondo Latinoamericano de Reservas (FLAR)", "type": "multilateral", "creditor": "FLAR", "amount_outstanding_mm": 1000, "rate_note": "Exposición pequeña pero de cobro activo por tratarse de un fondo regional.", "tier": "reportado" },
+          { "id": "paris-club", "name": "Club de París (agregado)", "type": "multilateral", "creditor": "Club de París", "amount_outstanding_mm": 2500, "rate_note": "Reclamos de acreedores oficiales bilaterales agrupados en el marco del Club.", "tier": "reportado" }
+        ]
+      },
+      {
+        "id": "proveedores-atrasos",
+        "label": "Atrasos comerciales y de proveedores",
+        "issuer": "República, PDVSA y entes descentralizados",
+        "tier": "reportado",
+        "total_mm": 35000,
+        "status": "impago",
+        "source_ids": ["S01", "S22", "S27"],
+        "note": "Es el bloque más opaco y el que más creció desde 2017. No pasa por tribunales internacionales ni por comités de bonistas: se acumula en forma de sentencias, reclamos gremiales y deuda renegociada caso por caso.",
+        "items": [
+          { "id": "atrasos-aerolineas", "name": "Aerolíneas internacionales (boletos retenidos y liquidaciones)", "amount_outstanding_mm": 5000, "tier": "reportado" },
+          { "id": "atrasos-salud", "name": "Farmacéuticas, insumos médicos y salud", "amount_outstanding_mm": 4000, "tier": "reportado" },
+          { "id": "atrasos-alimentos", "name": "Alimentos, agroindustria y distribución", "amount_outstanding_mm": 3500, "tier": "reportado" },
+          { "id": "atrasos-contratistas", "name": "Contratistas petroleros y empresas de servicios", "amount_outstanding_mm": 8000, "tier": "reportado" },
+          { "id": "atrasos-telecom", "name": "Telecomunicaciones, tecnología y equipos", "amount_outstanding_mm": 3000, "tier": "reportado" },
+          { "id": "atrasos-otros", "name": "Transporte, construcción y otros rezagos", "amount_outstanding_mm": 11500, "tier": "reportado" }
+        ]
+      },
+      {
+        "id": "otros-reconocidos",
+        "label": "Otros pasivos externos reconocidos",
+        "issuer": "República y entes públicos",
+        "tier": "calculado",
+        "total_mm": 17860,
+        "status": "mixto",
+        "source_ids": ["S01", "S27"],
+        "note": "Bloque residual: es la diferencia entre el agregado externo estimado y la suma de los bloques nombrados. Se declara como calculado precisamente porque su composición no está documentada tramo por tramo; si los demás bloques se afinan, este residual cambia.",
+        "items": [
+          { "id": "otras-internas-fx", "name": "Deuda interna reconocida en moneda extranjera", "amount_outstanding_mm": 9000, "tier": "calculado" },
+          { "id": "otras-fonden", "name": "Obligaciones con FONDEN y entes descentralizados", "amount_outstanding_mm": 4860, "tier": "calculado" },
+          { "id": "otras-sentencias", "name": "Sentencias laborales y contractuales pendientes de ejecución", "amount_outstanding_mm": 4000, "tier": "calculado" }
+        ]
+      }
+    ]
+  }
+}

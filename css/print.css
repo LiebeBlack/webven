@@ -1,0 +1,133 @@
+/* ============================================================================
+   css/print.css — Dossier ejecutivo imprimible
+   ---------------------------------------------------------------------------
+   Convierte el observatorio (oscuro, interactivo) en un informe sobre papel:
+   fondo blanco, tinta negra, sin navegación ni gráficos dependientes de JS.
+   Todo lo interactivo se muestra expandido para que el lector no pierda datos.
+   ========================================================================== */
+
+@media print {
+  @page {
+    margin: 18mm 14mm 16mm;
+    size: A4 portrait;
+  }
+
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --bg-raise: #ffffff;
+    --surface-solid: #ffffff;
+    --surface-1: #ffffff;
+    --surface-2: #ffffff;
+    --hairline: #cccccc;
+    --hairline-soft: #e2e2e2;
+    --hairline-strong: #999999;
+    --ink: #000000;
+    --ink-2: #333333;
+    --ink-3: #555555;
+    --ink-4: #777777;
+    --accent: #6b5518;
+    --accent-cool: #24506f;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 9.5pt;
+  }
+
+  /* Se oculta todo lo que no tiene sentido en papel. */
+  .skip-link,
+  .nav,
+  .ticker,
+  .masthead__status,
+  .chart-frame,
+  .chart-grid,
+  .heatmap,
+  .treemap,
+  .sim__controls,
+  .toast-wrap,
+  .boot,
+  .progress,
+  .toolbar,
+  .filters,
+  .panel__toggle .chev,
+  .cite,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Nada de blur ni transiciones: se imprime el estado final. */
+  .glass,
+  .panel {
+    background: #ffffff !important;
+    background-image: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: 1px solid #cccccc !important;
+    break-inside: avoid;
+  }
+
+  /* Las tarjetas expandibles se imprimen abiertas. */
+  .expandable__body {
+    display: block !important;
+    grid-template-rows: 1fr !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .panel__reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .table {
+    font-size: 8pt;
+  }
+
+  .table thead {
+    display: table-header-group;
+  }
+
+  .table tr {
+    break-inside: avoid;
+  }
+
+  /* Las tablas anchas se pueden partir en columnas sin romper la lectura. */
+  .table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .section {
+    break-inside: auto;
+    padding-block: 8mm;
+    page-break-before: auto;
+  }
+
+  .section__title {
+    font-size: 15pt;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  a[href^="http"]::after {
+    content: " ‹" attr(href) "›";
+    font-size: 6.5pt;
+    color: #555555;
+    word-break: break-all;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+.print-only {
+  display: none;
+}

@@ -1,0 +1,362 @@
+{
+  "meta": {
+    "slug": "observatorio-deuda-soberana-ve",
+    "title": "Observatorio Arquitectónico de la Deuda Soberana de Venezuela",
+    "short_title": "Observatorio de Deuda Soberana VE",
+    "subtitle": "Arquitectura de la acreencia, ingeniería de recuperación y trazabilidad probatoria, 1990–2026",
+    "masthead": "Información del Mercantil Venezolano",
+    "version": "1.0.0",
+    "dataset_version": "2026.09",
+    "generated_at": "2026-09-01",
+    "valuation_date": "2026-09-01",
+    "currency": "USD",
+    "unit": "millones de dólares (MM USD)",
+    "locale": "es-VE",
+    "period": "1990–2026",
+    "editorial_note": "Toda cifra de este observatorio declara su origen. Se distinguen cinco capas: oficial (documental), reportada (prensa, bancos de inversión, comités), precedente (instrumento ya aplicado en otra reestructuración soberana, no en Venezuela), calculada (derivada por nosotros con fórmula expuesta) y propuesta (instrumento teórico o de política, sin precedente aplicado en ningún país). Ninguna cifra calculada se presenta como valor oficial.",
+    "disclaimer": "Documento analítico de circulación informativa. No constituye asesoría financiera, legal ni fiscal. Las cifras de la capa calculada son estimaciones reproducibles a partir de supuestos explícitos. Venezuela se encuentra en cesación de pagos selectiva desde 2017 y no publica un boletín consolidado de deuda externa, por lo que varios agregados son reconstrucciones.",
+    "methodology_summary": "La serie histórica se reconstruyó anclando puntos documentados (1990–1998, 2013, 2024, 2026) e interpolando linealmente sobre el resto, con marca de procedencia punto a punto. Los importes por tramo son estimaciones de nominal pendiente, no saldos certificados. Las cifras derivadas (intereses acumulados de laudos, VPN de recuperación bajo escenarios, ratios macro) se recalculan en tools/validate.mjs y en tests/validate.html: si un insumo cambia y el resultado no se actualiza, la validación falla.",
+    "tiers": [
+      {
+        "id": "oficial",
+        "label": "Oficial",
+        "long": "Documental oficial",
+        "description": "Cifra publicada por la entidad emisora, un tribunal o un organismo multilateral: laudos del CIADI, decisiones de anulación, actas de clubes de acreedores, licencias de sanciones, estadísticas del BCV.",
+        "color": "#7fa6c8"
+      },
+      {
+        "id": "reportado",
+        "label": "Reportado",
+        "long": "Reportado por terceros",
+        "description": "Cifra difundida por prensa especializada, bancos de inversión, comités de acreedores u observatorios independientes. Trazable a un emisor identificable, pero sin acto administrativo o judicial que la respalde.",
+        "color": "#c8a24a"
+      },
+      {
+        "id": "precedente",
+        "label": "Precedente",
+        "long": "Precedente aplicado en otro país",
+        "description": "Instrumento o doctrina ya aplicado en una reestructuración soberana verificable (Plan Brady de 1989, canje argentino de 2005, cláusulas de acción colectiva agregadas) que no tiene aplicación consumada en Venezuela. Hecho documentado en otra jurisdicción: ni cifra oficial venezolana ni hipótesis teórica.",
+        "color": "#6ea89a"
+      },
+      {
+        "id": "calculado",
+        "label": "Calculado",
+        "long": "Análisis derivado propio",
+        "description": "Resultado de una fórmula explícita sobre datos de las capas anteriores (interés acumulado, VPN, ratio, variación). Cada valor se recalcula en el validador para que no pueda quedar desfasado.",
+        "color": "#9c7fc8"
+      },
+      {
+        "id": "propuesta",
+        "label": "Propuesta",
+        "long": "Instrumento propuesto o teórico",
+        "description": "Diseño de política económica o instrumento financiero que aún no existe en ningún país ni tiene precedente directo aplicado a Venezuela. Nunca debe leerse como hecho observable.",
+        "color": "#6e747e"
+      }
+    ],
+    "scope_notes": [
+      "El agregado de 2026 excluye intereses moratorios devengados no capitalizados y excluye las acreencias arbitrales, que se suman aparte como exposición contingente.",
+      "La deuda interna en bolívares se excluye del agregado externo, salvo el tramo reconocido en moneda extranjera.",
+      "Las acreencias de proveedores se contabilizan por su valor de reclamo declarado, no por su valor de mercado.",
+      "Los nominales por tramo son estimaciones de trabajo: el nominal exacto exige cotejar cada prospecto o escritura de emisión, tarea pendiente marcada en los vacíos de información."
+    ]
+  },
+  "sources": [
+    {
+      "id": "S01",
+      "name": "Al cierre de 2024 la deuda externa de Venezuela alcanzó más de 164.432 millones de dólares",
+      "publisher": "Transparencia Venezuela",
+      "kind": "observatorio",
+      "reliability": "alta",
+      "url": "https://transparenciave.org/",
+      "published_at": "2025-10-06",
+      "accessed_at": "2026-09-13",
+      "note": "Estimación propia del observatorio civil a partir de fuentes oficiales dispersas. Es el ancla principal del agregado 2024."
+    },
+    {
+      "id": "S02",
+      "name": "La deuda de Venezuela podría alcanzar los 240.000 millones de dólares",
+      "publisher": "Financial Times, difundido por GBM",
+      "kind": "prensa",
+      "reliability": "alta",
+      "url": "https://gbm.com/media/noticia/",
+      "published_at": "2026-06-24",
+      "accessed_at": "2026-09-13",
+      "note": "Reporta un rango de estimaciones de mercado entre 150.000 y 240.000 millones según se incluyan o no intereses y laudos arbitrales."
+    },
+    {
+      "id": "S03",
+      "name": "¿Quién está en la fila para cobrar los miles de millones de Venezuela?",
+      "publisher": "CNN en Español",
+      "kind": "prensa",
+      "reliability": "media",
+      "url": "https://cnnespanol.cnn.com/",
+      "published_at": "2025-12-19",
+      "accessed_at": "2026-09-13",
+      "note": "Ubica en torno a 60.000 millones de dólares el nominal de bonos en default en circulación."
+    },
+    {
+      "id": "S04",
+      "name": "Venezuela y PDVSA: ¿cómo podría estructurarse una deuda de esta magnitud?",
+      "publisher": "Amerant Bank, Insights",
+      "kind": "banco",
+      "reliability": "alta",
+      "url": "https://www.amerantbank.com/ofinterest/es/",
+      "published_at": "2026-01-14",
+      "accessed_at": "2026-09-13",
+      "note": "Sitúa por encima de 75.000 millones el nominal de bonos soberanos y de PDVSA en default, y describe estructuras de canje."
+    },
+    {
+      "id": "S05",
+      "name": "Casos y laudos: Venezuela",
+      "publisher": "CIADI / Grupo Banco Mundial",
+      "kind": "tribunal",
+      "reliability": "oficial",
+      "url": "https://icsid.worldbank.org/cases",
+      "published_at": "2026-01-22",
+      "accessed_at": "2026-09-13",
+      "note": "Portal de casos del Centro Internacional de Arreglo de Diferencias relativas a Inversiones. Fuente primaria de números de caso, fechas y montos de laudo."
+    },
+    {
+      "id": "S06",
+      "name": "ConocoPhillips Petrozuata B.V. y otros c. Venezuela: decisión sobre anulación",
+      "publisher": "CIADI, difundido por Jus Mundi",
+      "kind": "tribunal",
+      "reliability": "oficial",
+      "url": "https://jusmundi.com/",
+      "published_at": "2025-01-22",
+      "accessed_at": "2026-09-13",
+      "note": "El comité ad hoc rechazó la solicitud de anulación del laudo de 8.366 millones de dólares."
+    },
+    {
+      "id": "S07",
+      "name": "Tribunal de arbitraje rechaza petición de Venezuela de anular laudo ConocoPhillips",
+      "publisher": "Diario Las Américas",
+      "kind": "prensa",
+      "reliability": "media",
+      "url": "https://www.diariolasamericas.com/",
+      "published_at": "2025-01-23",
+      "accessed_at": "2026-09-13",
+      "note": "Cobertura de la decisión de anulación y del monto involucrado."
+    },
+    {
+      "id": "S08",
+      "name": "Arbitrajes pendientes con petroleras estadounidenses superan los 10.000 millones de dólares",
+      "publisher": "Shale 24",
+      "kind": "prensa",
+      "reliability": "media",
+      "url": "https://www.shale24.com/",
+      "published_at": "2026-01-04",
+      "accessed_at": "2026-09-13",
+      "note": "Recuento de acreencias de ExxonMobil y ConocoPhillips, con montos de laudo y estado de ejecución."
+    },
+    {
+      "id": "S09",
+      "name": "Por qué un tribunal del Banco Mundial anuló la indemnización a ExxonMobil",
+      "publisher": "BBC Mundo",
+      "kind": "prensa",
+      "reliability": "alta",
+      "url": "https://www.bbc.com/mundo/noticias-america-latina-39240812",
+      "published_at": "2017-03-11",
+      "accessed_at": "2026-09-13",
+      "note": "Anulación parcial del laudo CIADI de 2014 por falta de jurisdicción sobre parte de las reclamaciones."
+    },
+    {
+      "id": "S10",
+      "name": "Estadísticas: reservas internacionales y sector externo",
+      "publisher": "Banco Central de Venezuela",
+      "kind": "oficial",
+      "reliability": "oficial",
+      "url": "https://www.bcv.org.ve/",
+      "published_at": "2026-08-31",
+      "accessed_at": "2026-09-13",
+      "note": "Serie de reservas internacionales. La frecuencia y el detalle se redujeron de forma significativa desde 2015."
+    },
+    {
+      "id": "S11",
+      "name": "World Economic Outlook: base de datos macroeconómica",
+      "publisher": "Fondo Monetario Internacional",
+      "kind": "multilateral",
+      "reliability": "alta",
+      "url": "https://www.imf.org/en/Publications/WEO",
+      "published_at": "2026-04-15",
+      "accessed_at": "2026-09-13",
+      "note": "El FMI no publica cifras de Venezuela desde 2019 por insuficiencia de información; los valores usados son estimaciones de la propia institución y de analistas privados."
+    },
+    {
+      "id": "S12",
+      "name": "Informes de exportaciones petroleras y producción de crudo",
+      "publisher": "Analistas de mercado energético (agregación propia)",
+      "kind": "analista",
+      "reliability": "media",
+      "url": "https://www.opec.org/",
+      "published_at": "2026-06-30",
+      "accessed_at": "2026-09-13",
+      "note": "Valor de exportaciones petroleras de Venezuela usado como denominador de ratios. Rango observado entre 15.000 y 20.000 millones según fuente."
+    },
+    {
+      "id": "S13",
+      "name": "ConocoPhillips busca imponer el laudo a través de activos de PDVSA",
+      "publisher": "Ciar Global",
+      "kind": "prensa",
+      "reliability": "media",
+      "url": "https://ciarglobal.com/",
+      "published_at": "2018-05-07",
+      "accessed_at": "2026-09-13",
+      "note": "Describe la estrategia de ejecución sobre activos de PDVSA y su rol en el arraigo de laudos."
+    },
+    {
+      "id": "S14",
+      "name": "Sanciones y licencias: Venezuela",
+      "publisher": "OFAC, Departamento del Tesoro de Estados Unidos",
+      "kind": "oficial",
+      "reliability": "oficial",
+      "url": "https://ofac.treasury.gov/",
+      "published_at": "2026-07-31",
+      "accessed_at": "2026-09-13",
+      "note": "Base de medidas de la OFAC y licencias generales vigentes. Determina qué pagos y qué cobros son jurídicamente ejecutables."
+    },
+    {
+      "id": "S15",
+      "name": "Comunicados y tratamiento de deuda de acreedores oficiales",
+      "publisher": "Club de París",
+      "kind": "multilateral",
+      "reliability": "oficial",
+      "url": "https://clubdeparis.org/",
+      "published_at": "2026-03-15",
+      "accessed_at": "2026-09-13",
+      "note": "Marco de tratamiento de la deuda oficial bilateral. Venezuela no ha sostenido rondas de renegociación desde 2019."
+    },
+    {
+      "id": "S16",
+      "name": "Estadísticas de deuda internacional y socioeconómicas",
+      "publisher": "Banco Mundial",
+      "kind": "multilateral",
+      "reliability": "alta",
+      "url": "https://data.worldbank.org/",
+      "published_at": "2026-07-01",
+      "accessed_at": "2026-09-13",
+      "note": "Denominadores macroeconómicos de referencia y comparación de ratios con otras reestructuraciones."
+    },
+    {
+      "id": "S17",
+      "name": "Cláusulas de Acción Colectiva (CAC) y modelo actualizado",
+      "publisher": "ICMA, International Capital Market Association",
+      "kind": "documento_legal",
+      "reliability": "oficial",
+      "url": "https://www.icmagroup.org/",
+      "published_at": "2014-08-01",
+      "accessed_at": "2026-09-13",
+      "note": "Estándar contractual desde 2014. Venezuela emitió la mayor parte de su stock antes de esa fecha, por lo que su exposición a fondos buitre es estructural."
+    },
+    {
+      "id": "S18",
+      "name": "ExxonMobil y ConocoPhillips contra la República Bolivariana de Venezuela: análisis del laudo",
+      "publisher": "Curtis, Mallet-Prevost, Colt & Mosle",
+      "kind": "documento_legal",
+      "reliability": "alta",
+      "url": "https://s3.amazonaws.com/cdn.curtis.com/",
+      "published_at": "2015-06-01",
+      "accessed_at": "2026-09-13",
+      "note": "Análisis jurídico del estándar de indemnización y del procedimiento de anulación."
+    },
+    {
+      "id": "S19",
+      "name": "Comunicados del comité de acreedores",
+      "publisher": "Venezuela Creditors Committee (ad hoc)",
+      "kind": "analista",
+      "reliability": "media",
+      "url": "https://www.venezuelacreditorscommittee.com/",
+      "published_at": "2026-05-20",
+      "accessed_at": "2026-09-13",
+      "note": "Posición agregada de tenedores institucionales sobre condiciones de negociación."
+    },
+    {
+      "id": "S20",
+      "name": "Deuda pública en Venezuela (artículo de agregación)",
+      "publisher": "Wikipedia en español",
+      "kind": "agregador",
+      "reliability": "baja",
+      "url": "https://es.wikipedia.org/wiki/Deuda_p%C3%BAblica_en_Venezuela",
+      "published_at": "2026-02-10",
+      "accessed_at": "2026-09-13",
+      "note": "Se usa únicamente como índice de referencias cruzadas, nunca como fuente primaria de una cifra."
+    },
+    {
+      "id": "S21",
+      "name": "Cobertura de mercado sobre deuda venezolana en default y precios de referencia",
+      "publisher": "Reuters y Bloomberg (reportes agregados)",
+      "kind": "prensa",
+      "reliability": "alta",
+      "url": "https://www.reuters.com/",
+      "published_at": "2026-08-15",
+      "accessed_at": "2026-09-13",
+      "note": "Precios indicativos de bonos en default (centavos por dólar) usados para calibrar tasas implícitas de recuperación."
+    },
+    {
+      "id": "S22",
+      "name": "Informes de la comisión de finanzas sobre deuda pública",
+      "publisher": "Asamblea Nacional (informes de la oposición y de la comisión especial)",
+      "kind": "oficial",
+      "reliability": "media",
+      "url": "https://www.asambleanacional.gob.ve/",
+      "published_at": "2025-11-30",
+      "accessed_at": "2026-09-13",
+      "note": "Estimaciones legislativas sobre nominal emitido y ausencia de publicación de estados financieros de PDVSA."
+    },
+    {
+      "id": "S23",
+      "name": "Convenio del CIADI y reglamento de arbitraje",
+      "publisher": "CIADI / Banco Mundial",
+      "kind": "documento_legal",
+      "reliability": "oficial",
+      "url": "https://icsid.worldbank.org/resources/rules-and-regulations",
+      "published_at": "2022-07-01",
+      "accessed_at": "2026-09-13",
+      "note": "Artículo 54 del Convenio: reconocimiento y ejecución de laudos como sentencia firme en los Estados contratantes."
+    },
+    {
+      "id": "S24",
+      "name": "Convención de Nueva York de 1958 sobre reconocimiento y ejecución de laudos arbitrales extranjeros",
+      "publisher": "CNUDMI / UNCITRAL",
+      "kind": "documento_legal",
+      "reliability": "oficial",
+      "url": "https://uncitral.un.org/",
+      "published_at": "1958-06-10",
+      "accessed_at": "2026-09-13",
+      "note": "Base multilateral de ejecución de laudos del ICC y de arbitrajes ad hoc en más de 170 jurisdicciones."
+    },
+    {
+      "id": "S25",
+      "name": "Prospectos y escrituras de emisión de los bonos de la República y de PDVSA",
+      "publisher": "Escrituras fiduciarias (indentures) y suplementos",
+      "kind": "documento_legal",
+      "reliability": "oficial",
+      "url": null,
+      "published_at": "2020-10-28",
+      "accessed_at": "2026-09-13",
+      "note": "No existe una URL estable: cada tramo tiene su escritura, depositada ante el fiduciario. Es la razón por la que este observatorio omite ISIN y marca los nominales por tramo como estimados."
+    },
+    {
+      "id": "S26",
+      "name": "Estimaciones macroeconómicas y fiscales de analistas locales",
+      "publisher": "Ecoanalítica y Observatorio Venezolano de Finanzas",
+      "kind": "analista",
+      "reliability": "media",
+      "url": "https://observatoriodefinanzas.com/",
+      "published_at": "2026-05-01",
+      "accessed_at": "2026-09-13",
+      "note": "Estimaciones de PIB nominal, reservas efectivas y flujo petrolero, usadas cuando la fuente oficial no está disponible."
+    },
+    {
+      "id": "S27",
+      "name": "La deuda externa de Venezuela podría superar los 170.360 millones de dólares",
+      "publisher": "Transparencia Venezuela",
+      "kind": "observatorio",
+      "reliability": "alta",
+      "url": "https://transparenciave.org/",
+      "published_at": "2026-03-20",
+      "accessed_at": "2026-09-13",
+      "note": "Actualización del agregado externo con capitalización de atrasos y reconocimiento de nueva deuda posterior a las sanciones."
+    }
+  ]
+}

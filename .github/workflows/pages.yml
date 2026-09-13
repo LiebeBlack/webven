@@ -19,16 +19,17 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NODE_VERSION: "20"
+  # LTS con soporte hasta abril de 2027; Node 20 ya está en desuso en Actions.
+  NODE_VERSION: "22"
 
 jobs:
   validar:
     name: Validar dataset y artefactos
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -64,16 +65,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/configure-pages@v5
+      # Requiere que Pages esté habilitado una vez en el repositorio:
+      # Settings → Pages → Build and deployment → Source: "GitHub Actions".
+      - uses: actions/configure-pages@v6
 
       # El sitio es estático y no necesita compilación: se publica la raíz del
       # repositorio tal cual, con rutas relativas que funcionan igual en un
       # dominio propio que en usuario.github.io/repositorio/.
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

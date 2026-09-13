@@ -25,9 +25,14 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 $root      = Split-Path -Parent $PSScriptRoot
-$fragDir   = Join-Path $root "data\fragments"
-$jsonPath  = Join-Path $root "data\database.json"
-$embPath   = Join-Path $root "data\database.embedded.js"
+$fragDir   = Join-Path $root "data/fragments"
+$jsonPath  = Join-Path $root "data/database.json"
+$embPath   = Join-Path $root "data/database.embedded.js"
+
+# Nota de portabilidad: las barras inclinadas funcionan como separador de ruta
+# tanto en Windows como en Linux/macOS, donde el script también corre (CI de
+# GitHub Actions usa pwsh sobre Ubuntu). El separador "\" solo es válido en
+# Windows y rompería la compilación en el runner.
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 if (-not (Test-Path $fragDir)) {

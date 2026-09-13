@@ -344,7 +344,7 @@ export function renderCharts(data) {
 
     chartPanel({
       id: "chart-heatmap-table",
-      eyebrow: "Visualización 9b · datos de respaldo",
+      eyebrow: "Visualización 13 · datos de respaldo",
       title: "Tabla completa del mapa de calor",
       subtitle: "Los mismos valores del mapa de calor, en formato tabular",
       extra: renderHeatmapTable(data),
@@ -1028,7 +1028,7 @@ function mountRatingsTimeline(data) {
 function awardsGapPanel(data) {
   return chartPanel({
     id: "chart-awards-gap",
-    eyebrow: "Visualización 16 · arbitrajes",
+    eyebrow: "Visualización 16 · laudos por reclamante",
     title: "El interés devengado, medido laudo por laudo",
     subtitle: "Línea entre condena original y valor acumulado a la fecha de valuación",
     tall: true,

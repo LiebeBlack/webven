@@ -7042,7 +7042,7 @@ export function renderCharts(data) {
 
     chartPanel({
       id: "chart-heatmap-table",
-      eyebrow: "Visualización 9b · datos de respaldo",
+      eyebrow: "Visualización 13 · datos de respaldo",
       title: "Tabla completa del mapa de calor",
       subtitle: "Los mismos valores del mapa de calor, en formato tabular",
       extra: renderHeatmapTable(data),
@@ -7726,7 +7726,7 @@ function mountRatingsTimeline(data) {
 function awardsGapPanel(data) {
   return chartPanel({
     id: "chart-awards-gap",
-    eyebrow: "Visualización 16 · arbitrajes",
+    eyebrow: "Visualización 16 · laudos por reclamante",
     title: "El interés devengado, medido laudo por laudo",
     subtitle: "Línea entre condena original y valor acumulado a la fecha de valuación",
     tall: true,
@@ -7745,6 +7745,13 @@ function mountAwardsGap(data) {
     .filter((record) => Number(record.award_mm) > 0 && Number(record.award_total_mm) > 0)
     .sort((a, b) => Number(b.award_total_mm) - Number(a.award_total_mm))
     .slice(0, 10);
+  // Etiqueta corta por caso: quita el paréntesis y los sufijos societarios.
+  const shortName = (record) =>
+    record.claimant
+      .replace(/\s*\(.*?\)\s*/g, " ")
+      .replace(/\s*(International|Corporation|Incorporated|Ltd\.?|Limited|S\.?A\.?|N\.?V\.?|B\.?V\.?|Inc\.?|GmbH|PLC)\b.*$/i, "")
+      .trim()
+      .slice(0, 26);
 
   return {
     type: "scatter",
@@ -7752,13 +7759,13 @@ function mountAwardsGap(data) {
       datasets: [
         {
           label: "Principal",
-          data: cases.map((record) => ({ x: Number(record.award_mm), y: record.claimant.replace(/\s*\(.*?\)\s*/g, " ").trim() })),
+          data: cases.map((record) => ({ x: Number(record.award_mm), y: shortName(record) })),
           backgroundColor: withAlpha(CHART_THEME.accentCool, 0.9),
           pointRadius: 5,
         },
         {
           label: "Acumulado",
-          data: cases.map((record) => ({ x: Number(record.award_total_mm), y: record.claimant.replace(/\s*\(.*?\)\s*/g, " ").trim() })),
+          data: cases.map((record) => ({ x: Number(record.award_total_mm), y: shortName(record) })),
           backgroundColor: withAlpha(CHART_THEME.accentViolet, 0.9),
           pointRadius: 5,
         },
@@ -7767,7 +7774,7 @@ function mountAwardsGap(data) {
           type: "line",
           data: cases.map((record) => ({
             x: Number(record.award_mm),
-            y: record.claimant.replace(/\s*\(.*?\)\s*/g, " ").trim(),
+            y: shortName(record),
             gap: Number(record.award_total_mm) - Number(record.award_mm),
             to: Number(record.award_total_mm),
             date: record.award_date,
@@ -7792,8 +7799,9 @@ function mountAwardsGap(data) {
         y: {
           type: "category",
           offset: true,
+          position: "right",
           grid: { display: false },
-          ticks: { color: CHART_THEME.ink, font: { family: CHART_THEME.font, size: 10 } },
+          ticks: { color: CHART_THEME.ink, font: { family: CHART_THEME.font, size: 10 }, autoSkip: false, crossAlign: "far" },
         },
       },
       plugins: {
@@ -7828,10 +7836,29 @@ function mountEnforcementBars(data) {
   const rows = (data.enforcement_map ?? [])
     .slice()
     .sort((a, b) => Number(b.value_mm) - Number(a.value_mm));
+  // Nombres de fila cortos y legibles: el detalle completo está en el tooltip
+  // y en la ficha de cada línea del mapa de ejecución.
+  const shortTarget = (row) => {
+    const t = row.target.replace(/\s*\(.*?\)\s*/g, " ").trim();
+    if (/^Acciones de PDV Holding/i.test(t)) return "Acciones de Citgo";
+    if (/^Participaci\u00f3n del 50,1/i.test(t)) return "Colateral del bono PDVSA 2020";
+    if (/^Oro venezolano/i.test(t)) return "Oro en el Banco de Inglaterra";
+    if (/^Cuentas (corresponsales|sancionadas)/i.test(t)) return t.startsWith("Cuentas corresponsales") ? "Cuentas corresponsales" : "Cuentas bajo licencia";
+    if (/^Mon\u00f3meros/i.test(t)) return "Mon\u00f3meros (control disputado)";
+    if (/^Refiner\u00eda/i.test(t)) return "Refiner\u00eda de Curazao";
+    if (/^Buques/i.test(t)) return "Buques y cargamentos";
+    if (/^Pequiven/i.test(t)) return "Acciones de Pequiven";
+    if (/^Sentencias laborales/i.test(t)) return "Sentencias laborales";
+    if (/^Exxon/i.test(t)) return "Ejecuci\u00f3n Exxon (laudo ICC)";
+    if (/^ConocoPhillips/i.test(t)) return "Activos del Caribe (Conoco)";
+    if (/^Inmuebles/i.test(t)) return "Inmuebles diplom\u00e1ticos";
+    if (/^Reservas/i.test(t)) return "Reservas ejecutables";
+    return t.split(/\s+/).slice(0, 4).join(" ");
+  };
   return {
     type: "bar",
     data: {
-      labels: rows.map((row) => row.target.replace(/\s*\(.*?\)\s*/g, " ").trim().slice(0, 38)),
+      labels: rows.map(shortTarget),
       datasets: [
         {
           label: "Valor en disputa",
@@ -7983,11 +8010,19 @@ function mountCapacityLines(data) {
 /* ---- 19. Densidad de mecanismos ---------------------------------------- */
 
 function mechanismDensityPanel(data) {
+  /**
+   * La capacidad declarada de cada mecanismo NO es aditiva: muchos tocan el
+   * mismo flujo petrolero o el mismo stock de bonos (casi todos apuntan a los
+   * mismos 77.000 MM). Sumarlos daría un techo ficticio de cientos de miles de
+   * millones. Lo que se grafica es el MÁXIMO declarado por familia —el techo
+   * que esa vía alcanzaría si se ejecutara sola—, que es la lectura que el
+   * bloque admite sin inventar una suma imposible.
+   */
   const rows = (data.recovery_mechanisms ?? []).reduce((acc, mechanism) => {
     const category = mechanism.category ?? "otro";
     acc[category] = acc[category] ?? { count: 0, capacity: 0, fits: 0 };
     acc[category].count += 1;
-    acc[category].capacity += Number(mechanism.capacity_mm) || 0;
+    acc[category].capacity = Math.max(acc[category].capacity, Number(mechanism.capacity_mm) || 0);
     acc[category].fits += Number(mechanism.fit_score) || 0;
     return acc;
   }, {});
@@ -7998,8 +8033,8 @@ function mechanismDensityPanel(data) {
     id: "chart-mechanism-density",
     eyebrow: "Visualización 19 · ingeniería de recuperación",
     title: "Dónde está el potencial de recuperación, por categoría",
-    subtitle: `${num((data.recovery_mechanisms ?? []).length)} mecanismos evaluados · capacidad potencial declarada`,
-    extra: `<div class="mech-density" role="img" aria-label="Capacidad potencial de recuperación por categoría de mecanismo">
+    subtitle: `${num((data.recovery_mechanisms ?? []).length)} mecanismos evaluados · techo por familia (el máximo declarado, no la suma)`,
+    extra: `<div class="mech-density" role="img" aria-label="Techo de recuperación por categoría de mecanismo: el máximo declarado dentro de cada familia">
       ${sorted
         .map(
           ([category, value]) => `<div class="mech-density__row">
@@ -8015,9 +8050,10 @@ function mechanismDensityPanel(data) {
         .join("")}
     </div>`,
     heat: true,
-    note: `Las capacidades no son aditivas: varios mecanismos tocan el mismo flujo petrolero, y sumarlos daría un techo
-      ficticio. La barra mide el potencial declarado de cada familia, y la aptitud media —sobre 5— es la evaluación
-      cualitativa del bloque, con su justificación en la ficha de cada mecanismo.`,
+    note: `Las capacidades declaradas no son aditivas: casi todos los mecanismos tocan el mismo flujo petrolero o el
+      mismo stock de bonos, y sumarlos daría un techo ficticio de cientos de miles de millones. La barra es el máximo
+      declarado dentro de cada familia —lo que esa vía alcanzaría si se ejecutara sola—, y la aptitud media, sobre 5,
+      es la evaluación cualitativa del bloque con su justificación en la ficha de cada mecanismo.`,
   });
 }
 

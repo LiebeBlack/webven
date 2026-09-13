@@ -72,7 +72,7 @@ capa de sus partes: se declara la suya.
 │   ├── data/                   Cargador con cadena de respaldo + contrato de datos
 │   ├── render/                 Un módulo por sección del documento
 │   ├── charts/                 Plugins de Chart.js, mapa de calor y treemap propios
-│   ├── charts.js               Las trece visualizaciones y su ciclo de vida
+│   ├── charts.js               Las diecinueve visualizaciones y su ciclo de vida
 │   ├── expandable.js           Lógica de tarjetas expandibles (accesible)
 │   ├── filters.js              Filtros por atributos de datos
 │   ├── simulator.js            Simulador de reestructuración (gráfico + CSV)

@@ -225,10 +225,11 @@ export function sumValues({ items }, target = "total_mm") {
  * @param {{from_mm:number, to_mm:number, years?:number, from?:string, to?:string}} params
  */
 export function growth({ from_mm, to_mm, years, from, to }, target = "growth_pct") {
-  const from = Number(from_mm);
+  const fromValue = Number(from_mm);
   const outputs = {
-    delta_mm: round(Number(to_mm) - from, 2),
-    growth_pct: from === 0 ? 0 : round(((Number(to_mm) - from) / from) * 100, 2),
+    delta_mm: round(Number(to_mm) - fromValue, 2),
+    growth_pct:
+      fromValue === 0 ? 0 : round(((Number(to_mm) - fromValue) / fromValue) * 100, 2),
     cagr_pct: null,
   };
 
@@ -238,8 +239,13 @@ export function growth({ from_mm, to_mm, years, from, to }, target = "growth_pct
       horizon = yearsBetween(from, to);
     }
   }
-  if (Number.isFinite(horizon) && horizon > 0 && from > 0 && Number(to_mm) > 0) {
-    outputs.cagr_pct = round(((Number(to_mm) / from) ** (1 / horizon) - 1) * 100, 2);
+  if (
+    Number.isFinite(horizon) &&
+    horizon > 0 &&
+    fromValue > 0 &&
+    Number(to_mm) > 0
+  ) {
+    outputs.cagr_pct = round(((Number(to_mm) / fromValue) ** (1 / horizon) - 1) * 100, 2);
   }
 
   return { value: outputs[target] ?? outputs.growth_pct, outputs };

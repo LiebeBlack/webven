@@ -180,8 +180,9 @@ export function renderFooter(data, { source, validation } = {}) {
       </div>
     </div>
     <div class="footer__legal">
+      <!-- Un solo aviso legal: el del dataset si existe, con el del cliente
+           como respaldo. Renderizar ambos apilaba dos textos casi idénticos. -->
       <p>${esc(meta.disclaimer ?? DISCLAIMER)}</p>
-      <p>${esc(DISCLAIMER)}</p>
       <p class="mono">
         Código bajo licencia MIT · Datos bajo CC BY 4.0 · Sin datos personales · Sin cookies · Sin rastreo
       </p>

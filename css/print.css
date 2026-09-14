@@ -44,7 +44,7 @@
   .masthead__status,
   .chart-frame,
   .heatmap,
-  .treemap,
+  .treemap__canvas,
   .sim__controls,
   .toast-wrap,
   .boot,
@@ -75,6 +75,11 @@
     grid-template-rows: 1fr !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+
+  /* La retícula interna de los indicadores (lead + datos) se apila en papel. */
+  .expandable__grid {
+    display: block !important;
   }
 
   /* El contenido revelado de cada tarjeta: visible y sin desplazamiento

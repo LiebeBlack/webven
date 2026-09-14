@@ -186,6 +186,18 @@ p {
 .value--lg {
   font-size: var(--fs-2xl);
   line-height: 1.05;
+  /* Los valores son cadenas cortas: nunca deben partirse entre líneas. */
+  white-space: nowrap;
+}
+
+/* Unidad compuesta en cuerpo menor dentro de los valores grandes:
+   "US$ 170,4 MM MM" muestra el sufijo "MM MM" a un tamaño de apoyo
+   en lugar de competir con la cifra (y de partirse en dos líneas). */
+.value--lg .value__unit {
+  font-size: 0.55em;
+  color: var(--ink-2);
+  letter-spacing: var(--ls-wide);
+  margin-left: 0.22em;
 }
 
 .delta {
@@ -299,8 +311,20 @@ p {
   gap: 1px;
   background-color: var(--hairline);
   border: 1px solid var(--hairline);
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* 340px garantiza 4 columnas cómodas en escritorio: con 250px la
+     retícula empacaba 5-6 columnas y el encabezado de cada tarjeta
+     se estrujaba contra la insignia de capa. */
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   align-items: start;
+}
+
+/* Tarjeta de indicador abierta: ocupa la fila completa. Con la tarjeta
+   repleta de tablas y metodología, un ancho de 1/4 de la retícula
+   producía columnas de 1.800px que empujaban todo el layout y dejaban
+   tres huecos muertos a su lado. A todo lo ancho, el detalle se reorganiza
+   en dos columnas y la altura queda acotada. */
+.grid--kpis > .panel.is-open {
+  grid-column: 1 / -1;
 }
 
 .grid--2 {
@@ -395,6 +419,15 @@ p {
   }
 }
 
+/* En portátiles el título con tracking mono y los dos LEDs + botón de
+   comandos no caben juntos: el LED "dataset en línea" es el elemento
+   menos informativo (la página ES el dataset) y cede primero. */
+@media (max-width: 1240px) {
+  .masthead__status .led--ok {
+    display: none;
+  }
+}
+
 .masthead__bar {
   display: flex;
   align-items: center;
@@ -426,7 +459,9 @@ p {
 
 .masthead__title {
   font-family: var(--font-mono);
-  font-size: var(--fs-sm);
+  /* Fluida: a 1.066px el título con tracking mono desbordaba y la barra
+     lo truncaba con elipsis. Escala de 11px a 13px según el ancho. */
+  font-size: clamp(0.6875rem, 0.5rem + 0.4vw, 0.8125rem);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink);
@@ -665,6 +700,65 @@ p {
   margin-top: auto;
 }
 
+/* Ritmo tipográfico reservado en las tarjetas de indicadores: eyebrow,
+   título y subtítulo garantizan dos líneas (2 × 1.58 de interletrado del
+   cuerpo) para que los pies de las tarjetas cerradas de una misma fila
+   queden alineados sin forzar estirado. */
+.grid--kpis .panel__eyebrow,
+.grid--kpis .panel__title,
+.grid--kpis .panel__sub {
+  min-height: 3.16em;
+}
+
+/*
+ * Cuerpo expandido en dos columnas (solo indicadores).
+ *
+ * `.expandable__grid` envuelve los dos cuerpos de la tarjeta; al abrirse,
+ * el contenido narrativo (nota, sparkline, metodología) entra por la
+ * columna izquierda y el contenido tabular (desglose, conciliación,
+ * fuentes, cita) por la derecha. Cada mitad anima con el mismo mecanismo
+ * 0fr→1fr del cuerpo simple, así que el despliegue sigue sin medir píxeles.
+ */
+.expandable__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+}
+
+.expandable__grid > .expandable__body + .expandable__body {
+  border-left: 1px solid var(--hairline-soft);
+}
+
+.expandable__grid > .expandable__body--data .expandable__reveal {
+  padding-top: var(--sp-2);
+}
+
+@media (max-width: 1100px) {
+  .expandable__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expandable__grid > .expandable__body + .expandable__body {
+    border-left: 0;
+  }
+
+  .expandable__grid > .expandable__body + .expandable__body .expandable__reveal {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  /* Con una sola columna de retícula, el panel abierto vuelve a su celda. */
+  .grid--kpis > .panel.is-open {
+    grid-column: auto;
+  }
+}
+
+/* Valor grande acotado dentro de la tarjeta: el clamp global de --fs-2xl
+   desborda una tarjeta de 4 columnas con la unidad compuesta. */
+.grid--kpis .value--lg {
+  font-size: clamp(1.5rem, 0.95rem + 1.3vw, 2rem);
+}
+
 .panel:hover {
   border-color: var(--hairline-strong);
 }
@@ -757,10 +851,11 @@ p {
   display: block;
   font-family: var(--font-mono);
   font-size: var(--fs-3xs);
-  letter-spacing: var(--ls-wider);
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink-3);
   margin-bottom: var(--sp-2);
+  text-wrap: balance;
 }
 
 .panel__title {
@@ -800,10 +895,19 @@ p {
   contain: layout paint;
 }
 
+/* Retícula del encabezado expandible: el eyebrow ocupa la primera fila
+   completa; el bloque principal (título, valor, subtítulo) toma el ancho
+   íntegro de la tarjeta en la segunda fila, y la insignia de capa + fecha
+   (+ chevron) se reservan la esquina superior derecha. Así el título y el
+   valor nunca compiten con el aside por el ancho. */
 .expandable__toggle {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "eyebrow aside chev"
+    "main main main";
+  align-items: start;
+  column-gap: var(--sp-4);
   width: 100%;
   padding: var(--sp-4) var(--sp-5);
   background: transparent;
@@ -812,6 +916,18 @@ p {
   cursor: pointer;
   color: inherit;
   transition: background-color var(--dur-2) var(--ease-out);
+}
+
+.expandable__toggle .panel__eyebrow {
+  grid-area: eyebrow;
+}
+
+.expandable__toggle .expandable__aside {
+  grid-area: aside;
+}
+
+.expandable__toggle .chev {
+  grid-area: chev;
 }
 
 .expandable__toggle:hover {
@@ -824,7 +940,7 @@ p {
 }
 
 .expandable__toggle-main {
-  flex: 1 1 auto;
+  grid-area: main;
   min-width: 0;
 }
 
@@ -878,6 +994,7 @@ p {
 }
 
 .expandable.is-open > .expandable__body,
+.expandable.is-open > .expandable__grid > .expandable__body,
 .expandable__body.is-open {
   grid-template-rows: 1fr;
   opacity: 1;
@@ -908,6 +1025,7 @@ p {
 }
 
 .expandable.is-open > .expandable__body .expandable__reveal,
+.expandable.is-open > .expandable__grid > .expandable__body .expandable__reveal,
 .expandable__body.is-open .expandable__reveal {
   opacity: 1;
   transform: none;
@@ -916,7 +1034,8 @@ p {
 
 /* Estado transitorio mientras se cierra: evita el "salto" si el usuario
    vuelve a abrir la tarjeta antes de que termine la animación. */
-.expandable.is-collapsing > .expandable__body {
+.expandable.is-collapsing > .expandable__body,
+.expandable.is-collapsing > .expandable__grid > .expandable__body {
   transition-duration: var(--dur-2);
 }
 
@@ -1260,7 +1379,7 @@ p {
   z-index: 1;
   background: #0c0d0f;
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
+  font-size: var(--fs-2xs);
   font-weight: 500;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -1495,8 +1614,17 @@ p {
   border: 1px solid var(--hairline);
 }
 
-/* Treemap de exposición: algoritmo squarified en JS, pintado con DOM. */
+/* Treemap de exposición: algoritmo squarified en JS, pintado con DOM.
+   `.treemap` es la caja de flujo (borde, fondo, leyenda y nota como
+   hermanas); las celdas se posicionan dentro de `.treemap__canvas`,
+   que es quien reserva la altura fija. Antes la leyenda y la nota se
+   emitían dentro del propio lienzo y el contenedor de altura fija las
+   apilaba encima de las celdas. */
 .treemap {
+  width: 100%;
+}
+
+.treemap__canvas {
   position: relative;
   width: 100%;
   height: var(--chart-h-tall);
@@ -1504,6 +1632,9 @@ p {
   border-radius: var(--r-2);
   background: var(--surface-sunken);
   overflow: hidden;
+  /* Contenedor de tamaño inline: las etiquetas de celda escalan con cqi,
+     es decir, con el ancho real del gráfico, no con el de la ventana. */
+  container-type: inline-size;
 }
 
 .treemap__cell {
@@ -1516,7 +1647,8 @@ p {
   gap: 2px;
   overflow: hidden;
   cursor: default;
-  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);
+  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
 }
 
 .treemap__cell:hover {
@@ -1525,21 +1657,35 @@ p {
   z-index: 3;
 }
 
+/* Celda enfocada con teclado: mismo tratamiento que al pasar el cursor,
+   más un aro de foco para que sea visible sobre fondos oscuros. */
+.treemap__cell:focus-visible {
+  filter: brightness(1.35);
+  z-index: 3;
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
 .treemap__label {
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
+  /* Escala con la celda: grande en los bloques mayores, legible en los
+     medianos, y por debajo nunca (las celdas pequeñas no llevan etiqueta). */
+  font-size: clamp(0.625rem, 0.45rem + 0.55cqi, 0.9375rem);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink);
   line-height: 1.35;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .treemap__value {
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
   color: rgba(237, 237, 237, 0.72);
+  white-space: nowrap;
 }
 
 .sparkline {
@@ -2471,7 +2617,7 @@ p {
   }
 
   .grid--kpis {
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 
   .expandable__toggle,

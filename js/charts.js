@@ -207,7 +207,7 @@ export function renderCharts(data) {
       id: "chart-debt-line",
       eyebrow: "Visualización 1 · trayectoria",
       title: "Deuda externa total y atrasos comerciales, 1990–2026",
-      subtitle: `${num(first.year)}–${num(last.year)} · valores en millones de dólares`,
+      subtitle: `${first.year}–${last.year} · valores en millones de dólares`,
       tall: true,
       legend: lineLegend,
       note: `Las líneas verticales marcan los eventos de estrés declarados en el dataset (severidad 3 en rojo).
@@ -290,7 +290,9 @@ export function renderCharts(data) {
       id: "chart-treemap",
       eyebrow: "Visualización 8 · exposición",
       title: "Treemap de acreedores por exposición",
-      subtitle: "Área proporcional al monto reclamado",
+      // "Monto reclamado" era ambiguo: el área codifica la exposición total
+      // (reclamada o reconocida) de cada acreedor, no solo reclamaciones.
+      subtitle: "Área proporcional a la exposición total de cada acreedor",
       extra: `<div class="treemap" id="chart-treemap">${renderTreemap(data)}</div>`,
       // Las vistas DOM no declaran <canvas>: el contenido va en `extra`, así
       // que no hay que duplicar el id en un marco vacío.

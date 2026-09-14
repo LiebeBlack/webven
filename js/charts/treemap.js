@@ -82,6 +82,9 @@ export function squarify(items, x, y, width, height) {
 
 /**
  * Renderiza el treemap de acreedores como HTML posicionado en porcentajes.
+ * Solo las celdas viven dentro de `.treemap`; la leyenda y la nota quedan
+ * fuera, como hermanas del contenedor — antes se emitían dentro y el
+ * contenedor de altura fija las apilaba sobre las celdas.
  * @param {object} data
  * @param {{width?:number, height?:number}} options
  */
@@ -105,6 +108,8 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
     .map((rect) => {
       const color = CATEGORY_COLORS[rect.type] ?? CATEGORY_COLORS.otro;
       const areaPct = (rect.w * rect.h) / (width * height);
+      // Umbral de área para mostrar etiqueta y valor: con las medidas
+      // porcentuales reales, no con proporciones adivinadas.
       const showLabel = areaPct > 0.012;
       const showValue = areaPct > 0.03;
       const label = `${rect.label}: ${num(rect.value)} millones de dólares, ${pct(rect.share, 2)} de la exposición agregada`;
@@ -113,7 +118,8 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
         width:${((rect.w / width) * 100).toFixed(3)}%;
         height:${((rect.h / height) * 100).toFixed(3)}%;
         background:${esc(color)}22;border-color:${esc(color)}55"
-        title="${esc(label)}" role="img" aria-label="${esc(label)}" data-treemap-id="${esc(rect.id)}">
+        title="${esc(label)}" role="img" aria-label="${esc(label)}" data-treemap-id="${esc(rect.id)}"
+        tabindex="0">
         ${showLabel ? `<span class="treemap__label" style="color:${esc(color)}">${esc(rect.short)}</span>` : ""}
         ${showValue ? `<span class="treemap__value">${esc(num(rect.value))} MM · ${esc(pct(rect.share, 1))}</span>` : ""}
       </div>`;
@@ -129,12 +135,12 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
     )
     .join("");
 
-  return `${cells}
+  return `<div class="treemap__canvas">${cells}</div>
   <div class="chart-legend">${legend}</div>
   <p class="chart-note">
     Área proporcional a la exposición en millones de dólares. Total representado: ${esc(usdText(total))}.
     Las clases pequeñas se etiquetan solo cuando el área permite lectura; el valor completo aparece al pasar el cursor
-    o al enfocar la celda con el teclado.
+    o al enfocar la celda con la tecla Tab.
   </p>`;
 }
 

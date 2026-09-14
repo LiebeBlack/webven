@@ -355,7 +355,14 @@ export function metaRow({ tier, sourceIds, cite }) {
   </div>`;
 }
 
-/** Encabezado de un panel expandible. */
+/** Encabezado de un panel expandible.
+ *
+ *  La retícula del botón (css/styles.css, .expandable__toggle) sitúa el
+ *  eyebrow en una primera fila a todo lo ancho y el bloque principal
+ *  (título, valor, subtítulo) en la segunda; la insignia de capa y el
+ *  chevron quedan en la esquina superior derecha. Para que las áreas de
+ *  la retícula apliquen, el eyebrow debe ser hijo directo del botón y no
+ *  quedar anidado dentro de toggle-main. */
 export function expandableHeader({
   id,
   eyebrow,
@@ -368,8 +375,8 @@ export function expandableHeader({
 }) {
   return `<button class="expandable__toggle" type="button" aria-expanded="${open ? "true" : "false"}"
     aria-controls="${esc(id)}-body" data-expandable-toggle>
+    ${eyebrow ? `<span class="panel__eyebrow">${esc(eyebrow)}</span>` : ""}
     <span class="expandable__toggle-main">
-      ${eyebrow ? `<span class="panel__eyebrow">${esc(eyebrow)}</span>` : ""}
       ${title ? `<span class="panel__title" style="display:block">${esc(title)}</span>` : ""}
       ${value ? `<span class="value value--lg" style="display:block;margin-top:var(--sp-2)">${value}</span>` : ""}
       ${subtitle ? `<span class="panel__sub" style="display:block">${esc(subtitle)}</span>` : ""}
@@ -379,7 +386,7 @@ export function expandableHeader({
   </button>`;
 }
 
-export function expandableBody(id, { label, content, open = false }) {
+export function expandableBody(id, { label, content, open = false, variant = "" } = {}) {
   // Sin atributo `hidden`: el estado cerrado lo gobierna el CSS
   // (grid-template-rows: 0fr + visibility: hidden), que además retira el
   // contenido del árbol de accesibilidad y del orden de tabulación.
@@ -387,7 +394,12 @@ export function expandableBody(id, { label, content, open = false }) {
   // !important` en tokens.css) y la tarjeta no podría abrirse jamás.
   // La clase `is-open` inicial solo aplica cuando un renderizador pide
   // explícitamente la tarjeta abierta.
-  return `<div class="expandable__body${open ? " is-open" : ""}" id="${esc(id)}-body" role="region"
+  // `variant` distingue cuerpos hermanos dentro de una misma tarjeta
+  // (p. ej. la retícula de dos columnas de los indicadores): sufija el id
+  // para que el documento no tenga ids duplicados.
+  const suffix = variant ? `-${variant}` : "";
+  const cls = variant ? ` expandable__body--${variant}` : "";
+  return `<div class="expandable__body${cls}${open ? " is-open" : ""}" id="${esc(id)}-body${suffix}" role="region"
     aria-label="${esc(label)}">
     <div class="expandable__inner">
       <div class="expandable__reveal">${content}</div>

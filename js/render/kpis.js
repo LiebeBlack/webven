@@ -87,10 +87,21 @@ function calcBlock(kpi) {
   return calcBox(kpi.calc, { recomputed });
 }
 
+/**
+ * Marca el sufijo de la unidad ("MM MM") como un cuerpo menor dentro del
+ * valor grande, para que no compita con la cifra ni se parta en dos líneas.
+ */
+function markUnit(value) {
+  // Solo los montos comparten el sufijo "MM MM" (y "US$ 5.810" no lleva).
+  // El $ de "US$" se escapa: en una RegExp de JS un $ suelto es ancla.
+  const match = /^(US\$ [\d.,]+)( MM MM)$/.exec(value);
+  return match ? `${match[1]}<span class="value__unit">${match[2]}</span>` : value;
+}
+
 /** Tarjeta de un indicador. */
 export function renderKpiCard(kpi) {
   const id = anchorId("kpi", kpi.id);
-  const value = formatKpiValue(kpi);
+  const value = markUnit(formatKpiValue(kpi));
   const direction = deltaDirection(kpi.delta_yoy_pct, { invert: false });
   const deltaClass = `delta delta--${direction}`;
   const delta =
@@ -105,8 +116,13 @@ export function renderKpiCard(kpi) {
     kpi.note ? `<div class="prose"><p>${esc(kpi.note)}</p></div>` : "",
     kpi.sparkline?.length ? `<div style="margin-top:var(--sp-4)">${sparkline(kpi.sparkline)}</div>` : "",
     thresholdNote(kpi),
-    breakdownBlock(kpi),
     calcBlock(kpi),
+  ]
+    .filter(Boolean)
+    .join("");
+
+  const dataContent = [
+    breakdownBlock(kpi),
     reconciliationBox(kpi.reconciliation),
     sourceListBlock(kpi.source_ids),
     `<div class="expandable__section">
@@ -129,7 +145,10 @@ export function renderKpiCard(kpi) {
       value,
       aside,
     })}
-    ${expandableBody(id, { label: `Detalle de ${kpi.label}`, content })}
+    <div class="expandable__grid">
+      ${expandableBody(id, { label: `Detalle de ${kpi.label}`, content, variant: "lead" })}
+      ${expandableBody(id, { label: `Datos de ${kpi.label}`, content: dataContent, variant: "data" })}
+    </div>
     <div class="panel__footer">
       <span class="row">${delta}</span>
       <span class="row mono">${esc(kpi.id)}</span>

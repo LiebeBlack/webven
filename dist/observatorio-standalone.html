@@ -465,6 +465,18 @@ p {
 .value--lg {
   font-size: var(--fs-2xl);
   line-height: 1.05;
+  /* Los valores son cadenas cortas: nunca deben partirse entre líneas. */
+  white-space: nowrap;
+}
+
+/* Unidad compuesta en cuerpo menor dentro de los valores grandes:
+   "US$ 170,4 MM MM" muestra el sufijo "MM MM" a un tamaño de apoyo
+   en lugar de competir con la cifra (y de partirse en dos líneas). */
+.value--lg .value__unit {
+  font-size: 0.55em;
+  color: var(--ink-2);
+  letter-spacing: var(--ls-wide);
+  margin-left: 0.22em;
 }
 
 .delta {
@@ -578,8 +590,20 @@ p {
   gap: 1px;
   background-color: var(--hairline);
   border: 1px solid var(--hairline);
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* 340px garantiza 4 columnas cómodas en escritorio: con 250px la
+     retícula empacaba 5-6 columnas y el encabezado de cada tarjeta
+     se estrujaba contra la insignia de capa. */
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   align-items: start;
+}
+
+/* Tarjeta de indicador abierta: ocupa la fila completa. Con la tarjeta
+   repleta de tablas y metodología, un ancho de 1/4 de la retícula
+   producía columnas de 1.800px que empujaban todo el layout y dejaban
+   tres huecos muertos a su lado. A todo lo ancho, el detalle se reorganiza
+   en dos columnas y la altura queda acotada. */
+.grid--kpis > .panel.is-open {
+  grid-column: 1 / -1;
 }
 
 .grid--2 {
@@ -674,6 +698,15 @@ p {
   }
 }
 
+/* En portátiles el título con tracking mono y los dos LEDs + botón de
+   comandos no caben juntos: el LED "dataset en línea" es el elemento
+   menos informativo (la página ES el dataset) y cede primero. */
+@media (max-width: 1240px) {
+  .masthead__status .led--ok {
+    display: none;
+  }
+}
+
 .masthead__bar {
   display: flex;
   align-items: center;
@@ -705,7 +738,9 @@ p {
 
 .masthead__title {
   font-family: var(--font-mono);
-  font-size: var(--fs-sm);
+  /* Fluida: a 1.066px el título con tracking mono desbordaba y la barra
+     lo truncaba con elipsis. Escala de 11px a 13px según el ancho. */
+  font-size: clamp(0.6875rem, 0.5rem + 0.4vw, 0.8125rem);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink);
@@ -944,6 +979,65 @@ p {
   margin-top: auto;
 }
 
+/* Ritmo tipográfico reservado en las tarjetas de indicadores: eyebrow,
+   título y subtítulo garantizan dos líneas (2 × 1.58 de interletrado del
+   cuerpo) para que los pies de las tarjetas cerradas de una misma fila
+   queden alineados sin forzar estirado. */
+.grid--kpis .panel__eyebrow,
+.grid--kpis .panel__title,
+.grid--kpis .panel__sub {
+  min-height: 3.16em;
+}
+
+/*
+ * Cuerpo expandido en dos columnas (solo indicadores).
+ *
+ * `.expandable__grid` envuelve los dos cuerpos de la tarjeta; al abrirse,
+ * el contenido narrativo (nota, sparkline, metodología) entra por la
+ * columna izquierda y el contenido tabular (desglose, conciliación,
+ * fuentes, cita) por la derecha. Cada mitad anima con el mismo mecanismo
+ * 0fr→1fr del cuerpo simple, así que el despliegue sigue sin medir píxeles.
+ */
+.expandable__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+}
+
+.expandable__grid > .expandable__body + .expandable__body {
+  border-left: 1px solid var(--hairline-soft);
+}
+
+.expandable__grid > .expandable__body--data .expandable__reveal {
+  padding-top: var(--sp-2);
+}
+
+@media (max-width: 1100px) {
+  .expandable__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expandable__grid > .expandable__body + .expandable__body {
+    border-left: 0;
+  }
+
+  .expandable__grid > .expandable__body + .expandable__body .expandable__reveal {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  /* Con una sola columna de retícula, el panel abierto vuelve a su celda. */
+  .grid--kpis > .panel.is-open {
+    grid-column: auto;
+  }
+}
+
+/* Valor grande acotado dentro de la tarjeta: el clamp global de --fs-2xl
+   desborda una tarjeta de 4 columnas con la unidad compuesta. */
+.grid--kpis .value--lg {
+  font-size: clamp(1.5rem, 0.95rem + 1.3vw, 2rem);
+}
+
 .panel:hover {
   border-color: var(--hairline-strong);
 }
@@ -1036,10 +1130,11 @@ p {
   display: block;
   font-family: var(--font-mono);
   font-size: var(--fs-3xs);
-  letter-spacing: var(--ls-wider);
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink-3);
   margin-bottom: var(--sp-2);
+  text-wrap: balance;
 }
 
 .panel__title {
@@ -1079,10 +1174,19 @@ p {
   contain: layout paint;
 }
 
+/* Retícula del encabezado expandible: el eyebrow ocupa la primera fila
+   completa; el bloque principal (título, valor, subtítulo) toma el ancho
+   íntegro de la tarjeta en la segunda fila, y la insignia de capa + fecha
+   (+ chevron) se reservan la esquina superior derecha. Así el título y el
+   valor nunca compiten con el aside por el ancho. */
 .expandable__toggle {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "eyebrow aside chev"
+    "main main main";
+  align-items: start;
+  column-gap: var(--sp-4);
   width: 100%;
   padding: var(--sp-4) var(--sp-5);
   background: transparent;
@@ -1091,6 +1195,18 @@ p {
   cursor: pointer;
   color: inherit;
   transition: background-color var(--dur-2) var(--ease-out);
+}
+
+.expandable__toggle .panel__eyebrow {
+  grid-area: eyebrow;
+}
+
+.expandable__toggle .expandable__aside {
+  grid-area: aside;
+}
+
+.expandable__toggle .chev {
+  grid-area: chev;
 }
 
 .expandable__toggle:hover {
@@ -1103,7 +1219,7 @@ p {
 }
 
 .expandable__toggle-main {
-  flex: 1 1 auto;
+  grid-area: main;
   min-width: 0;
 }
 
@@ -1157,6 +1273,7 @@ p {
 }
 
 .expandable.is-open > .expandable__body,
+.expandable.is-open > .expandable__grid > .expandable__body,
 .expandable__body.is-open {
   grid-template-rows: 1fr;
   opacity: 1;
@@ -1187,6 +1304,7 @@ p {
 }
 
 .expandable.is-open > .expandable__body .expandable__reveal,
+.expandable.is-open > .expandable__grid > .expandable__body .expandable__reveal,
 .expandable__body.is-open .expandable__reveal {
   opacity: 1;
   transform: none;
@@ -1195,7 +1313,8 @@ p {
 
 /* Estado transitorio mientras se cierra: evita el "salto" si el usuario
    vuelve a abrir la tarjeta antes de que termine la animación. */
-.expandable.is-collapsing > .expandable__body {
+.expandable.is-collapsing > .expandable__body,
+.expandable.is-collapsing > .expandable__grid > .expandable__body {
   transition-duration: var(--dur-2);
 }
 
@@ -1539,7 +1658,7 @@ p {
   z-index: 1;
   background: #0c0d0f;
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
+  font-size: var(--fs-2xs);
   font-weight: 500;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -1774,8 +1893,17 @@ p {
   border: 1px solid var(--hairline);
 }
 
-/* Treemap de exposición: algoritmo squarified en JS, pintado con DOM. */
+/* Treemap de exposición: algoritmo squarified en JS, pintado con DOM.
+   `.treemap` es la caja de flujo (borde, fondo, leyenda y nota como
+   hermanas); las celdas se posicionan dentro de `.treemap__canvas`,
+   que es quien reserva la altura fija. Antes la leyenda y la nota se
+   emitían dentro del propio lienzo y el contenedor de altura fija las
+   apilaba encima de las celdas. */
 .treemap {
+  width: 100%;
+}
+
+.treemap__canvas {
   position: relative;
   width: 100%;
   height: var(--chart-h-tall);
@@ -1783,6 +1911,9 @@ p {
   border-radius: var(--r-2);
   background: var(--surface-sunken);
   overflow: hidden;
+  /* Contenedor de tamaño inline: las etiquetas de celda escalan con cqi,
+     es decir, con el ancho real del gráfico, no con el de la ventana. */
+  container-type: inline-size;
 }
 
 .treemap__cell {
@@ -1795,7 +1926,8 @@ p {
   gap: 2px;
   overflow: hidden;
   cursor: default;
-  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);
+  transition: filter var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
 }
 
 .treemap__cell:hover {
@@ -1804,21 +1936,35 @@ p {
   z-index: 3;
 }
 
+/* Celda enfocada con teclado: mismo tratamiento que al pasar el cursor,
+   más un aro de foco para que sea visible sobre fondos oscuros. */
+.treemap__cell:focus-visible {
+  filter: brightness(1.35);
+  z-index: 3;
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
 .treemap__label {
   font-family: var(--font-mono);
-  font-size: var(--fs-3xs);
+  /* Escala con la celda: grande en los bloques mayores, legible en los
+     medianos, y por debajo nunca (las celdas pequeñas no llevan etiqueta). */
+  font-size: clamp(0.625rem, 0.45rem + 0.55cqi, 0.9375rem);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--ink);
   line-height: 1.35;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .treemap__value {
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
   color: rgba(237, 237, 237, 0.72);
+  white-space: nowrap;
 }
 
 .sparkline {
@@ -2750,7 +2896,7 @@ p {
   }
 
   .grid--kpis {
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 
   .expandable__toggle,
@@ -2975,7 +3121,7 @@ p {
   .masthead__status,
   .chart-frame,
   .heatmap,
-  .treemap,
+  .treemap__canvas,
   .sim__controls,
   .toast-wrap,
   .boot,
@@ -3006,6 +3152,11 @@ p {
     grid-template-rows: 1fr !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+
+  /* La retícula interna de los indicadores (lead + datos) se apila en papel. */
+  .expandable__grid {
+    display: block !important;
   }
 
   /* El contenido revelado de cada tarjeta: visible y sin desplazamiento
@@ -7715,7 +7866,7 @@ export function renderCharts(data) {
       id: "chart-debt-line",
       eyebrow: "Visualización 1 · trayectoria",
       title: "Deuda externa total y atrasos comerciales, 1990–2026",
-      subtitle: `${num(first.year)}–${num(last.year)} · valores en millones de dólares`,
+      subtitle: `${first.year}–${last.year} · valores en millones de dólares`,
       tall: true,
       legend: lineLegend,
       note: `Las líneas verticales marcan los eventos de estrés declarados en el dataset (severidad 3 en rojo).
@@ -7798,7 +7949,9 @@ export function renderCharts(data) {
       id: "chart-treemap",
       eyebrow: "Visualización 8 · exposición",
       title: "Treemap de acreedores por exposición",
-      subtitle: "Área proporcional al monto reclamado",
+      // "Monto reclamado" era ambiguo: el área codifica la exposición total
+      // (reclamada o reconocida) de cada acreedor, no solo reclamaciones.
+      subtitle: "Área proporcional a la exposición total de cada acreedor",
       extra: `<div class="treemap" id="chart-treemap">${renderTreemap(data)}</div>`,
       // Las vistas DOM no declaran <canvas>: el contenido va en `extra`, así
       // que no hay que duplicar el id en un marco vacío.
@@ -9313,6 +9466,9 @@ export function squarify(items, x, y, width, height) {
 
 /**
  * Renderiza el treemap de acreedores como HTML posicionado en porcentajes.
+ * Solo las celdas viven dentro de `.treemap`; la leyenda y la nota quedan
+ * fuera, como hermanas del contenedor — antes se emitían dentro y el
+ * contenedor de altura fija las apilaba sobre las celdas.
  * @param {object} data
  * @param {{width?:number, height?:number}} options
  */
@@ -9336,6 +9492,8 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
     .map((rect) => {
       const color = CATEGORY_COLORS[rect.type] ?? CATEGORY_COLORS.otro;
       const areaPct = (rect.w * rect.h) / (width * height);
+      // Umbral de área para mostrar etiqueta y valor: con las medidas
+      // porcentuales reales, no con proporciones adivinadas.
       const showLabel = areaPct > 0.012;
       const showValue = areaPct > 0.03;
       const label = `${rect.label}: ${num(rect.value)} millones de dólares, ${pct(rect.share, 2)} de la exposición agregada`;
@@ -9344,7 +9502,8 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
         width:${((rect.w / width) * 100).toFixed(3)}%;
         height:${((rect.h / height) * 100).toFixed(3)}%;
         background:${esc(color)}22;border-color:${esc(color)}55"
-        title="${esc(label)}" role="img" aria-label="${esc(label)}" data-treemap-id="${esc(rect.id)}">
+        title="${esc(label)}" role="img" aria-label="${esc(label)}" data-treemap-id="${esc(rect.id)}"
+        tabindex="0">
         ${showLabel ? `<span class="treemap__label" style="color:${esc(color)}">${esc(rect.short)}</span>` : ""}
         ${showValue ? `<span class="treemap__value">${esc(num(rect.value))} MM · ${esc(pct(rect.share, 1))}</span>` : ""}
       </div>`;
@@ -9360,12 +9519,12 @@ export function renderTreemap(data, { width = 1000, height = 460 } = {}) {
     )
     .join("");
 
-  return `${cells}
+  return `<div class="treemap__canvas">${cells}</div>
   <div class="chart-legend">${legend}</div>
   <p class="chart-note">
     Área proporcional a la exposición en millones de dólares. Total representado: ${esc(usdText(total))}.
     Las clases pequeñas se etiquetan solo cuando el área permite lectura; el valor completo aparece al pasar el cursor
-    o al enfocar la celda con el teclado.
+    o al enfocar la celda con la tecla Tab.
   </p>`;
 }
 
@@ -10479,13 +10638,22 @@ function isOpen(card) {
   return card?.classList.contains(CLASSES.open) ?? false;
 }
 
+/**
+ * Cuerpos expandibles de una tarjeta: hijo directo (una sola columna) o
+ * retícula de dos columnas (indicadores: lead narrativo + datos). Gobernar
+ * ambos con el mismo selector evita estados desincronizados.
+ */
+function bodiesOf(card) {
+  return card.querySelectorAll(":scope > .expandable__body, :scope > .expandable__grid > .expandable__body");
+}
+
 /** Abre o cierra una tarjeta, con el estado accesible correspondiente. */
 export function setExpanded(card, open) {
   if (!card) return;
   const toggle = card.querySelector("[data-expandable-toggle]");
   if (!toggle) return;
 
-  const body = card.querySelector(":scope > .expandable__body");
+  const bodies = bodiesOf(card);
 
   if (open) {
     card.classList.remove(CLASSES.collapsing);
@@ -10494,7 +10662,7 @@ export function setExpanded(card, open) {
     // Defensa en profundidad: ningún renderizador debe dejar un atributo
     // `hidden` en el cuerpo; si lo hubiera, la tarjeta no abriría nunca
     // porque tokens.css lo resuelve a display:none !important.
-    if (body) body.removeAttribute("hidden");
+    bodies.forEach((body) => body.removeAttribute("hidden"));
   } else {
     card.classList.add(CLASSES.collapsing);
     card.classList.remove(CLASSES.open);
@@ -11841,10 +12009,21 @@ function calcBlock(kpi) {
   return calcBox(kpi.calc, { recomputed });
 }
 
+/**
+ * Marca el sufijo de la unidad ("MM MM") como un cuerpo menor dentro del
+ * valor grande, para que no compita con la cifra ni se parta en dos líneas.
+ */
+function markUnit(value) {
+  // Solo los montos comparten el sufijo "MM MM" (y "US$ 5.810" no lleva).
+  // El $ de "US$" se escapa: en una RegExp de JS un $ suelto es ancla.
+  const match = /^(US\$ [\d.,]+)( MM MM)$/.exec(value);
+  return match ? `${match[1]}<span class="value__unit">${match[2]}</span>` : value;
+}
+
 /** Tarjeta de un indicador. */
 export function renderKpiCard(kpi) {
   const id = anchorId("kpi", kpi.id);
-  const value = formatKpiValue(kpi);
+  const value = markUnit(formatKpiValue(kpi));
   const direction = deltaDirection(kpi.delta_yoy_pct, { invert: false });
   const deltaClass = `delta delta--${direction}`;
   const delta =
@@ -11859,8 +12038,13 @@ export function renderKpiCard(kpi) {
     kpi.note ? `<div class="prose"><p>${esc(kpi.note)}</p></div>` : "",
     kpi.sparkline?.length ? `<div style="margin-top:var(--sp-4)">${sparkline(kpi.sparkline)}</div>` : "",
     thresholdNote(kpi),
-    breakdownBlock(kpi),
     calcBlock(kpi),
+  ]
+    .filter(Boolean)
+    .join("");
+
+  const dataContent = [
+    breakdownBlock(kpi),
     reconciliationBox(kpi.reconciliation),
     sourceListBlock(kpi.source_ids),
     `<div class="expandable__section">
@@ -11883,7 +12067,10 @@ export function renderKpiCard(kpi) {
       value,
       aside,
     })}
-    ${expandableBody(id, { label: `Detalle de ${kpi.label}`, content })}
+    <div class="expandable__grid">
+      ${expandableBody(id, { label: `Detalle de ${kpi.label}`, content, variant: "lead" })}
+      ${expandableBody(id, { label: `Datos de ${kpi.label}`, content: dataContent, variant: "data" })}
+    </div>
     <div class="panel__footer">
       <span class="row">${delta}</span>
       <span class="row mono">${esc(kpi.id)}</span>
@@ -11970,10 +12157,13 @@ function milestoneTimeline(milestones) {
   if (!milestones?.length) return "";
   const ordered = milestones.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
   return `<ol class="timeline">${ordered
-    .map((milestone) =>
+    .map((milestone, index) =>
       renderTimelineItem(
         {
-          id: milestone.date,
+          // El dataset puede repetir la fecha de un hito entre gestiones
+          // (la transición 1999-02-02 pertenece a dos administraciones);
+          // el índice garantiza ids de ancla únicos en el documento.
+          id: `${milestone.date}-${index}`,
           date: milestone.date,
           category: "macroeconomia",
           title: milestone.title,
@@ -12735,7 +12925,14 @@ export function metaRow({ tier, sourceIds, cite }) {
   </div>`;
 }
 
-/** Encabezado de un panel expandible. */
+/** Encabezado de un panel expandible.
+ *
+ *  La retícula del botón (css/styles.css, .expandable__toggle) sitúa el
+ *  eyebrow en una primera fila a todo lo ancho y el bloque principal
+ *  (título, valor, subtítulo) en la segunda; la insignia de capa y el
+ *  chevron quedan en la esquina superior derecha. Para que las áreas de
+ *  la retícula apliquen, el eyebrow debe ser hijo directo del botón y no
+ *  quedar anidado dentro de toggle-main. */
 export function expandableHeader({
   id,
   eyebrow,
@@ -12748,8 +12945,8 @@ export function expandableHeader({
 }) {
   return `<button class="expandable__toggle" type="button" aria-expanded="${open ? "true" : "false"}"
     aria-controls="${esc(id)}-body" data-expandable-toggle>
+    ${eyebrow ? `<span class="panel__eyebrow">${esc(eyebrow)}</span>` : ""}
     <span class="expandable__toggle-main">
-      ${eyebrow ? `<span class="panel__eyebrow">${esc(eyebrow)}</span>` : ""}
       ${title ? `<span class="panel__title" style="display:block">${esc(title)}</span>` : ""}
       ${value ? `<span class="value value--lg" style="display:block;margin-top:var(--sp-2)">${value}</span>` : ""}
       ${subtitle ? `<span class="panel__sub" style="display:block">${esc(subtitle)}</span>` : ""}
@@ -12759,7 +12956,7 @@ export function expandableHeader({
   </button>`;
 }
 
-export function expandableBody(id, { label, content, open = false }) {
+export function expandableBody(id, { label, content, open = false, variant = "" } = {}) {
   // Sin atributo `hidden`: el estado cerrado lo gobierna el CSS
   // (grid-template-rows: 0fr + visibility: hidden), que además retira el
   // contenido del árbol de accesibilidad y del orden de tabulación.
@@ -12767,7 +12964,12 @@ export function expandableBody(id, { label, content, open = false }) {
   // !important` en tokens.css) y la tarjeta no podría abrirse jamás.
   // La clase `is-open` inicial solo aplica cuando un renderizador pide
   // explícitamente la tarjeta abierta.
-  return `<div class="expandable__body${open ? " is-open" : ""}" id="${esc(id)}-body" role="region"
+  // `variant` distingue cuerpos hermanos dentro de una misma tarjeta
+  // (p. ej. la retícula de dos columnas de los indicadores): sufija el id
+  // para que el documento no tenga ids duplicados.
+  const suffix = variant ? `-${variant}` : "";
+  const cls = variant ? ` expandable__body--${variant}` : "";
+  return `<div class="expandable__body${cls}${open ? " is-open" : ""}" id="${esc(id)}-body${suffix}" role="region"
     aria-label="${esc(label)}">
     <div class="expandable__inner">
       <div class="expandable__reveal">${content}</div>
@@ -13239,8 +13441,9 @@ export function renderFooter(data, { source, validation } = {}) {
       </div>
     </div>
     <div class="footer__legal">
+      <!-- Un solo aviso legal: el del dataset si existe, con el del cliente
+           como respaldo. Renderizar ambos apilaba dos textos casi idénticos. -->
       <p>${esc(meta.disclaimer ?? DISCLAIMER)}</p>
-      <p>${esc(DISCLAIMER)}</p>
       <p class="mono">
         Código bajo licencia MIT · Datos bajo CC BY 4.0 · Sin datos personales · Sin cookies · Sin rastreo
       </p>

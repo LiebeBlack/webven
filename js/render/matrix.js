@@ -48,10 +48,13 @@ function milestoneTimeline(milestones) {
   if (!milestones?.length) return "";
   const ordered = milestones.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
   return `<ol class="timeline">${ordered
-    .map((milestone) =>
+    .map((milestone, index) =>
       renderTimelineItem(
         {
-          id: milestone.date,
+          // El dataset puede repetir la fecha de un hito entre gestiones
+          // (la transición 1999-02-02 pertenece a dos administraciones);
+          // el índice garantiza ids de ancla únicos en el documento.
+          id: `${milestone.date}-${index}`,
           date: milestone.date,
           category: "macroeconomia",
           title: milestone.title,

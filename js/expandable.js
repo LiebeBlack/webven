@@ -33,13 +33,22 @@ function isOpen(card) {
   return card?.classList.contains(CLASSES.open) ?? false;
 }
 
+/**
+ * Cuerpos expandibles de una tarjeta: hijo directo (una sola columna) o
+ * retícula de dos columnas (indicadores: lead narrativo + datos). Gobernar
+ * ambos con el mismo selector evita estados desincronizados.
+ */
+function bodiesOf(card) {
+  return card.querySelectorAll(":scope > .expandable__body, :scope > .expandable__grid > .expandable__body");
+}
+
 /** Abre o cierra una tarjeta, con el estado accesible correspondiente. */
 export function setExpanded(card, open) {
   if (!card) return;
   const toggle = card.querySelector("[data-expandable-toggle]");
   if (!toggle) return;
 
-  const body = card.querySelector(":scope > .expandable__body");
+  const bodies = bodiesOf(card);
 
   if (open) {
     card.classList.remove(CLASSES.collapsing);
@@ -48,7 +57,7 @@ export function setExpanded(card, open) {
     // Defensa en profundidad: ningún renderizador debe dejar un atributo
     // `hidden` en el cuerpo; si lo hubiera, la tarjeta no abriría nunca
     // porque tokens.css lo resuelve a display:none !important.
-    if (body) body.removeAttribute("hidden");
+    bodies.forEach((body) => body.removeAttribute("hidden"));
   } else {
     card.classList.add(CLASSES.collapsing);
     card.classList.remove(CLASSES.open);

@@ -781,7 +781,8 @@ p {
     opacity var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-3);
 }
 
-.expandable.is-open > .expandable__body {
+.expandable.is-open > .expandable__body,
+.expandable__body.is-open {
   grid-template-rows: 1fr;
   opacity: 1;
   visibility: visible;
@@ -808,7 +809,8 @@ p {
   padding: 0 var(--sp-5) var(--sp-5);
 }
 
-.expandable.is-open > .expandable__body .expandable__reveal {
+.expandable.is-open > .expandable__body .expandable__reveal,
+.expandable__body.is-open .expandable__reveal {
   opacity: 1;
   transform: none;
   transition-delay: 90ms;

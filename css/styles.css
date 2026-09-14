@@ -73,6 +73,8 @@ canvas {
 
 a {
   color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
   text-decoration-color: var(--hairline-strong);
   text-underline-offset: 0.18em;
   transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
@@ -81,6 +83,7 @@ a {
 a:hover {
   color: var(--accent);
   text-decoration-color: var(--accent-line);
+  text-decoration-thickness: 1.5px;
 }
 
 button,
@@ -263,6 +266,8 @@ p {
 .section__title {
   font-size: var(--fs-xl);
   max-width: 34ch;
+  text-wrap: balance;
+  hanging-punctuation: first;
 }
 
 .section__lede {
@@ -522,7 +527,7 @@ p {
   color: var(--ink-3);
   text-decoration: none;
   padding-block: var(--sp-2);
-  transition: color var(--dur-2) var(--ease-out);
+  transition: color var(--dur-1) var(--ease-out);
 }
 
 .nav__link::after {
@@ -538,6 +543,7 @@ p {
 
 .nav__link:hover {
   color: var(--ink);
+  transform: translateY(-1px);
 }
 
 .nav__link:hover::after,
@@ -558,7 +564,7 @@ p {
 .ticker__track {
   display: flex;
   width: max-content;
-  animation: ticker-scroll 74s linear infinite;
+  animation: ticker-scroll 58s linear infinite;
 }
 
 .ticker:hover .ticker__track,
@@ -585,6 +591,12 @@ p {
   font-size: var(--fs-2xs);
   color: var(--ink-3);
   white-space: nowrap;
+  transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+}
+
+.ticker__item:hover {
+  color: var(--ink);
+  background: var(--surface-2);
 }
 
 .ticker__item b {
@@ -634,6 +646,68 @@ p {
 
 .panel--static:hover {
   border-color: var(--hairline);
+}
+
+/* ---------------------------------------------------------------- Reveal ---
+   Entrada de paneles y bloques al entrar en pantalla. La retícula de
+   indicadores revela cada celda con un retardo escalonado (fila × columna)
+   para que la retícula completa se construya ante el lector. Sin
+   IntersectionObserver, en no-js o con movimiento reducido, todo se ve
+   inmediatamente: el estado inicial ya es legible por sí mismo. */
+.panel,
+.flow-note,
+.expandable,
+.tier-legend__item,
+.timeline__item {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-reveal),
+    transform var(--dur-reveal) var(--ease-reveal),
+    border-color var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
+  will-change: opacity, transform;
+}
+
+/* La retícula de hairlines pinta los bordes con el fondo del contenedor:
+   revelar las celdas con opacidad parcial no rompe la retícula porque el
+   delay escala con la posición de la celda. */
+.grid--kpis > .panel {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+}
+
+.is-visible > .panel,
+.is-visible.flow-note,
+.panel.is-visible,
+.expandable.is-visible,
+.tier-legend__item.is-visible,
+.timeline__item.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.no-js .panel,
+.no-js .flow-note,
+.no-js .expandable,
+.no-js .tier-legend__item,
+.no-js .timeline__item {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .grid--kpis > .panel,
+  .flow-note,
+  .expandable,
+  .tier-legend__item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
 }
 
 .panel--accent {
@@ -687,7 +761,7 @@ p {
   background: var(--surface-1);
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-  color: var(--ink-3);
+  color: var(--ink-2);
   display: flex;
   justify-content: space-between;
   gap: var(--sp-3);
@@ -804,9 +878,11 @@ p {
 
 .expandable__reveal {
   opacity: 0;
-  transform: translate3d(0, -8px, 0);
-  transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-3) var(--ease-out-expo);
+  transform: translate3d(0, -8px, 0);  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-3) var(--ease-out-expo);
   padding: 0 var(--sp-5) var(--sp-5);
+  font-size: var(--fs-base);
 }
 
 .expandable.is-open > .expandable__body .expandable__reveal,
@@ -1030,10 +1106,18 @@ p {
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   cursor: pointer;
-  transition: all var(--dur-2) var(--ease-out);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
 .chip:hover {
+  transform: translateY(-1px);
+}
+
+.chip:active {
   color: var(--ink);
   border-color: var(--hairline-accent);
   background: var(--surface-2);
@@ -1066,6 +1150,7 @@ p {
   background: var(--accent);
   border-radius: inherit;
   transition: width var(--dur-4) var(--ease-out-expo);
+  box-shadow: 0 0 8px var(--accent-line);
 }
 
 .meter--cool .meter__fill {
@@ -1158,14 +1243,16 @@ p {
   color: var(--ink-3);
   border-bottom: 1px solid var(--hairline-strong);
   white-space: nowrap;
+  box-shadow: 0 8px 10px -8px rgba(0, 0, 0, 0.65);
 }
 
 .table tbody tr {
-  transition: background-color var(--dur-1) var(--ease-out);
+  transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
 }
 
 .table tbody tr:hover {
   background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .table tbody tr:last-child td {
@@ -1341,12 +1428,16 @@ p {
   border-radius: 1px;
   background: rgba(200, 162, 74, var(--heat, 0));
   outline: 1px solid rgba(255, 255, 255, 0.015);
-  transition: outline-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  transition:
+    outline-color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
 }
 
 .heatmap__cell:hover {
   outline-color: var(--ink-2);
   transform: scale(1.35);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
   z-index: 2;
 }
 
@@ -1402,6 +1493,7 @@ p {
 
 .treemap__cell:hover {
   filter: brightness(1.35);
+  transform: scale(1.004);
   z-index: 3;
 }
 
@@ -1434,6 +1526,10 @@ p {
   stroke: var(--accent);
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
+}
+
+.sparkline:hover path:not(.area) {
+  filter: drop-shadow(0 0 4px var(--accent-line));
 }
 
 .sparkline path.area {
@@ -1719,13 +1815,22 @@ p {
   text-transform: uppercase;
   color: var(--ink-3);
   cursor: pointer;
-  transition: all var(--dur-2) var(--ease-out);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
-.cite:hover {
+.cite:hover,
+.cite:focus-visible {
   color: var(--accent);
   border-color: var(--hairline-accent);
   background: var(--accent-soft);
+}
+
+.cite:active {
+  transform: translateY(0);
 }
 
 .kbd {

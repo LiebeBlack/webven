@@ -8,7 +8,7 @@
  */
 
 import { esc, tierBadge, sourceRefs } from "./parts.js";
-import { dateLong, dateShort, num } from "../format.js";
+import { dateShort, num } from "../format.js";
 
 const CATEGORY_LABELS = {
   crisis: "Crisis",
@@ -43,7 +43,6 @@ export function renderTimelineItem(event, { prefix = "t" } = {}) {
       ${event.debt_mm !== undefined ? `<span class="badge"><span class="dot"></span>stock ${esc(num(event.debt_mm))} MM</span>` : ""}
       ${sourceRefs(event.source_ids, { compact: true })}
     </div>
-    <p class="mono" style="display:none">${esc(dateLong(event.date))}</p>
   </li>`;
 }
 

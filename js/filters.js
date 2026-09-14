@@ -56,7 +56,10 @@ function activateChip(chip) {
   });
 }
 
-/** Aplica visibilidad y cuenta resultados en una colección de nodos. */
+/** Aplica visibilidad y cuenta resultados en una colección de nodos.
+ *  El contador se escribe sobre los nodos visibles, no sobre el total de la
+ *  colección: contar los que se acaban de ocultar presentaría el filtro como
+ *  inoperante. */
 function applyVisibility(selector, predicate, counterSelector, label) {
   const nodes = [...document.querySelectorAll(selector)];
   let visible = 0;
@@ -96,14 +99,25 @@ function applyMechanismFilters() {
 }
 
 function applyTimelineFilters() {
-  applyVisibility(
-    "[data-category]",
-    (node) =>
+  // El contador y los filtros de cronología solo gobiernan la cronología
+  // global: los hitos de la matriz histórica reutilizan data-category pero
+  // no forman parte de este recuento, y los duplicados de "hechos recientes"
+  // (prefijo recent-) no deben contar dos veces.
+  const nodes = [...document.querySelectorAll("#timeline-container [data-category]")];
+  let visible = 0;
+  for (const node of nodes) {
+    const show =
       (state.timelineCategory === "all" || node.dataset.category === state.timelineCategory) &&
-      (state.timelineSeverity === "all" || node.dataset.severity === state.timelineSeverity),
-    "[data-timeline-count]",
-    "hechos"
-  );
+      (state.timelineSeverity === "all" || node.dataset.severity === state.timelineSeverity);
+    node.hidden = !show;
+    if (show) visible += 1;
+  }
+  const counter = document.querySelector("[data-timeline-count]");
+  if (counter) {
+    counter.textContent = `${num(visible)} de ${num(nodes.length)} hechos`;
+  }
+  if (hooks.announce) hooks.announce(`hechos: ${visible} de ${nodes.length} visibles`);
+  return visible;
 }
 
 /** Reaplica todos los filtros activos. Útil tras un re-render. */

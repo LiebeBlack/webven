@@ -302,20 +302,19 @@ export const CLASSES = {
   noJs: "no-js",
 };
 
-/** Secciones ancladas: alimenta la navegación y la paleta de comandos. */
+/** Secciones ancladas: alimenta la navegación y la paleta de comandos.
+ *  Deben coincidir con los id reales del documento; una entrada fantasma
+ *  produce comandos que no llevan a ninguna parte. */
 export const SECTIONS = [
   { id: "resumen", label: "Resumen ejecutivo" },
   { id: "trayectoria", label: "Trayectoria y composición" },
-  { id: "datos", label: "Matriz de datos por capa" },
   { id: "acreedores", label: "Mapa de acreedores" },
   { id: "arbitrajes", label: "Laudos y arbitrajes" },
-  { id: "ejecucion", label: "Ejecución y activos" },
+  { id: "ejecucion", label: "Ejecución y sanciones" },
   { id: "matriz-historica", label: "Matriz histórica" },
   { id: "cronologia", label: "Cronología global" },
   { id: "mecanismos", label: "Mecanismos de recuperación" },
   { id: "escenarios", label: "Escenarios y simulador" },
-  { id: "sanciones", label: "Régimen de sanciones" },
-  { id: "actores", label: "Mapa institucional" },
   { id: "vigilancia", label: "Vigilancia y vacíos" },
   { id: "fuentes", label: "Fuentes y glosario" },
 ];

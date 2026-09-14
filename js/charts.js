@@ -86,7 +86,12 @@ export function chartEvents() {
 
 /* ------------------------------------------------------------ helpers --- */
 
-function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, heat = false, extra = "" }) {
+function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, heat = false, extra = "", omitCanvas = false }) {
+  const frame = omitCanvas
+    ? ""
+    : `<div class="chart-frame ${tall ? "chart-frame--tall" : ""}">
+        <canvas id="${id}" role="img" aria-label="${title}"></canvas>
+      </div>`;
   return `<article class="panel panel--static" id="${id}-panel">
     <div class="panel__head">
       <div>
@@ -96,15 +101,9 @@ function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = fa
       </div>
     </div>
     <div class="panel__pad">
-      ${
-        heat
-          ? `<div class="chart-frame chart-frame--heat" id="${id}"></div>`
-          : `<div class="chart-frame ${tall ? "chart-frame--tall" : ""}">
-              <canvas id="${id}" role="img" aria-label="${title}"></canvas>
-            </div>
-            ${legend ? `<div class="chart-legend">${legend}</div>` : ""}`
-      }
+      ${frame}
       ${extra}
+      ${legend && !omitCanvas ? `<div class="chart-legend">${legend}</div>` : ""}
       ${note ? `<p class="chart-note">${note}</p>` : ""}
     </div>
   </article>`;
@@ -293,7 +292,10 @@ export function renderCharts(data) {
       title: "Treemap de acreedores por exposición",
       subtitle: "Área proporcional al monto reclamado",
       extra: `<div class="treemap" id="chart-treemap">${renderTreemap(data)}</div>`,
+      // Las vistas DOM (heat: true) no declaran <canvas>: el contenido va en
+      // `extra`, así que no hay que duplicar el id en un marco vacío.
       heat: true,
+      omitCanvas: true,
     }),
 
     chartPanel({
@@ -303,6 +305,7 @@ export function renderCharts(data) {
       subtitle: "Peso de cada componente dentro del total de su año",
       extra: renderHeatmap(data),
       heat: true,
+      omitCanvas: true,
     }),
 
     chartPanel({
@@ -349,6 +352,7 @@ export function renderCharts(data) {
       subtitle: "Los mismos valores del mapa de calor, en formato tabular",
       extra: renderHeatmapTable(data),
       heat: true,
+      omitCanvas: true,
       note: "Se publica siempre una versión tabular de cada visualización: es lo que hace accesible el documento para lectores de pantalla y lo que sobrevive a la impresión.",
     }),
 
@@ -811,11 +815,12 @@ export function initCharts(data) {
   tryCreate("capacity-lines", "chart-capacity-lines", () => mountCapacityLines(data));
 
   /* 19. Densidad de mecanismos (DOM, no Chart.js). */
-  // El contenido va embebido en el panel: aquí solo se verifica que exista.
-  if (!document.getElementById("chart-mechanism-density")) {
-    failed.push("mechanism-density: contenedor no encontrado");
-  } else {
+  // El panel se autoregistra en el HTML (panel con id chart-mechanism-density);
+  // aquí solo se verifica que el contenedor exista.
+  if (document.getElementById("chart-mechanism-density")) {
     created += 1;
+  } else {
+    failed.push("mechanism-density: contenedor no encontrado");
   }
 
   return { created, failed };

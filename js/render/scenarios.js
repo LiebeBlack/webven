@@ -20,6 +20,10 @@ import {
 import { num, pct, usd } from "../format.js";
 import { SIMULATOR_DEFAULTS, SIMULATOR_LIMITS, THRESHOLDS } from "../config.js";
 
+/** Nominal base compartido por todos los escenarios (scenarios.base_nominal_mm).
+ *  Constante de respaldo por si el dataset llegara sin el bloque scenarios. */
+const BASE_NOMINAL_MM = 75000;
+
 /** Tarjeta expandible de un escenario precalculado. */
 export function renderScenarioCard(scenario) {
   const id = anchorId("escenario", scenario.id);
@@ -54,7 +58,7 @@ export function renderScenarioCard(scenario) {
       `<div class="calc-box">
         <code class="formula">${esc(scenario.calc?.formula ?? "—")}</code>
         <dl class="calc-grid">
-          <div><dt>Nominal base</dt><dd>${esc(usd(75000))}</dd></div>
+          <div><dt>Nominal base</dt><dd>${esc(usd(BASE_NOMINAL_MM))}</dd></div>
           <div><dt>Cupón por período</dt><dd>${esc(usd(scenario.coupon_mm_per_period))}</dd></div>
           <div><dt>Períodos totales</dt><dd>${esc(num(Number(scenario.tenor_years) + Number(scenario.grace_years)))}</dd></div>
         </dl>

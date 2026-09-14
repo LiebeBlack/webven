@@ -13,9 +13,16 @@ import { recoveryNpv } from "./calc/index.js";
 import { num, pct, usd, toCsv } from "./format.js";
 import { SIMULATOR_DEFAULTS, SIMULATOR_LIMITS, CHART_THEME } from "./config.js";
 import { chartsAvailable, baseOptions, baseScales, baseTooltip, withAlpha, chartsUnavailableMessage } from "./charts/plugins.js";
+import { downloadBlob } from "./ui.js";
 
 let chart = null;
 let frame = null;
+
+/** Año de partida del servicio proyectado. Se usa el año en curso para que
+ *  la tabla, el gráfico y el CSV exportado declaren siempre el mismo calendario. */
+function serviceStartYear() {
+  return new Date().getUTCFullYear();
+}
 
 /** Lee los supuestos actuales desde los controles. */
 function readParams() {
@@ -73,7 +80,7 @@ function syncOutputs(params, outputs) {
 }
 
 /** Tabla del servicio anual proyectado (se muestra truncada si es muy larga). */
-function scheduleTable(params, outputs, { limit = 40, startYear = 2026 } = {}) {
+function scheduleTable(params, outputs, { limit = 40, startYear = serviceStartYear() } = {}) {
   const rows = (outputs.schedule ?? []).slice(0, limit);
   const head = `<thead><tr>
       <th scope="col">Año</th>
@@ -125,7 +132,7 @@ function syncChart(params, outputs) {
   if (!canvas) return;
 
   const rows = outputs.schedule;
-  const labels = rows.map((row) => String(2026 + row.year_offset));
+  const labels = rows.map((row) => String(serviceStartYear() + row.year_offset));
   const coupon = rows.map((row) => row.coupon_mm);
   const principal = rows.map((row) => row.principal_mm);
 
@@ -187,6 +194,7 @@ function refresh({ silent = false } = {}) {
 function exportCsv() {
   const params = readParams();
   const { outputs } = recoveryNpv(params);
+  const startYear = new Date().getUTCFullYear();
   const headers = [
     "Año",
     "Período",
@@ -197,7 +205,7 @@ function exportCsv() {
     "Valor presente (MM USD)",
   ];
   const rows = outputs.schedule.map((row) => [
-    2026 + row.year_offset,
+    startYear + row.year_offset,
     row.period,
     row.coupon_mm,
     row.principal_mm,
@@ -206,15 +214,10 @@ function exportCsv() {
     row.pv_mm,
   ]);
   const csv = toCsv(headers, rows);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `servicio-simulado-quita-${params.haircut_pct}-cupon-${params.coupon_pct}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  downloadBlob(
+    `servicio-simulado-quita-${params.haircut_pct}-cupon-${params.coupon_pct}.csv`,
+    csv
+  );
   return { params, rows: rows.length };
 }
 

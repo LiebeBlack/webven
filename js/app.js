@@ -260,8 +260,7 @@ async function bootstrap() {
     setFilterHooks({
       rerenderCreditors: (order) => {
         const ordered = sortCreditors(data.creditors ?? [], order);
-        const { renderCreditorsTable: rerender } = { renderCreditorsTable };
-        const html = rerender({ ...data, creditors: ordered });
+        const html = renderCreditorsTable({ ...data, creditors: ordered });
         mount("creditorsTable", html);
       },
       announce,

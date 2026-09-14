@@ -43,7 +43,6 @@
   .ticker,
   .masthead__status,
   .chart-frame,
-  .chart-grid,
   .heatmap,
   .treemap,
   .sim__controls,
@@ -52,7 +51,7 @@
   .progress,
   .toolbar,
   .filters,
-  .panel__toggle .chev,
+  .expandable__toggle .chev,
   .cite,
   .no-print {
     display: none !important;
@@ -78,9 +77,12 @@
     opacity: 1 !important;
   }
 
-  .panel__reveal {
+  /* El contenido revelado de cada tarjeta: visible y sin desplazamiento
+     residual, porque fuera de pantalla no hay transición que lo traiga. */
+  .expandable__reveal {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
   }
 
   .table {

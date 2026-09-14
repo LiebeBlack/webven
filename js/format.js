@@ -37,7 +37,9 @@ export function usd(valueMm, { digits = 0, unit = true } = {}) {
   return `US$ ${num(valueMm, digits)}${unit ? " MM" : ""}`;
 }
 
-/** Valores en millones de dólares → "US$ 164,4 MM" abreviado en millardos. */
+/** Valores en millones de dólares → "US$ 164,4 MM MM" abreviado en millardos.
+ *  El doble MM es deliberado: millardos de dólares = miles de millones.
+ *  Se separa con espacio para que el sufijo no se lea como un error tipográfico. */
 export function usdBn(valueMm, { digits = 1 } = {}) {
   if (valueMm === null || valueMm === undefined) return "—";
   return `US$ ${num(Number(valueMm) / 1000, digits)} MM MM`;

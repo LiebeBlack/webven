@@ -158,19 +158,25 @@ export const stressEventsPlugin = {
     ctx.save();
     ctx.font = `9px ${CHART_THEME.font}`;
     events.forEach((event) => {
-      const index = xScale.getPixelForValue(event.year);
-      if (!Number.isFinite(index) || index < chartArea.left || index > chartArea.right) return;
+      // El eje x es de categorías (etiquetas de año en texto): getPixelForValue
+      // espera el índice de la categoría, no el número del año. Buscar por el
+      // valor numérico situaba todas las marcas fuera del área del gráfico y
+      // el guard clause las descartaba: el plugin no dibujaba nada.
+      const labelIndex = (chart.data.labels ?? []).indexOf(String(event.year));
+      if (labelIndex < 0) return;
+      const x = xScale.getPixelForValue(labelIndex);
+      if (!Number.isFinite(x) || x < chartArea.left || x > chartArea.right) return;
       const severe = Number(event.severity) >= 3;
       ctx.strokeStyle = severe ? "rgba(196, 69, 63, 0.45)" : "rgba(110, 116, 126, 0.35)";
       ctx.setLineDash([2, 3]);
       ctx.beginPath();
-      ctx.moveTo(index, chartArea.top);
-      ctx.lineTo(index, chartArea.bottom);
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
       ctx.stroke();
       ctx.setLineDash([]);
 
       ctx.save();
-      ctx.translate(index + 3, chartArea.top + 4);
+      ctx.translate(x + 3, chartArea.top + 4);
       ctx.rotate(Math.PI / 2);
       ctx.fillStyle = severe ? "rgba(224, 132, 127, 0.9)" : "rgba(110, 116, 126, 0.85)";
       ctx.textBaseline = "bottom";

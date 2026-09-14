@@ -50,10 +50,12 @@ function thresholdNote(kpi) {
 /** Desglose interno del indicador. */
 function breakdownBlock(kpi) {
   if (!Array.isArray(kpi.breakdown) || kpi.breakdown.length === 0) return "";
+  // La unidad se declara por fila según el campo presente: value_mm es un
+  // monto en millones de dólares; value_pct, un porcentaje. No se asume una.
   const rows = kpi.breakdown.map((item) => [
     esc(item.label),
     esc(item.value_mm !== undefined ? num(item.value_mm, 0) : num(item.value_pct, 2)),
-    `US$ MM`,
+    esc(item.value_mm !== undefined ? "US$ MM" : "%"),
     `<span class="tier-mark tier-mark--${esc(item.tier ?? "reportado")}">${esc(item.tier ?? "reportado")}</span>`,
   ]);
   return panelSection(

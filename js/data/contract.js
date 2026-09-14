@@ -456,15 +456,24 @@ export function validateDatabase(database, options = {}) {
 
   /* 11. Escenarios -------------------------------------------------------- */
   const scenarios = database.scenarios?.items ?? [];
+  let scenarioFailures = 0;
   const scenarioChecks = scenarios.map((scenario) => {
-    const pct = Number(scenario.recovery_pct_of_nominal);
-    const consistent = Math.abs(Number(scenario.recovery_npv_mm) / Number(database.scenarios.base_nominal_mm) * 100 - pct) < 0.05;
+    const recoveryPct = Number(scenario.recovery_pct_of_nominal);
+    const consistent =
+      Number(database.scenarios.base_nominal_mm) > 0 &&
+      Math.abs((Number(scenario.recovery_npv_mm) / Number(database.scenarios.base_nominal_mm)) * 100 - recoveryPct) < 0.05;
+    // Un escenario internamente inconsistente debe detener la validación: el
+    // VPN es la cifra sobre la que se compara cualquier oferta de canje.
+    if (!consistent) scenarioFailures += 1;
     return check(
       `${scenario.name}`,
       consistent ? "pass" : "fail",
-      `quita ${scenario.haircut_pct} % · recuperación ${pct} % del nominal`
+      `quita ${scenario.haircut_pct} % · recuperación ${recoveryPct} % del nominal`
     );
   });
+  if (scenarioFailures > 0) {
+    errors.push(`Escenarios: ${scenarioFailures} con VPN inconsistente respecto al nominal base.`);
+  }
   push("escenarios", "Escenarios de recuperación", scenarioChecks);
 
   /* 12. Coherencia de la matriz histórica -------------------------------- */

@@ -162,6 +162,8 @@
   --r-2: 4px;
   --r-3: 6px;
   --r-4: 10px;
+  /* Alias semántico usado por las visualizaciones DOM (mosaico, densidad). */
+  --r-md: 6px;
   --r-pill: 999px;
 
   /* --------------------------------------------------------------- Sombra --- */
@@ -1056,7 +1058,8 @@ p {
     opacity var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-3);
 }
 
-.expandable.is-open > .expandable__body {
+.expandable.is-open > .expandable__body,
+.expandable__body.is-open {
   grid-template-rows: 1fr;
   opacity: 1;
   visibility: visible;
@@ -1083,7 +1086,8 @@ p {
   padding: 0 var(--sp-5) var(--sp-5);
 }
 
-.expandable.is-open > .expandable__body .expandable__reveal {
+.expandable.is-open > .expandable__body .expandable__reveal,
+.expandable__body.is-open .expandable__reveal {
   opacity: 1;
   transform: none;
   transition-delay: 90ms;
@@ -1531,11 +1535,6 @@ p {
 
 .chart-frame--tall {
   height: var(--chart-h-tall);
-}
-
-.chart-frame--heat {
-  height: auto;
-  min-height: 12rem;
 }
 
 .chart-note {
@@ -2155,11 +2154,14 @@ p {
   color: var(--ink-2);
 }
 
-.boot__box .boot__line {
+.boot .boot__line {
   display: flex;
   justify-content: space-between;
   gap: var(--sp-3);
   padding-block: 3px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
 }
 
 .boot__box .ok {
@@ -2412,6 +2414,57 @@ p {
   font-size: var(--fs-2xs);
   color: var(--ink-4);
   line-height: 1.8;
+}
+
+/* --------------------------------- 13b. Página de auditoría (validate) --- */
+/* Clases propias de tests/validate.html: reutilizan tokens y primitivas del
+   sistema (table, pill, sim__stat, error-panel) y solo añaden la maquetación
+   específica del encabezado y de las tarjetas del informe. Sin ellas, el
+   informe se renderiza como HTML sin estilo. */
+
+.page__body {
+  max-width: 120ch;
+  margin-inline: auto;
+  padding: var(--sp-6) var(--gutter) var(--sp-8);
+}
+
+.masthead__inner {
+  max-width: 120ch;
+  margin-inline: auto;
+  padding: var(--sp-7) var(--gutter) var(--sp-5);
+}
+
+.masthead__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--sp-3);
+}
+
+.masthead__note {
+  max-width: var(--measure);
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: var(--lh-normal);
+}
+
+.card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-2);
+  background: var(--surface-solid);
+  padding: var(--sp-5);
+}
+
+.card__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 var(--sp-4);
 }
 
 /* ------------------------------------- 14. Scrollbars y accesibilidad --- */
@@ -2772,7 +2825,6 @@ p {
   .ticker,
   .masthead__status,
   .chart-frame,
-  .chart-grid,
   .heatmap,
   .treemap,
   .sim__controls,
@@ -2781,7 +2833,7 @@ p {
   .progress,
   .toolbar,
   .filters,
-  .panel__toggle .chev,
+  .expandable__toggle .chev,
   .cite,
   .no-print {
     display: none !important;
@@ -2807,9 +2859,12 @@ p {
     opacity: 1 !important;
   }
 
-  .panel__reveal {
+  /* El contenido revelado de cada tarjeta: visible y sin desplazamiento
+     residual, porque fuera de pantalla no hay transición que lo traiga. */
+  .expandable__reveal {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
   }
 
   .table {
@@ -2974,9 +3029,12 @@ p {
       </div>
     </header>
 
-    <!-- Cinta de hechos verificables -->
-    <div class="ticker" aria-label="Últimos hechos registrados">
-      <div class="ticker__track" id="ticker-track"></div>
+    <!-- Cinta de hechos verificables. Se anuncia como región con nombre para
+         que los lectores de pantalla la presenten como "Últimos hechos";
+         un aria-label sobre un div sin role se ignora. -->
+    <div class="ticker">
+      <div class="ticker__track" id="ticker-track" role="list"
+        aria-label="Últimos hechos registrados y cifras de referencia"></div>
     </div>
 
     <!-- Navegación anclada -->
@@ -3225,6 +3283,7 @@ p {
                     <button class="chip" type="button" data-filter-timeline-category="legal" aria-pressed="false">Jurídico</button>
                     <button class="chip" type="button" data-filter-timeline-category="reestructuracion" aria-pressed="false">Reestructuración</button>
                     <button class="chip" type="button" data-filter-timeline-category="macroeconomia" aria-pressed="false">Macroeconomía</button>
+                    <button class="chip" type="button" data-filter-timeline-category="politico" aria-pressed="false">Político</button>
                     <button class="chip" type="button" data-filter-timeline-category="dato" aria-pressed="false">Dato</button>
                   </div>
                 </div>
@@ -3353,7 +3412,9 @@ p {
       </div>
     </footer>
 
-    <!-- Paleta de comandos -->
+    <!-- Paleta de comandos: cuadro combinado (input + listbox vinculada).
+         aria-expanded/controls sobre el propio input comunican el estado del
+         cuadro de resultados; aria-activedescendant lo mantiene en ui.js. -->
     <div class="palette" id="command-palette" hidden role="dialog" aria-modal="true" aria-label="Paleta de comandos">
       <div class="palette__box">
         <input
@@ -3363,6 +3424,9 @@ p {
           placeholder="Buscar sección, laudo, mecanismo o indicador…"
           aria-label="Buscar comando"
           autocomplete="off"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="palette-list"
         />
         <ul class="palette__list" id="palette-list" role="listbox" aria-label="Resultados"></ul>
       </div>
@@ -6745,8 +6809,7 @@ async function bootstrap() {
     setFilterHooks({
       rerenderCreditors: (order) => {
         const ordered = sortCreditors(data.creditors ?? [], order);
-        const { renderCreditorsTable: rerender } = { renderCreditorsTable };
-        const html = rerender({ ...data, creditors: ordered });
+        const html = renderCreditorsTable({ ...data, creditors: ordered });
         mount("creditorsTable", html);
       },
       announce,
@@ -6769,6 +6832,13 @@ async function bootstrap() {
     resizeAllCharts();
   });
   document.addEventListener("observatorio:collapse-all", () => setGroupOpen(null, false));
+  // Variante por grupo: la paleta de comandos expande/contrae los indicadores
+  // sin tocar el resto de las tarjetas.
+  document.addEventListener("observatorio:expand-group", (event) => {
+    setGroupOpen(event.detail ?? null, true);
+    resizeAllCharts();
+  });
+  document.addEventListener("observatorio:collapse-group", (event) => setGroupOpen(event.detail ?? null, false));
 
   /* ---- Redimensionado: los gráficos necesitan aviso al cambiar de tamaño ---- */
   let resizeFrame = null;
@@ -7110,7 +7180,11 @@ export function recoveryNpv(
     npv_mm: round(npv, 2),
     undiscounted_mm: round(undiscounted, 2),
     recovery_pct_of_nominal: round((npv / nominal) * 100, 2),
-    // Cuánto de cada dólar nominal recupera el acreedor, ya descontado el tiempo.
+    // Cuántos centavos de cada dólar nominal recupera el acreedor ya
+    // descontado el tiempo. Coincide numéricamente con el porcentaje porque
+    // "cents per dollar" es, por definición, el porcentaje × 1: se publica
+    // como salida propia para que la interfaz pueda etiquetar la lectura
+    // en centavos sin recalcular ni duplicar la fórmula en el cliente.
     effective_cents_per_dollar: round((npv / nominal) * 100, 2),
     schedule,
   };
@@ -7147,6 +7221,22 @@ export function impliedYield(
   let high = Number(guess_max);
   let iterations = 0;
   let mid = low;
+
+  // Validación de bracket: si el precio no está entre el valor con rendimiento
+  // máximo (y→guess_min) y el mínimo (y→guess_max), no existe solución en el
+  // intervalo. Fallar con un mensaje claro es parte del contrato de auditoría:
+  // un rendimiento implícito inventado en el borde del intervalo sería peor
+  // que ningún número.
+  const priceAtLow = priceAt(low);
+  const priceAtHigh = priceAt(high);
+  if (!(price <= priceAtLow && price >= priceAtHigh)) {
+    throw new Error(
+      `implied_yield: el precio ${price} % queda fuera del rango resoluble [${round(priceAtHigh, 2)}, ${round(
+        priceAtLow,
+        2
+      )}] para cupón ${coupon} %, plazo ${tenor} años y rescate ${redemption} %. Ajuste guess_min/guess_max.`
+    );
+  }
 
   // 80 iteraciones llevan la precisión muy por debajo de un punto base.
   while (iterations < 80) {
@@ -7204,15 +7294,36 @@ export function sumValues({ items }, target = "total_mm") {
 /**
  * Variación porcentual entre dos valores. Se usa en los indicadores de
  * crecimiento de la deuda entre administraciones.
- * @param {{from_mm:number, to_mm:number}} params
+ *
+ * Si se declara `years` (o `from`/`to` ISO), además calcula el CAGR de la
+ * variación: sin horizonte temporal el CAGR no está definido y se reporta
+ * como null, nunca como 0 (un cero sería una tasa, no una ausencia).
+ * @param {{from_mm:number, to_mm:number, years?:number, from?:string, to?:string}} params
  */
-export function growth({ from_mm, to_mm }, target = "growth_pct") {
-  const from = Number(from_mm);
+export function growth({ from_mm, to_mm, years, from, to }, target = "growth_pct") {
+  const fromValue = Number(from_mm);
   const outputs = {
-    delta_mm: round(Number(to_mm) - from, 2),
-    growth_pct: from === 0 ? 0 : round(((Number(to_mm) - from) / from) * 100, 2),
-    cagr_pct: 0,
+    delta_mm: round(Number(to_mm) - fromValue, 2),
+    growth_pct:
+      fromValue === 0 ? 0 : round(((Number(to_mm) - fromValue) / fromValue) * 100, 2),
+    cagr_pct: null,
   };
+
+  let horizon = Number(years);
+  if (!Number.isFinite(horizon) || horizon <= 0) {
+    if (typeof from === "string" && typeof to === "string") {
+      horizon = yearsBetween(from, to);
+    }
+  }
+  if (
+    Number.isFinite(horizon) &&
+    horizon > 0 &&
+    fromValue > 0 &&
+    Number(to_mm) > 0
+  ) {
+    outputs.cagr_pct = round(((Number(to_mm) / fromValue) ** (1 / horizon) - 1) * 100, 2);
+  }
+
   return { value: outputs[target] ?? outputs.growth_pct, outputs };
 }
 
@@ -7314,7 +7425,12 @@ export function chartEvents() {
 
 /* ------------------------------------------------------------ helpers --- */
 
-function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, heat = false, extra = "" }) {
+function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, extra = "", omitCanvas = false }) {
+  const frame = omitCanvas
+    ? ""
+    : `<div class="chart-frame ${tall ? "chart-frame--tall" : ""}">
+        <canvas id="${id}" role="img" aria-label="${title}"></canvas>
+      </div>`;
   return `<article class="panel panel--static" id="${id}-panel">
     <div class="panel__head">
       <div>
@@ -7324,15 +7440,9 @@ function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = fa
       </div>
     </div>
     <div class="panel__pad">
-      ${
-        heat
-          ? `<div class="chart-frame chart-frame--heat" id="${id}"></div>`
-          : `<div class="chart-frame ${tall ? "chart-frame--tall" : ""}">
-              <canvas id="${id}" role="img" aria-label="${title}"></canvas>
-            </div>
-            ${legend ? `<div class="chart-legend">${legend}</div>` : ""}`
-      }
+      ${frame}
       ${extra}
+      ${legend && !omitCanvas ? `<div class="chart-legend">${legend}</div>` : ""}
       ${note ? `<p class="chart-note">${note}</p>` : ""}
     </div>
   </article>`;
@@ -7521,7 +7631,9 @@ export function renderCharts(data) {
       title: "Treemap de acreedores por exposición",
       subtitle: "Área proporcional al monto reclamado",
       extra: `<div class="treemap" id="chart-treemap">${renderTreemap(data)}</div>`,
-      heat: true,
+      // Las vistas DOM no declaran <canvas>: el contenido va en `extra`, así
+      // que no hay que duplicar el id en un marco vacío.
+      omitCanvas: true,
     }),
 
     chartPanel({
@@ -7530,7 +7642,7 @@ export function renderCharts(data) {
       title: "Mapa de calor de composición anual",
       subtitle: "Peso de cada componente dentro del total de su año",
       extra: renderHeatmap(data),
-      heat: true,
+      omitCanvas: true,
     }),
 
     chartPanel({
@@ -7576,7 +7688,7 @@ export function renderCharts(data) {
       title: "Tabla completa del mapa de calor",
       subtitle: "Los mismos valores del mapa de calor, en formato tabular",
       extra: renderHeatmapTable(data),
-      heat: true,
+      omitCanvas: true,
       note: "Se publica siempre una versión tabular de cada visualización: es lo que hace accesible el documento para lectores de pantalla y lo que sobrevive a la impresión.",
     }),
 
@@ -8039,11 +8151,12 @@ export function initCharts(data) {
   tryCreate("capacity-lines", "chart-capacity-lines", () => mountCapacityLines(data));
 
   /* 19. Densidad de mecanismos (DOM, no Chart.js). */
-  // El contenido va embebido en el panel: aquí solo se verifica que exista.
-  if (!document.getElementById("chart-mechanism-density")) {
-    failed.push("mechanism-density: contenedor no encontrado");
-  } else {
+  // El panel se autoregistra en el HTML (panel con id chart-mechanism-density);
+  // aquí solo se verifica que el contenedor exista.
+  if (document.getElementById("chart-mechanism-density")) {
     created += 1;
+  } else {
+    failed.push("mechanism-density: contenedor no encontrado");
   }
 
   return { created, failed };
@@ -8109,7 +8222,7 @@ function sanctionsMosaicPanel(data) {
         { label: "Sectorial o empresarial", backgroundColor: "var(--warn)", legendColor: "var(--warn)" },
         { label: "Marco general", backgroundColor: "var(--ink-3)", legendColor: "var(--ink-3)" },
       ])}</div>`,
-    heat: true,
+    omitCanvas: true,
     note: `El salto de 2017 es el punto de inflexión: las medidas dejan de señalar individuos y tocan la deuda y el
       financiamiento, que es exactamente el momento en que la salida voluntaria del default se vuelve operativamente
       imposible. Cada celda corresponde a un registro del bloque sanciones_regime, con su fuente en la ficha de la sección Ejecución.`,
@@ -8564,7 +8677,7 @@ function mechanismDensityPanel(data) {
     eyebrow: "Visualización 19 · ingeniería de recuperación",
     title: "Dónde está el potencial de recuperación, por categoría",
     subtitle: `${num((data.recovery_mechanisms ?? []).length)} mecanismos evaluados · techo por familia (el máximo declarado, no la suma)`,
-    extra: `<div class="mech-density" role="img" aria-label="Techo de recuperación por categoría de mecanismo: el máximo declarado dentro de cada familia">
+    extra: `<div class="mech-density" id="chart-mechanism-density" role="img" aria-label="Techo de recuperación por categoría de mecanismo: el máximo declarado dentro de cada familia">
       ${sorted
         .map(
           ([category, value]) => `<div class="mech-density__row">
@@ -8579,7 +8692,7 @@ function mechanismDensityPanel(data) {
         )
         .join("")}
     </div>`,
-    heat: true,
+    omitCanvas: true,
     note: `Las capacidades declaradas no son aditivas: casi todos los mecanismos tocan el mismo flujo petrolero o el
       mismo stock de bonos, y sumarlos daría un techo ficticio de cientos de miles de millones. La barra es el máximo
       declarado dentro de cada familia —lo que esa vía alcanzaría si se ejecutara sola—, y la aptitud media, sobre 5,
@@ -8854,19 +8967,25 @@ export const stressEventsPlugin = {
     ctx.save();
     ctx.font = `9px ${CHART_THEME.font}`;
     events.forEach((event) => {
-      const index = xScale.getPixelForValue(event.year);
-      if (!Number.isFinite(index) || index < chartArea.left || index > chartArea.right) return;
+      // El eje x es de categorías (etiquetas de año en texto): getPixelForValue
+      // espera el índice de la categoría, no el número del año. Buscar por el
+      // valor numérico situaba todas las marcas fuera del área del gráfico y
+      // el guard clause las descartaba: el plugin no dibujaba nada.
+      const labelIndex = (chart.data.labels ?? []).indexOf(String(event.year));
+      if (labelIndex < 0) return;
+      const x = xScale.getPixelForValue(labelIndex);
+      if (!Number.isFinite(x) || x < chartArea.left || x > chartArea.right) return;
       const severe = Number(event.severity) >= 3;
       ctx.strokeStyle = severe ? "rgba(196, 69, 63, 0.45)" : "rgba(110, 116, 126, 0.35)";
       ctx.setLineDash([2, 3]);
       ctx.beginPath();
-      ctx.moveTo(index, chartArea.top);
-      ctx.lineTo(index, chartArea.bottom);
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
       ctx.stroke();
       ctx.setLineDash([]);
 
       ctx.save();
-      ctx.translate(index + 3, chartArea.top + 4);
+      ctx.translate(x + 3, chartArea.top + 4);
       ctx.rotate(Math.PI / 2);
       ctx.fillStyle = severe ? "rgba(224, 132, 127, 0.9)" : "rgba(110, 116, 126, 0.85)";
       ctx.textBaseline = "bottom";
@@ -9406,20 +9525,19 @@ export const CLASSES = {
   noJs: "no-js",
 };
 
-/** Secciones ancladas: alimenta la navegación y la paleta de comandos. */
+/** Secciones ancladas: alimenta la navegación y la paleta de comandos.
+ *  Deben coincidir con los id reales del documento; una entrada fantasma
+ *  produce comandos que no llevan a ninguna parte. */
 export const SECTIONS = [
   { id: "resumen", label: "Resumen ejecutivo" },
   { id: "trayectoria", label: "Trayectoria y composición" },
-  { id: "datos", label: "Matriz de datos por capa" },
   { id: "acreedores", label: "Mapa de acreedores" },
   { id: "arbitrajes", label: "Laudos y arbitrajes" },
-  { id: "ejecucion", label: "Ejecución y activos" },
+  { id: "ejecucion", label: "Ejecución y sanciones" },
   { id: "matriz-historica", label: "Matriz histórica" },
   { id: "cronologia", label: "Cronología global" },
   { id: "mecanismos", label: "Mecanismos de recuperación" },
   { id: "escenarios", label: "Escenarios y simulador" },
-  { id: "sanciones", label: "Régimen de sanciones" },
-  { id: "actores", label: "Mapa institucional" },
   { id: "vigilancia", label: "Vigilancia y vacíos" },
   { id: "fuentes", label: "Fuentes y glosario" },
 ];
@@ -9887,15 +10005,24 @@ export function validateDatabase(database, options = {}) {
 
   /* 11. Escenarios -------------------------------------------------------- */
   const scenarios = database.scenarios?.items ?? [];
+  let scenarioFailures = 0;
   const scenarioChecks = scenarios.map((scenario) => {
-    const pct = Number(scenario.recovery_pct_of_nominal);
-    const consistent = Math.abs(Number(scenario.recovery_npv_mm) / Number(database.scenarios.base_nominal_mm) * 100 - pct) < 0.05;
+    const recoveryPct = Number(scenario.recovery_pct_of_nominal);
+    const consistent =
+      Number(database.scenarios.base_nominal_mm) > 0 &&
+      Math.abs((Number(scenario.recovery_npv_mm) / Number(database.scenarios.base_nominal_mm)) * 100 - recoveryPct) < 0.05;
+    // Un escenario internamente inconsistente debe detener la validación: el
+    // VPN es la cifra sobre la que se compara cualquier oferta de canje.
+    if (!consistent) scenarioFailures += 1;
     return check(
       `${scenario.name}`,
       consistent ? "pass" : "fail",
-      `quita ${scenario.haircut_pct} % · recuperación ${pct} % del nominal`
+      `quita ${scenario.haircut_pct} % · recuperación ${recoveryPct} % del nominal`
     );
   });
+  if (scenarioFailures > 0) {
+    errors.push(`Escenarios: ${scenarioFailures} con VPN inconsistente respecto al nominal base.`);
+  }
   push("escenarios", "Escenarios de recuperación", scenarioChecks);
 
   /* 12. Coherencia de la matriz histórica -------------------------------- */
@@ -10187,14 +10314,23 @@ export function setExpanded(card, open) {
   const toggle = card.querySelector("[data-expandable-toggle]");
   if (!toggle) return;
 
+  const body = card.querySelector(":scope > .expandable__body");
+
   if (open) {
     card.classList.remove(CLASSES.collapsing);
     card.classList.add(CLASSES.open);
     toggle.setAttribute("aria-expanded", "true");
+    // Defensa en profundidad: ningún renderizador debe dejar un atributo
+    // `hidden` en el cuerpo; si lo hubiera, la tarjeta no abriría nunca
+    // porque tokens.css lo resuelve a display:none !important.
+    if (body) body.removeAttribute("hidden");
   } else {
     card.classList.add(CLASSES.collapsing);
     card.classList.remove(CLASSES.open);
     toggle.setAttribute("aria-expanded", "false");
+    // El cuerpo no recibe `hidden`: lo mantiene el CSS cerrado, que permite
+    // animar el cierre y retira el contenido del árbol accesible mediante
+    // `visibility: hidden` una vez terminada la transición.
     window.setTimeout(() => card.classList.remove(CLASSES.collapsing), COLLAPSE_MS);
   }
 }
@@ -10350,7 +10486,10 @@ function activateChip(chip) {
   });
 }
 
-/** Aplica visibilidad y cuenta resultados en una colección de nodos. */
+/** Aplica visibilidad y cuenta resultados en una colección de nodos.
+ *  El contador se escribe sobre los nodos visibles, no sobre el total de la
+ *  colección: contar los que se acaban de ocultar presentaría el filtro como
+ *  inoperante. */
 function applyVisibility(selector, predicate, counterSelector, label) {
   const nodes = [...document.querySelectorAll(selector)];
   let visible = 0;
@@ -10390,14 +10529,25 @@ function applyMechanismFilters() {
 }
 
 function applyTimelineFilters() {
-  applyVisibility(
-    "[data-category]",
-    (node) =>
+  // El contador y los filtros de cronología solo gobiernan la cronología
+  // global: los hitos de la matriz histórica reutilizan data-category pero
+  // no forman parte de este recuento, y los duplicados de "hechos recientes"
+  // (prefijo recent-) no deben contar dos veces.
+  const nodes = [...document.querySelectorAll("#timeline-container [data-category]")];
+  let visible = 0;
+  for (const node of nodes) {
+    const show =
       (state.timelineCategory === "all" || node.dataset.category === state.timelineCategory) &&
-      (state.timelineSeverity === "all" || node.dataset.severity === state.timelineSeverity),
-    "[data-timeline-count]",
-    "hechos"
-  );
+      (state.timelineSeverity === "all" || node.dataset.severity === state.timelineSeverity);
+    node.hidden = !show;
+    if (show) visible += 1;
+  }
+  const counter = document.querySelector("[data-timeline-count]");
+  if (counter) {
+    counter.textContent = `${num(visible)} de ${num(nodes.length)} hechos`;
+  }
+  if (hooks.announce) hooks.announce(`hechos: ${visible} de ${nodes.length} visibles`);
+  return visible;
 }
 
 /** Reaplica todos los filtros activos. Útil tras un re-render. */
@@ -10517,7 +10667,9 @@ export function usd(valueMm, { digits = 0, unit = true } = {}) {
   return `US$ ${num(valueMm, digits)}${unit ? " MM" : ""}`;
 }
 
-/** Valores en millones de dólares → "US$ 164,4 MM" abreviado en millardos. */
+/** Valores en millones de dólares → "US$ 164,4 MM MM" abreviado en millardos.
+ *  El doble MM es deliberado: millardos de dólares = miles de millones.
+ *  Se separa con espacio para que el sufijo no se lea como un error tipográfico. */
 export function usdBn(valueMm, { digits = 1 } = {}) {
   if (valueMm === null || valueMm === undefined) return "—";
   return `US$ ${num(Number(valueMm) / 1000, digits)} MM MM`;
@@ -11481,10 +11633,12 @@ function thresholdNote(kpi) {
 /** Desglose interno del indicador. */
 function breakdownBlock(kpi) {
   if (!Array.isArray(kpi.breakdown) || kpi.breakdown.length === 0) return "";
+  // La unidad se declara por fila según el campo presente: value_mm es un
+  // monto en millones de dólares; value_pct, un porcentaje. No se asume una.
   const rows = kpi.breakdown.map((item) => [
     esc(item.label),
     esc(item.value_mm !== undefined ? num(item.value_mm, 0) : num(item.value_pct, 2)),
-    `US$ MM`,
+    esc(item.value_mm !== undefined ? "US$ MM" : "%"),
     `<span class="tier-mark tier-mark--${esc(item.tier ?? "reportado")}">${esc(item.tier ?? "reportado")}</span>`,
   ]);
   return panelSection(
@@ -12435,8 +12589,15 @@ export function expandableHeader({
 }
 
 export function expandableBody(id, { label, content, open = false }) {
-  return `<div class="expandable__body" id="${esc(id)}-body" role="region"
-    aria-label="${esc(label)}" ${open ? "" : "hidden"}>
+  // Sin atributo `hidden`: el estado cerrado lo gobierna el CSS
+  // (grid-template-rows: 0fr + visibility: hidden), que además retira el
+  // contenido del árbol de accesibilidad y del orden de tabulación.
+  // Un atributo `hidden` aquí ganaría sobre la animación (`display:none
+  // !important` en tokens.css) y la tarjeta no podría abrirse jamás.
+  // La clase `is-open` inicial solo aplica cuando un renderizador pide
+  // explícitamente la tarjeta abierta.
+  return `<div class="expandable__body${open ? " is-open" : ""}" id="${esc(id)}-body" role="region"
+    aria-label="${esc(label)}">
     <div class="expandable__inner">
       <div class="expandable__reveal">${content}</div>
     </div>
@@ -12501,6 +12662,10 @@ import {
 import { num, pct, usd } from "../format.js";
 import { SIMULATOR_DEFAULTS, SIMULATOR_LIMITS, THRESHOLDS } from "../config.js";
 
+/** Nominal base compartido por todos los escenarios (scenarios.base_nominal_mm).
+ *  Constante de respaldo por si el dataset llegara sin el bloque scenarios. */
+const BASE_NOMINAL_MM = 75000;
+
 /** Tarjeta expandible de un escenario precalculado. */
 export function renderScenarioCard(scenario) {
   const id = anchorId("escenario", scenario.id);
@@ -12535,7 +12700,7 @@ export function renderScenarioCard(scenario) {
       `<div class="calc-box">
         <code class="formula">${esc(scenario.calc?.formula ?? "—")}</code>
         <dl class="calc-grid">
-          <div><dt>Nominal base</dt><dd>${esc(usd(75000))}</dd></div>
+          <div><dt>Nominal base</dt><dd>${esc(usd(BASE_NOMINAL_MM))}</dd></div>
           <div><dt>Cupón por período</dt><dd>${esc(usd(scenario.coupon_mm_per_period))}</dd></div>
           <div><dt>Períodos totales</dt><dd>${esc(num(Number(scenario.tenor_years) + Number(scenario.grace_years)))}</dd></div>
         </dl>
@@ -12754,9 +12919,12 @@ export function renderTicker(data) {
   const recent = timeline.slice(0, 8);
   const kpis = (data.kpis ?? []).slice(0, 4);
 
+  // Cada elemento es un `listitem` real: el contenedor declara role="list",
+  // así que los lectores de pantalla presentan la cinta como lista con nombre
+  // en lugar de un flujo de texto anónimo.
   const items = [
     ...kpis.map(
-      (kpi) => `<span class="ticker__item">
+      (kpi) => `<span class="ticker__item" role="listitem">
         <span class="t-date">${esc(kpi.label)}</span>
         <b>${esc(
           kpi.value_pct !== undefined
@@ -12769,7 +12937,7 @@ export function renderTicker(data) {
       </span>`
     ),
     ...recent.map(
-      (event) => `<span class="ticker__item">
+      (event) => `<span class="ticker__item" role="listitem">
         <span class="t-date">${esc(dateShort(event.date))}</span>
         <b>${esc(event.title)}</b>
       </span>`
@@ -13238,7 +13406,7 @@ export { hostOf };
  */
 
 import { esc, tierBadge, sourceRefs } from "./parts.js";
-import { dateLong, dateShort, num } from "../format.js";
+import { dateShort, num } from "../format.js";
 
 const CATEGORY_LABELS = {
   crisis: "Crisis",
@@ -13273,7 +13441,6 @@ export function renderTimelineItem(event, { prefix = "t" } = {}) {
       ${event.debt_mm !== undefined ? `<span class="badge"><span class="dot"></span>stock ${esc(num(event.debt_mm))} MM</span>` : ""}
       ${sourceRefs(event.source_ids, { compact: true })}
     </div>
-    <p class="mono" style="display:none">${esc(dateLong(event.date))}</p>
   </li>`;
 }
 
@@ -13325,9 +13492,16 @@ import { recoveryNpv } from "./calc/index.js";
 import { num, pct, usd, toCsv } from "./format.js";
 import { SIMULATOR_DEFAULTS, SIMULATOR_LIMITS, CHART_THEME } from "./config.js";
 import { chartsAvailable, baseOptions, baseScales, baseTooltip, withAlpha, chartsUnavailableMessage } from "./charts/plugins.js";
+import { downloadBlob } from "./ui.js";
 
 let chart = null;
 let frame = null;
+
+/** Año de partida del servicio proyectado. Se usa el año en curso para que
+ *  la tabla, el gráfico y el CSV exportado declaren siempre el mismo calendario. */
+function serviceStartYear() {
+  return new Date().getUTCFullYear();
+}
 
 /** Lee los supuestos actuales desde los controles. */
 function readParams() {
@@ -13385,7 +13559,7 @@ function syncOutputs(params, outputs) {
 }
 
 /** Tabla del servicio anual proyectado (se muestra truncada si es muy larga). */
-function scheduleTable(params, outputs, { limit = 40, startYear = 2026 } = {}) {
+function scheduleTable(params, outputs, { limit = 40, startYear = serviceStartYear() } = {}) {
   const rows = (outputs.schedule ?? []).slice(0, limit);
   const head = `<thead><tr>
       <th scope="col">Año</th>
@@ -13437,7 +13611,7 @@ function syncChart(params, outputs) {
   if (!canvas) return;
 
   const rows = outputs.schedule;
-  const labels = rows.map((row) => String(2026 + row.year_offset));
+  const labels = rows.map((row) => String(serviceStartYear() + row.year_offset));
   const coupon = rows.map((row) => row.coupon_mm);
   const principal = rows.map((row) => row.principal_mm);
 
@@ -13499,6 +13673,7 @@ function refresh({ silent = false } = {}) {
 function exportCsv() {
   const params = readParams();
   const { outputs } = recoveryNpv(params);
+  const startYear = new Date().getUTCFullYear();
   const headers = [
     "Año",
     "Período",
@@ -13509,7 +13684,7 @@ function exportCsv() {
     "Valor presente (MM USD)",
   ];
   const rows = outputs.schedule.map((row) => [
-    2026 + row.year_offset,
+    startYear + row.year_offset,
     row.period,
     row.coupon_mm,
     row.principal_mm,
@@ -13518,15 +13693,10 @@ function exportCsv() {
     row.pv_mm,
   ]);
   const csv = toCsv(headers, rows);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `servicio-simulado-quita-${params.haircut_pct}-cupon-${params.coupon_pct}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  downloadBlob(
+    `servicio-simulado-quita-${params.haircut_pct}-cupon-${params.coupon_pct}.csv`,
+    csv
+  );
   return { params, rows: rows.length };
 }
 
@@ -13862,6 +14032,16 @@ export function initCommandPalette(data) {
       run: () => document.dispatchEvent(new CustomEvent("observatorio:collapse-all")),
     },
     {
+      label: "Expandir los indicadores clave",
+      kind: "acción",
+      run: () => document.dispatchEvent(new CustomEvent("observatorio:expand-group", { detail: "kpis" })),
+    },
+    {
+      label: "Contraer los indicadores clave",
+      kind: "acción",
+      run: () => document.dispatchEvent(new CustomEvent("observatorio:collapse-group", { detail: "kpis" })),
+    },
+    {
       label: "Abrir la auditoría del dataset",
       kind: "acción",
       run: () => window.open("./tests/validate.html", "_blank", "noopener"),
@@ -13871,9 +14051,23 @@ export function initCommandPalette(data) {
       kind: "acción",
       run: () => window.print(),
     },
+    {
+      label: "Copiar la cita del documento completo",
+      kind: "acción",
+      run: () => {
+        const cite = document.querySelector("[data-cite]");
+        const text = cite?.getAttribute("data-cite") ?? "";
+        if (!text) {
+          toast("No hay cita declarada en el documento.", "warn");
+          return;
+        }
+        copyText(text).then((ok) => toast(ok ? "Cita copiada al portapapeles." : "No se pudo copiar la cita.", ok ? "info" : "warn"));
+      },
+    },
   ];
 
   let index = 0;
+  let lastFocus = null;
 
   function openById(id) {
     const node = document.getElementById(id);
@@ -13890,11 +14084,20 @@ export function initCommandPalette(data) {
       .slice(0, 40)
       .map(
         (command, i) =>
-          `<li class="palette__item" role="option" aria-selected="${i === index}" data-command-index="${i}">
+          `<li class="palette__item" id="palette-opt-${i}" role="option" aria-selected="${i === index}" data-command-index="${i}">
             <span>${command.label}</span><span class="palette__kind">${command.kind}</span>
           </li>`
       )
       .join("");
+    syncActiveDescendant();
+  }
+
+  function syncActiveDescendant() {
+    const option = document.getElementById(`palette-opt-${index}`);
+    input.setAttribute("aria-activedescendant", option ? `palette-opt-${index}` : "");
+    // La opción activa siempre a la vista: sin esto, las flechas recorren
+    // una lista cuyo extremo inferior el usuario no ve.
+    option?.scrollIntoView({ block: "nearest" });
   }
 
   function filtered() {
@@ -13904,7 +14107,9 @@ export function initCommandPalette(data) {
   }
 
   function show() {
+    lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     palette.hidden = false;
+    input.setAttribute("aria-expanded", "true");
     input.value = "";
     index = 0;
     render(commands);
@@ -13913,6 +14118,12 @@ export function initCommandPalette(data) {
 
   function hide() {
     palette.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+    // Devolución de foco: la paleta es un diálogo modal; devolver el foco al
+    // punto de partida es parte del contrato WAI-ARIA.
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    lastFocus = null;
   }
 
   function execute(command) {
@@ -13940,6 +14151,14 @@ export function initCommandPalette(data) {
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
       index = Math.max(index - 1, 0);
+      render(current);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      index = 0;
+      render(current);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      index = Math.max(0, Math.min(current.length, 40) - 1);
       render(current);
     } else if (event.key === "Enter") {
       event.preventDefault();

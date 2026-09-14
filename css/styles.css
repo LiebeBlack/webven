@@ -1258,11 +1258,6 @@ p {
   height: var(--chart-h-tall);
 }
 
-.chart-frame--heat {
-  height: auto;
-  min-height: 12rem;
-}
-
 .chart-note {
   margin-top: var(--sp-3);
   font-family: var(--font-mono);

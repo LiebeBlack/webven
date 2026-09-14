@@ -104,7 +104,11 @@ export function recoveryNpv(
     npv_mm: round(npv, 2),
     undiscounted_mm: round(undiscounted, 2),
     recovery_pct_of_nominal: round((npv / nominal) * 100, 2),
-    // Cuánto de cada dólar nominal recupera el acreedor, ya descontado el tiempo.
+    // Cuántos centavos de cada dólar nominal recupera el acreedor ya
+    // descontado el tiempo. Coincide numéricamente con el porcentaje porque
+    // "cents per dollar" es, por definición, el porcentaje × 1: se publica
+    // como salida propia para que la interfaz pueda etiquetar la lectura
+    // en centavos sin recalcular ni duplicar la fórmula en el cliente.
     effective_cents_per_dollar: round((npv / nominal) * 100, 2),
     schedule,
   };
@@ -141,6 +145,22 @@ export function impliedYield(
   let high = Number(guess_max);
   let iterations = 0;
   let mid = low;
+
+  // Validación de bracket: si el precio no está entre el valor con rendimiento
+  // máximo (y→guess_min) y el mínimo (y→guess_max), no existe solución en el
+  // intervalo. Fallar con un mensaje claro es parte del contrato de auditoría:
+  // un rendimiento implícito inventado en el borde del intervalo sería peor
+  // que ningún número.
+  const priceAtLow = priceAt(low);
+  const priceAtHigh = priceAt(high);
+  if (!(price <= priceAtLow && price >= priceAtHigh)) {
+    throw new Error(
+      `implied_yield: el precio ${price} % queda fuera del rango resoluble [${round(priceAtHigh, 2)}, ${round(
+        priceAtLow,
+        2
+      )}] para cupón ${coupon} %, plazo ${tenor} años y rescate ${redemption} %. Ajuste guess_min/guess_max.`
+    );
+  }
 
   // 80 iteraciones llevan la precisión muy por debajo de un punto base.
   while (iterations < 80) {
@@ -198,15 +218,30 @@ export function sumValues({ items }, target = "total_mm") {
 /**
  * Variación porcentual entre dos valores. Se usa en los indicadores de
  * crecimiento de la deuda entre administraciones.
- * @param {{from_mm:number, to_mm:number}} params
+ *
+ * Si se declara `years` (o `from`/`to` ISO), además calcula el CAGR de la
+ * variación: sin horizonte temporal el CAGR no está definido y se reporta
+ * como null, nunca como 0 (un cero sería una tasa, no una ausencia).
+ * @param {{from_mm:number, to_mm:number, years?:number, from?:string, to?:string}} params
  */
-export function growth({ from_mm, to_mm }, target = "growth_pct") {
+export function growth({ from_mm, to_mm, years, from, to }, target = "growth_pct") {
   const from = Number(from_mm);
   const outputs = {
     delta_mm: round(Number(to_mm) - from, 2),
     growth_pct: from === 0 ? 0 : round(((Number(to_mm) - from) / from) * 100, 2),
-    cagr_pct: 0,
+    cagr_pct: null,
   };
+
+  let horizon = Number(years);
+  if (!Number.isFinite(horizon) || horizon <= 0) {
+    if (typeof from === "string" && typeof to === "string") {
+      horizon = yearsBetween(from, to);
+    }
+  }
+  if (Number.isFinite(horizon) && horizon > 0 && from > 0 && Number(to_mm) > 0) {
+    outputs.cagr_pct = round(((Number(to_mm) / from) ** (1 / horizon) - 1) * 100, 2);
+  }
+
   return { value: outputs[target] ?? outputs.growth_pct, outputs };
 }
 

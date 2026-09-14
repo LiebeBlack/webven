@@ -86,7 +86,7 @@ export function chartEvents() {
 
 /* ------------------------------------------------------------ helpers --- */
 
-function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, heat = false, extra = "", omitCanvas = false }) {
+function chartPanel({ id, eyebrow, title, subtitle, note, legend = "", tall = false, extra = "", omitCanvas = false }) {
   const frame = omitCanvas
     ? ""
     : `<div class="chart-frame ${tall ? "chart-frame--tall" : ""}">
@@ -292,9 +292,8 @@ export function renderCharts(data) {
       title: "Treemap de acreedores por exposición",
       subtitle: "Área proporcional al monto reclamado",
       extra: `<div class="treemap" id="chart-treemap">${renderTreemap(data)}</div>`,
-      // Las vistas DOM (heat: true) no declaran <canvas>: el contenido va en
-      // `extra`, así que no hay que duplicar el id en un marco vacío.
-      heat: true,
+      // Las vistas DOM no declaran <canvas>: el contenido va en `extra`, así
+      // que no hay que duplicar el id en un marco vacío.
       omitCanvas: true,
     }),
 
@@ -304,7 +303,6 @@ export function renderCharts(data) {
       title: "Mapa de calor de composición anual",
       subtitle: "Peso de cada componente dentro del total de su año",
       extra: renderHeatmap(data),
-      heat: true,
       omitCanvas: true,
     }),
 
@@ -351,7 +349,6 @@ export function renderCharts(data) {
       title: "Tabla completa del mapa de calor",
       subtitle: "Los mismos valores del mapa de calor, en formato tabular",
       extra: renderHeatmapTable(data),
-      heat: true,
       omitCanvas: true,
       note: "Se publica siempre una versión tabular de cada visualización: es lo que hace accesible el documento para lectores de pantalla y lo que sobrevive a la impresión.",
     }),
@@ -886,7 +883,7 @@ function sanctionsMosaicPanel(data) {
         { label: "Sectorial o empresarial", backgroundColor: "var(--warn)", legendColor: "var(--warn)" },
         { label: "Marco general", backgroundColor: "var(--ink-3)", legendColor: "var(--ink-3)" },
       ])}</div>`,
-    heat: true,
+    omitCanvas: true,
     note: `El salto de 2017 es el punto de inflexión: las medidas dejan de señalar individuos y tocan la deuda y el
       financiamiento, que es exactamente el momento en que la salida voluntaria del default se vuelve operativamente
       imposible. Cada celda corresponde a un registro del bloque sanciones_regime, con su fuente en la ficha de la sección Ejecución.`,
@@ -1341,7 +1338,7 @@ function mechanismDensityPanel(data) {
     eyebrow: "Visualización 19 · ingeniería de recuperación",
     title: "Dónde está el potencial de recuperación, por categoría",
     subtitle: `${num((data.recovery_mechanisms ?? []).length)} mecanismos evaluados · techo por familia (el máximo declarado, no la suma)`,
-    extra: `<div class="mech-density" role="img" aria-label="Techo de recuperación por categoría de mecanismo: el máximo declarado dentro de cada familia">
+    extra: `<div class="mech-density" id="chart-mechanism-density" role="img" aria-label="Techo de recuperación por categoría de mecanismo: el máximo declarado dentro de cada familia">
       ${sorted
         .map(
           ([category, value]) => `<div class="mech-density__row">
@@ -1356,7 +1353,7 @@ function mechanismDensityPanel(data) {
         )
         .join("")}
     </div>`,
-    heat: true,
+    omitCanvas: true,
     note: `Las capacidades declaradas no son aditivas: casi todos los mecanismos tocan el mismo flujo petrolero o el
       mismo stock de bonos, y sumarlos daría un techo ficticio de cientos de miles de millones. La barra es el máximo
       declarado dentro de cada familia —lo que esa vía alcanzaría si se ejecutara sola—, y la aptitud media, sobre 5,

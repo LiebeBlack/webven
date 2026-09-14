@@ -368,6 +368,25 @@ p {
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
   backdrop-filter: blur(18px) saturate(1.1);
   border-bottom: 1px solid var(--hairline);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+/* Modo compacto: al hacer scroll la cabecera se oscurece y se eleva con una
+   sombra propia. La altura no cambia a propósito: el anclaje de la navegación
+   sticky depende de la altura exacta del masthead. */
+.masthead.is-compact {
+  background: rgba(0, 0, 0, 0.92);
+  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.95);
+}
+
+.masthead__mark {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.masthead.is-compact .masthead__mark {
+  transform: scale(0.92);
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
@@ -637,7 +656,13 @@ p {
 .grid--kpis > .panel {
   border: 0;
   border-radius: 0;
+  display: flex;
+  flex-direction: column;
   /* Cada celda de la retícula de hairlines no necesita borde propio. */
+}
+
+.grid--kpis > .panel .panel__footer {
+  margin-top: auto;
 }
 
 .panel:hover {
@@ -649,16 +674,19 @@ p {
 }
 
 /* ---------------------------------------------------------------- Reveal ---
-   Entrada de paneles y bloques al entrar en pantalla. La retícula de
-   indicadores revela cada celda con un retardo escalonado (fila × columna)
-   para que la retícula completa se construya ante el lector. Sin
-   IntersectionObserver, en no-js o con movimiento reducido, todo se ve
-   inmediatamente: el estado inicial ya es legible por sí mismo. */
-.panel,
-.flow-note,
-.expandable,
-.tier-legend__item,
-.timeline__item {
+   Entrada de paneles y bloques al entrar en pantalla, gobernada por
+   js/ui.js (initRevealObserver). Todo el estado inicial va bajo html.js:
+   sin JavaScript el documento es estático y no oculta nada.
+
+   Detalle importante: las retículas de hairlines (.grid--kpis,
+   .tier-legend) pintan sus líneas con el fondo del contenedor; si solo las
+   celdas se ocultan, el contenedor se ve como una losa gris. Mientras la
+   retícula no está revelada, su fondo y borde son transparentes y entran
+   junto con la primera ola de celdas. */
+.js .panel,
+.js .flow-note,
+.js .tier-legend__item,
+.js .timeline__item {
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
@@ -667,46 +695,40 @@ p {
     border-color var(--dur-2) var(--ease-out),
     background-color var(--dur-2) var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
-  will-change: opacity, transform;
 }
 
-/* La retícula de hairlines pinta los bordes con el fondo del contenedor:
-   revelar las celdas con opacidad parcial no rompe la retícula porque el
-   delay escala con la posición de la celda. */
-.grid--kpis > .panel {
-  opacity: 0;
+.js .grid--kpis > .panel {
   transform: translate3d(0, 12px, 0);
 }
 
-.is-visible > .panel,
-.is-visible.flow-note,
-.panel.is-visible,
-.expandable.is-visible,
-.tier-legend__item.is-visible,
-.timeline__item.is-visible {
+.js .is-visible > .panel,
+.js .is-visible.flow-note,
+.js .panel.is-visible,
+.js .tier-legend__item.is-visible,
+.js .timeline__item.is-visible {
   opacity: 1;
   transform: none;
 }
 
-.no-js .panel,
-.no-js .flow-note,
-.no-js .expandable,
-.no-js .tier-legend__item,
-.no-js .timeline__item {
-  opacity: 1;
-  transform: none;
+.js .grid--kpis,
+.js .tier-legend {
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+}
+
+.js .grid--kpis:not(.is-visible),
+.js .tier-legend:not(.is-visible) {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel,
-  .grid--kpis > .panel,
-  .flow-note,
-  .expandable,
-  .tier-legend__item {
+  .js .panel,
+  .js .grid--kpis > .panel,
+  .js .flow-note,
+  .js .tier-legend__item {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-    will-change: auto;
   }
 }
 
@@ -1114,13 +1136,15 @@ p {
 }
 
 .chip:hover {
+  color: var(--ink);
+  border-color: var(--hairline-accent);
+  background: var(--surface-2);
   transform: translateY(-1px);
 }
 
 .chip:active {
-  color: var(--ink);
-  border-color: var(--hairline-accent);
-  background: var(--surface-2);
+  transform: translateY(0);
+  transition-duration: var(--dur-1);
 }
 
 .chip[aria-pressed="true"],
@@ -1341,6 +1365,10 @@ p {
   position: relative;
   width: 100%;
   height: var(--chart-h);
+  /* El marcu entra con las transiciones de revelado del panel contenedor;
+     si el panel todavía no es visible, se mantiene visible para que el
+     grafico se mida con su tamaño real y no colapse en altura 0. */
+  visibility: visible;
 }
 
 .chart-frame--tall {
@@ -2347,6 +2375,20 @@ p {
 
   .ticker__track {
     animation: none;
+    transform: none;
+  }
+
+  .masthead,
+  .nav {
+    transition: none;
+  }
+
+  .masthead.is-compact .masthead__mark {
+    transform: none;
+  }
+
+  .nav__link:hover,
+  .chip:hover {
     transform: none;
   }
 

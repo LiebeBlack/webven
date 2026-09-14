@@ -123,6 +123,8 @@
   --dur-2: 260ms;
   --dur-3: 460ms;
   --dur-4: 720ms;
+  --dur-reveal: 720ms;
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);

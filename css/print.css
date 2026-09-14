@@ -128,6 +128,24 @@
   .print-only {
     display: block !important;
   }
+
+  /* Revelado de pantalla: en papel todo se imprime, nada queda oculto por
+     una transición pendiente o por un observador que no llegó a correr. */
+  .panel,
+  .flow-note,
+  .tier-legend__item,
+  .timeline__item,
+  .grid--kpis,
+  .tier-legend {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .js .grid--kpis:not(.is-visible),
+  .js .tier-legend:not(.is-visible) {
+    background-color: var(--hairline) !important;
+    border-color: var(--hairline) !important;
+  }
 }
 
 .print-only {

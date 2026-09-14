@@ -149,6 +149,8 @@
   --dur-2: 260ms;
   --dur-3: 460ms;
   --dur-4: 720ms;
+  --dur-reveal: 720ms;
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -321,6 +323,8 @@ canvas {
 
 a {
   color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
   text-decoration-color: var(--hairline-strong);
   text-underline-offset: 0.18em;
   transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
@@ -329,6 +333,7 @@ a {
 a:hover {
   color: var(--accent);
   text-decoration-color: var(--accent-line);
+  text-decoration-thickness: 1.5px;
 }
 
 button,
@@ -511,6 +516,8 @@ p {
 .section__title {
   font-size: var(--fs-xl);
   max-width: 34ch;
+  text-wrap: balance;
+  hanging-punctuation: first;
 }
 
 .section__lede {
@@ -611,6 +618,25 @@ p {
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
   backdrop-filter: blur(18px) saturate(1.1);
   border-bottom: 1px solid var(--hairline);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+/* Modo compacto: al hacer scroll la cabecera se oscurece y se eleva con una
+   sombra propia. La altura no cambia a propósito: el anclaje de la navegación
+   sticky depende de la altura exacta del masthead. */
+.masthead.is-compact {
+  background: rgba(0, 0, 0, 0.92);
+  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.95);
+}
+
+.masthead__mark {
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.masthead.is-compact .masthead__mark {
+  transform: scale(0.92);
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
@@ -770,7 +796,7 @@ p {
   color: var(--ink-3);
   text-decoration: none;
   padding-block: var(--sp-2);
-  transition: color var(--dur-2) var(--ease-out);
+  transition: color var(--dur-1) var(--ease-out);
 }
 
 .nav__link::after {
@@ -786,6 +812,7 @@ p {
 
 .nav__link:hover {
   color: var(--ink);
+  transform: translateY(-1px);
 }
 
 .nav__link:hover::after,
@@ -806,7 +833,7 @@ p {
 .ticker__track {
   display: flex;
   width: max-content;
-  animation: ticker-scroll 74s linear infinite;
+  animation: ticker-scroll 58s linear infinite;
 }
 
 .ticker:hover .ticker__track,
@@ -833,6 +860,12 @@ p {
   font-size: var(--fs-2xs);
   color: var(--ink-3);
   white-space: nowrap;
+  transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+}
+
+.ticker__item:hover {
+  color: var(--ink);
+  background: var(--surface-2);
 }
 
 .ticker__item b {
@@ -873,7 +906,13 @@ p {
 .grid--kpis > .panel {
   border: 0;
   border-radius: 0;
+  display: flex;
+  flex-direction: column;
   /* Cada celda de la retícula de hairlines no necesita borde propio. */
+}
+
+.grid--kpis > .panel .panel__footer {
+  margin-top: auto;
 }
 
 .panel:hover {
@@ -882,6 +921,65 @@ p {
 
 .panel--static:hover {
   border-color: var(--hairline);
+}
+
+/* ---------------------------------------------------------------- Reveal ---
+   Entrada de paneles y bloques al entrar en pantalla, gobernada por
+   js/ui.js (initRevealObserver). Todo el estado inicial va bajo html.js:
+   sin JavaScript el documento es estático y no oculta nada.
+
+   Detalle importante: las retículas de hairlines (.grid--kpis,
+   .tier-legend) pintan sus líneas con el fondo del contenedor; si solo las
+   celdas se ocultan, el contenedor se ve como una losa gris. Mientras la
+   retícula no está revelada, su fondo y borde son transparentes y entran
+   junto con la primera ola de celdas. */
+.js .panel,
+.js .flow-note,
+.js .tier-legend__item,
+.js .timeline__item {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-reveal),
+    transform var(--dur-reveal) var(--ease-reveal),
+    border-color var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
+}
+
+.js .grid--kpis > .panel {
+  transform: translate3d(0, 12px, 0);
+}
+
+.js .is-visible > .panel,
+.js .is-visible.flow-note,
+.js .panel.is-visible,
+.js .tier-legend__item.is-visible,
+.js .timeline__item.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.js .grid--kpis,
+.js .tier-legend {
+  transition: background-color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+}
+
+.js .grid--kpis:not(.is-visible),
+.js .tier-legend:not(.is-visible) {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .panel,
+  .js .grid--kpis > .panel,
+  .js .flow-note,
+  .js .tier-legend__item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .panel--accent {
@@ -935,7 +1033,7 @@ p {
   background: var(--surface-1);
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-  color: var(--ink-3);
+  color: var(--ink-2);
   display: flex;
   justify-content: space-between;
   gap: var(--sp-3);
@@ -1052,9 +1150,11 @@ p {
 
 .expandable__reveal {
   opacity: 0;
-  transform: translate3d(0, -8px, 0);
-  transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-3) var(--ease-out-expo);
+  transform: translate3d(0, -8px, 0);  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-3) var(--ease-out-expo);
   padding: 0 var(--sp-5) var(--sp-5);
+  font-size: var(--fs-base);
 }
 
 .expandable.is-open > .expandable__body .expandable__reveal,
@@ -1278,13 +1378,23 @@ p {
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   cursor: pointer;
-  transition: all var(--dur-2) var(--ease-out);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
 .chip:hover {
   color: var(--ink);
   border-color: var(--hairline-accent);
   background: var(--surface-2);
+  transform: translateY(-1px);
+}
+
+.chip:active {
+  transform: translateY(0);
+  transition-duration: var(--dur-1);
 }
 
 .chip[aria-pressed="true"],
@@ -1314,6 +1424,7 @@ p {
   background: var(--accent);
   border-radius: inherit;
   transition: width var(--dur-4) var(--ease-out-expo);
+  box-shadow: 0 0 8px var(--accent-line);
 }
 
 .meter--cool .meter__fill {
@@ -1406,14 +1517,16 @@ p {
   color: var(--ink-3);
   border-bottom: 1px solid var(--hairline-strong);
   white-space: nowrap;
+  box-shadow: 0 8px 10px -8px rgba(0, 0, 0, 0.65);
 }
 
 .table tbody tr {
-  transition: background-color var(--dur-1) var(--ease-out);
+  transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
 }
 
 .table tbody tr:hover {
   background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .table tbody tr:last-child td {
@@ -1502,6 +1615,10 @@ p {
   position: relative;
   width: 100%;
   height: var(--chart-h);
+  /* El marcu entra con las transiciones de revelado del panel contenedor;
+     si el panel todavía no es visible, se mantiene visible para que el
+     grafico se mida con su tamaño real y no colapse en altura 0. */
+  visibility: visible;
 }
 
 .chart-frame--tall {
@@ -1589,12 +1706,16 @@ p {
   border-radius: 1px;
   background: rgba(200, 162, 74, var(--heat, 0));
   outline: 1px solid rgba(255, 255, 255, 0.015);
-  transition: outline-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  transition:
+    outline-color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
 }
 
 .heatmap__cell:hover {
   outline-color: var(--ink-2);
   transform: scale(1.35);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
   z-index: 2;
 }
 
@@ -1650,6 +1771,7 @@ p {
 
 .treemap__cell:hover {
   filter: brightness(1.35);
+  transform: scale(1.004);
   z-index: 3;
 }
 
@@ -1682,6 +1804,10 @@ p {
   stroke: var(--accent);
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
+}
+
+.sparkline:hover path:not(.area) {
+  filter: drop-shadow(0 0 4px var(--accent-line));
 }
 
 .sparkline path.area {
@@ -1967,13 +2093,22 @@ p {
   text-transform: uppercase;
   color: var(--ink-3);
   cursor: pointer;
-  transition: all var(--dur-2) var(--ease-out);
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
-.cite:hover {
+.cite:hover,
+.cite:focus-visible {
   color: var(--accent);
   border-color: var(--hairline-accent);
   background: var(--accent-soft);
+}
+
+.cite:active {
+  transform: translateY(0);
 }
 
 .kbd {
@@ -2493,6 +2628,20 @@ p {
     transform: none;
   }
 
+  .masthead,
+  .nav {
+    transition: none;
+  }
+
+  .masthead.is-compact .masthead__mark {
+    transform: none;
+  }
+
+  .nav__link:hover,
+  .chip:hover {
+    transform: none;
+  }
+
   /* Sin animación, la expansión debe ser instantánea y completa. */
   .expandable__body {
     transition: none;
@@ -2880,6 +3029,24 @@ p {
 
   .print-only {
     display: block !important;
+  }
+
+  /* Revelado de pantalla: en papel todo se imprime, nada queda oculto por
+     una transición pendiente o por un observador que no llegó a correr. */
+  .panel,
+  .flow-note,
+  .tier-legend__item,
+  .timeline__item,
+  .grid--kpis,
+  .tier-legend {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .js .grid--kpis:not(.is-visible),
+  .js .tier-legend:not(.is-visible) {
+    background-color: var(--hairline) !important;
+    border-color: var(--hairline) !important;
   }
 }
 
@@ -6091,6 +6258,7 @@ import {
   initRevealObserver,
   initCountUp,
   initNavActive,
+  initStickyHeader,
   initCitationCopy,
   initCommandPalette,
   initAnnouncements,
@@ -6283,6 +6451,7 @@ async function bootstrap() {
     initRevealObserver();
     initCountUp();
     initNavActive();
+    initStickyHeader();
     initCommandPalette(data);
     return "";
   });
@@ -8352,7 +8521,9 @@ export function baseOptions({ plugins = {}, scales = null, indexAxis = "x" } = {
     responsive: true,
     maintainAspectRatio: false,
     indexAxis,
-    animation: prefersReducedMotion() ? false : { duration: 620, easing: "easeOutQuart" },
+    animation: prefersReducedMotion()
+      ? false
+      : { duration: 820, easing: "easeOutExpo", delay: 40 },
     interaction: { mode: "nearest", intersect: false, axis: "xy" },
     plugins: {
       legend: { display: false },
@@ -13235,6 +13406,9 @@ import { num } from "./format.js";
 
 export function setNoJsFlag() {
   document.documentElement.classList.remove(CLASSES.noJs);
+  // Marca de "JS disponible": permite a CSS reservar estados iniciales de
+  // animación solo cuando el observador va a poder revelarlos.
+  document.documentElement.classList.add("js");
 }
 
 export function hideBoot() {
@@ -13285,9 +13459,40 @@ export function initProgressBar() {
 
 /* ---------------------------------------------------------------- revelado --- */
 
-/** Revela elementos al entrar en pantalla. Sin observador, todo queda visible. */
+/**
+ * Retardo escalonado para el revelado de retículas: cada celda entra según
+ * su posición visual (columna primero, fila después), con un tope para que
+ * el último elemento no espere demasiado.
+ */
+function applyGridRevealDelays(grid) {
+  const cells = [...grid.children];
+  if (!cells.length) return;
+  if (!grid.classList.contains("grid--kpis") && !grid.classList.contains("tier-legend")) return;
+  const tops = cells.map((cell) => Math.round(cell.getBoundingClientRect().top));
+  const firstTop = Math.min(...tops);
+  const sameRowSlack = 2;
+  const columns = Math.max(1, tops.filter((top) => Math.abs(top - firstTop) <= sameRowSlack).length);
+  cells.forEach((cell, index) => {
+    const row = Math.floor(index / columns);
+    const column = index % columns;
+    cell.style.setProperty("--reveal-delay", `${Math.min(row * 60 + column * 40, 480)}ms`);
+  });
+}
+
+/**
+ * Revela al entrar en pantalla: cronología, paneles y celdas de retículas.
+ * Los paneles agrupados en retículas (indicadores, tier-legend) se revelan
+ * escalonados; el resto entra con su propio retardo 0. Sin observador, en
+ * no-js o con movimiento reducido, todo queda visible de inmediato.
+ */
 export function initRevealObserver() {
-  const targets = document.querySelectorAll(".timeline__item, .panel");
+  const kpiGrid = document.querySelector(".grid--kpis");
+  if (kpiGrid) applyGridRevealDelays(kpiGrid);
+  document.querySelectorAll(".tier-legend").forEach(applyGridRevealDelays);
+
+  const targets = document.querySelectorAll(
+    ".timeline__item, .panel, .flow-note, .grid--kpis, .tier-legend, .tier-legend__item"
+  );
   if (!("IntersectionObserver" in window)) {
     targets.forEach((node) => node.classList.add(CLASSES.visible));
     return;
@@ -13303,10 +13508,32 @@ export function initRevealObserver() {
     },
     { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
   );
-  targets.forEach((node) => {
-    if (node.classList.contains("timeline__item")) observer.observe(node);
-    else node.classList.add(CLASSES.visible);
-  });
+  targets.forEach((node) => observer.observe(node));
+}
+
+/**
+ * Cabecera compacta: pasada una pequeña zona de amortiguación, el masthead
+ * gana contraste y sombra; la clase se quita al volver arriba. Un listener
+ * rAF-throttled para no pagar layout en cada evento de scroll.
+ */
+export function initStickyHeader() {
+  const masthead = document.querySelector(".masthead");
+  if (!masthead) return;
+  let ticking = false;
+  const update = () => {
+    masthead.classList.toggle("is-compact", window.scrollY > 24);
+    ticking = false;
+  };
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true }
+  );
+  update();
 }
 
 /** Anima las cifras grandes desde cero al aparecer. Respeta movimiento reducido. */

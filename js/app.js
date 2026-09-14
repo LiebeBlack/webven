@@ -81,6 +81,7 @@ import {
   initRevealObserver,
   initCountUp,
   initNavActive,
+  initStickyHeader,
   initCitationCopy,
   initCommandPalette,
   initAnnouncements,
@@ -273,6 +274,7 @@ async function bootstrap() {
     initRevealObserver();
     initCountUp();
     initNavActive();
+    initStickyHeader();
     initCommandPalette(data);
     return "";
   });

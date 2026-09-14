@@ -82,7 +82,9 @@ export function baseOptions({ plugins = {}, scales = null, indexAxis = "x" } = {
     responsive: true,
     maintainAspectRatio: false,
     indexAxis,
-    animation: prefersReducedMotion() ? false : { duration: 620, easing: "easeOutQuart" },
+    animation: prefersReducedMotion()
+      ? false
+      : { duration: 820, easing: "easeOutExpo", delay: 40 },
     interaction: { mode: "nearest", intersect: false, axis: "xy" },
     plugins: {
       legend: { display: false },

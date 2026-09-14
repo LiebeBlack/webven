@@ -14,6 +14,9 @@ import { num } from "./format.js";
 
 export function setNoJsFlag() {
   document.documentElement.classList.remove(CLASSES.noJs);
+  // Marca de "JS disponible": permite a CSS reservar estados iniciales de
+  // animación solo cuando el observador va a poder revelarlos.
+  document.documentElement.classList.add("js");
 }
 
 export function hideBoot() {
@@ -64,9 +67,40 @@ export function initProgressBar() {
 
 /* ---------------------------------------------------------------- revelado --- */
 
-/** Revela elementos al entrar en pantalla. Sin observador, todo queda visible. */
+/**
+ * Retardo escalonado para el revelado de retículas: cada celda entra según
+ * su posición visual (columna primero, fila después), con un tope para que
+ * el último elemento no espere demasiado.
+ */
+function applyGridRevealDelays(grid) {
+  const cells = [...grid.children];
+  if (!cells.length) return;
+  if (!grid.classList.contains("grid--kpis") && !grid.classList.contains("tier-legend")) return;
+  const tops = cells.map((cell) => Math.round(cell.getBoundingClientRect().top));
+  const firstTop = Math.min(...tops);
+  const sameRowSlack = 2;
+  const columns = Math.max(1, tops.filter((top) => Math.abs(top - firstTop) <= sameRowSlack).length);
+  cells.forEach((cell, index) => {
+    const row = Math.floor(index / columns);
+    const column = index % columns;
+    cell.style.setProperty("--reveal-delay", `${Math.min(row * 60 + column * 40, 480)}ms`);
+  });
+}
+
+/**
+ * Revela al entrar en pantalla: cronología, paneles y celdas de retículas.
+ * Los paneles agrupados en retículas (indicadores, tier-legend) se revelan
+ * escalonados; el resto entra con su propio retardo 0. Sin observador, en
+ * no-js o con movimiento reducido, todo queda visible de inmediato.
+ */
 export function initRevealObserver() {
-  const targets = document.querySelectorAll(".timeline__item, .panel");
+  const kpiGrid = document.querySelector(".grid--kpis");
+  if (kpiGrid) applyGridRevealDelays(kpiGrid);
+  document.querySelectorAll(".tier-legend").forEach(applyGridRevealDelays);
+
+  const targets = document.querySelectorAll(
+    ".timeline__item, .panel, .flow-note, .grid--kpis, .tier-legend, .tier-legend__item"
+  );
   if (!("IntersectionObserver" in window)) {
     targets.forEach((node) => node.classList.add(CLASSES.visible));
     return;
@@ -82,10 +116,32 @@ export function initRevealObserver() {
     },
     { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
   );
-  targets.forEach((node) => {
-    if (node.classList.contains("timeline__item")) observer.observe(node);
-    else node.classList.add(CLASSES.visible);
-  });
+  targets.forEach((node) => observer.observe(node));
+}
+
+/**
+ * Cabecera compacta: pasada una pequeña zona de amortiguación, el masthead
+ * gana contraste y sombra; la clase se quita al volver arriba. Un listener
+ * rAF-throttled para no pagar layout en cada evento de scroll.
+ */
+export function initStickyHeader() {
+  const masthead = document.querySelector(".masthead");
+  if (!masthead) return;
+  let ticking = false;
+  const update = () => {
+    masthead.classList.toggle("is-compact", window.scrollY > 24);
+    ticking = false;
+  };
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true }
+  );
+  update();
 }
 
 /** Anima las cifras grandes desde cero al aparecer. Respeta movimiento reducido. */

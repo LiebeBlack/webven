@@ -173,9 +173,12 @@
       </div>
     </header>
 
-    <!-- Cinta de hechos verificables -->
-    <div class="ticker" aria-label="Últimos hechos registrados">
-      <div class="ticker__track" id="ticker-track"></div>
+    <!-- Cinta de hechos verificables. Se anuncia como región con nombre para
+         que los lectores de pantalla la presenten como "Últimos hechos";
+         un aria-label sobre un div sin role se ignora. -->
+    <div class="ticker">
+      <div class="ticker__track" id="ticker-track" role="list"
+        aria-label="Últimos hechos registrados y cifras de referencia"></div>
     </div>
 
     <!-- Navegación anclada -->
@@ -553,7 +556,9 @@
       </div>
     </footer>
 
-    <!-- Paleta de comandos -->
+    <!-- Paleta de comandos: cuadro combinado (input + listbox vinculada).
+         aria-expanded/controls sobre el propio input comunican el estado del
+         cuadro de resultados; aria-activedescendant lo mantiene en ui.js. -->
     <div class="palette" id="command-palette" hidden role="dialog" aria-modal="true" aria-label="Paleta de comandos">
       <div class="palette__box">
         <input
@@ -563,6 +568,9 @@
           placeholder="Buscar sección, laudo, mecanismo o indicador…"
           aria-label="Buscar comando"
           autocomplete="off"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="palette-list"
         />
         <ul class="palette__list" id="palette-list" role="listbox" aria-label="Resultados"></ul>
       </div>

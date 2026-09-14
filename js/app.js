@@ -283,6 +283,13 @@ async function bootstrap() {
     resizeAllCharts();
   });
   document.addEventListener("observatorio:collapse-all", () => setGroupOpen(null, false));
+  // Variante por grupo: la paleta de comandos expande/contrae los indicadores
+  // sin tocar el resto de las tarjetas.
+  document.addEventListener("observatorio:expand-group", (event) => {
+    setGroupOpen(event.detail ?? null, true);
+    resizeAllCharts();
+  });
+  document.addEventListener("observatorio:collapse-group", (event) => setGroupOpen(event.detail ?? null, false));
 
   /* ---- Redimensionado: los gráficos necesitan aviso al cambiar de tamaño ---- */
   let resizeFrame = null;

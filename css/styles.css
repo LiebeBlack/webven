@@ -1877,11 +1877,14 @@ p {
   color: var(--ink-2);
 }
 
-.boot__box .boot__line {
+.boot .boot__line {
   display: flex;
   justify-content: space-between;
   gap: var(--sp-3);
   padding-block: 3px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
 }
 
 .boot__box .ok {
@@ -2134,6 +2137,57 @@ p {
   font-size: var(--fs-2xs);
   color: var(--ink-4);
   line-height: 1.8;
+}
+
+/* --------------------------------- 13b. Página de auditoría (validate) --- */
+/* Clases propias de tests/validate.html: reutilizan tokens y primitivas del
+   sistema (table, pill, sim__stat, error-panel) y solo añaden la maquetación
+   específica del encabezado y de las tarjetas del informe. Sin ellas, el
+   informe se renderiza como HTML sin estilo. */
+
+.page__body {
+  max-width: 120ch;
+  margin-inline: auto;
+  padding: var(--sp-6) var(--gutter) var(--sp-8);
+}
+
+.masthead__inner {
+  max-width: 120ch;
+  margin-inline: auto;
+  padding: var(--sp-7) var(--gutter) var(--sp-5);
+}
+
+.masthead__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--sp-3);
+}
+
+.masthead__note {
+  max-width: var(--measure);
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: var(--lh-normal);
+}
+
+.card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-2);
+  background: var(--surface-solid);
+  padding: var(--sp-5);
+}
+
+.card__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 var(--sp-4);
 }
 
 /* ------------------------------------- 14. Scrollbars y accesibilidad --- */

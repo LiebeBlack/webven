@@ -31,9 +31,12 @@ export function renderTicker(data) {
   const recent = timeline.slice(0, 8);
   const kpis = (data.kpis ?? []).slice(0, 4);
 
+  // Cada elemento es un `listitem` real: el contenedor declara role="list",
+  // así que los lectores de pantalla presentan la cinta como lista con nombre
+  // en lugar de un flujo de texto anónimo.
   const items = [
     ...kpis.map(
-      (kpi) => `<span class="ticker__item">
+      (kpi) => `<span class="ticker__item" role="listitem">
         <span class="t-date">${esc(kpi.label)}</span>
         <b>${esc(
           kpi.value_pct !== undefined
@@ -46,7 +49,7 @@ export function renderTicker(data) {
       </span>`
     ),
     ...recent.map(
-      (event) => `<span class="ticker__item">
+      (event) => `<span class="ticker__item" role="listitem">
         <span class="t-date">${esc(dateShort(event.date))}</span>
         <b>${esc(event.title)}</b>
       </span>`

@@ -272,6 +272,16 @@ export function initCommandPalette(data) {
       run: () => document.dispatchEvent(new CustomEvent("observatorio:collapse-all")),
     },
     {
+      label: "Expandir los indicadores clave",
+      kind: "acción",
+      run: () => document.dispatchEvent(new CustomEvent("observatorio:expand-group", { detail: "kpis" })),
+    },
+    {
+      label: "Contraer los indicadores clave",
+      kind: "acción",
+      run: () => document.dispatchEvent(new CustomEvent("observatorio:collapse-group", { detail: "kpis" })),
+    },
+    {
       label: "Abrir la auditoría del dataset",
       kind: "acción",
       run: () => window.open("./tests/validate.html", "_blank", "noopener"),
@@ -281,9 +291,23 @@ export function initCommandPalette(data) {
       kind: "acción",
       run: () => window.print(),
     },
+    {
+      label: "Copiar la cita del documento completo",
+      kind: "acción",
+      run: () => {
+        const cite = document.querySelector("[data-cite]");
+        const text = cite?.getAttribute("data-cite") ?? "";
+        if (!text) {
+          toast("No hay cita declarada en el documento.", "warn");
+          return;
+        }
+        copyText(text).then((ok) => toast(ok ? "Cita copiada al portapapeles." : "No se pudo copiar la cita.", ok ? "info" : "warn"));
+      },
+    },
   ];
 
   let index = 0;
+  let lastFocus = null;
 
   function openById(id) {
     const node = document.getElementById(id);
@@ -300,11 +324,20 @@ export function initCommandPalette(data) {
       .slice(0, 40)
       .map(
         (command, i) =>
-          `<li class="palette__item" role="option" aria-selected="${i === index}" data-command-index="${i}">
+          `<li class="palette__item" id="palette-opt-${i}" role="option" aria-selected="${i === index}" data-command-index="${i}">
             <span>${command.label}</span><span class="palette__kind">${command.kind}</span>
           </li>`
       )
       .join("");
+    syncActiveDescendant();
+  }
+
+  function syncActiveDescendant() {
+    const option = document.getElementById(`palette-opt-${index}`);
+    input.setAttribute("aria-activedescendant", option ? `palette-opt-${index}` : "");
+    // La opción activa siempre a la vista: sin esto, las flechas recorren
+    // una lista cuyo extremo inferior el usuario no ve.
+    option?.scrollIntoView({ block: "nearest" });
   }
 
   function filtered() {
@@ -314,7 +347,9 @@ export function initCommandPalette(data) {
   }
 
   function show() {
+    lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     palette.hidden = false;
+    input.setAttribute("aria-expanded", "true");
     input.value = "";
     index = 0;
     render(commands);
@@ -323,6 +358,12 @@ export function initCommandPalette(data) {
 
   function hide() {
     palette.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+    // Devolución de foco: la paleta es un diálogo modal; devolver el foco al
+    // punto de partida es parte del contrato WAI-ARIA.
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    lastFocus = null;
   }
 
   function execute(command) {
@@ -350,6 +391,14 @@ export function initCommandPalette(data) {
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
       index = Math.max(index - 1, 0);
+      render(current);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      index = 0;
+      render(current);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      index = Math.max(0, Math.min(current.length, 40) - 1);
       render(current);
     } else if (event.key === "Enter") {
       event.preventDefault();

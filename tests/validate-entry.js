@@ -99,10 +99,18 @@ async function main() {
   const boot = document.getElementById("boot");
   const started = performance.now();
 
+  // La pantalla de arranque de esta página es un overlay fijo a pantalla
+  // completa: cualquier salida —error incluido— debe retirarlo, o el informe
+  // quedaría tapado por una capa opaca sin explicación alguna.
+  const hideBoot = () => {
+    if (boot) boot.hidden = true;
+  };
+
   let load;
   try {
     load = await loadDatabase({ validate: false });
   } catch (error) {
+    hideBoot();
     host.innerHTML = `<div class="error-panel" role="alert"><p class="error-panel__title">No se pudo cargar el dataset</p><pre>${esc(
       error.message
     )}</pre></div>`;
@@ -123,7 +131,7 @@ async function main() {
   const counts = tierCounts(data);
 
   document.title = `${ok ? "Auditoría correcta" : "Auditoría con incidencias"} · ${data.meta?.short_title ?? "Observatorio"}`;
-  if (boot) boot.hidden = true;
+  hideBoot();
 
   host.innerHTML = `
     <div class="error-panel" style="border-color:${ok ? "var(--ok)" : "var(--alert)"};background:${
@@ -186,6 +194,8 @@ async function main() {
 }
 
 main().catch((error) => {
+  const boot = document.getElementById("boot");
+  if (boot) boot.hidden = true;
   const host = document.getElementById("report");
   if (host) {
     host.innerHTML = `<div class="error-panel" role="alert"><p class="error-panel__title">Fallo inesperado del validador</p><pre>${esc(

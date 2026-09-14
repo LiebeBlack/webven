@@ -39,14 +39,23 @@ export function setExpanded(card, open) {
   const toggle = card.querySelector("[data-expandable-toggle]");
   if (!toggle) return;
 
+  const body = card.querySelector(":scope > .expandable__body");
+
   if (open) {
     card.classList.remove(CLASSES.collapsing);
     card.classList.add(CLASSES.open);
     toggle.setAttribute("aria-expanded", "true");
+    // Defensa en profundidad: ningún renderizador debe dejar un atributo
+    // `hidden` en el cuerpo; si lo hubiera, la tarjeta no abriría nunca
+    // porque tokens.css lo resuelve a display:none !important.
+    if (body) body.removeAttribute("hidden");
   } else {
     card.classList.add(CLASSES.collapsing);
     card.classList.remove(CLASSES.open);
     toggle.setAttribute("aria-expanded", "false");
+    // El cuerpo no recibe `hidden`: lo mantiene el CSS cerrado, que permite
+    // animar el cierre y retira el contenido del árbol accesible mediante
+    // `visibility: hidden` una vez terminada la transición.
     window.setTimeout(() => card.classList.remove(CLASSES.collapsing), COLLAPSE_MS);
   }
 }

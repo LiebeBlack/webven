@@ -380,8 +380,15 @@ export function expandableHeader({
 }
 
 export function expandableBody(id, { label, content, open = false }) {
-  return `<div class="expandable__body" id="${esc(id)}-body" role="region"
-    aria-label="${esc(label)}" ${open ? "" : "hidden"}>
+  // Sin atributo `hidden`: el estado cerrado lo gobierna el CSS
+  // (grid-template-rows: 0fr + visibility: hidden), que además retira el
+  // contenido del árbol de accesibilidad y del orden de tabulación.
+  // Un atributo `hidden` aquí ganaría sobre la animación (`display:none
+  // !important` en tokens.css) y la tarjeta no podría abrirse jamás.
+  // La clase `is-open` inicial solo aplica cuando un renderizador pide
+  // explícitamente la tarjeta abierta.
+  return `<div class="expandable__body${open ? " is-open" : ""}" id="${esc(id)}-body" role="region"
+    aria-label="${esc(label)}">
     <div class="expandable__inner">
       <div class="expandable__reveal">${content}</div>
     </div>
